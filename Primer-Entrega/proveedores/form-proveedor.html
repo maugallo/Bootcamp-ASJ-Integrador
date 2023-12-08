@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Integrador</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+        crossorigin="anonymous"></script>
+    
+</head>
+
+<body class="bg-body-tertiary ">
+    <!-- Header -->
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark" aria-label="Offcanvas navbar large">
+            <div class="container-fluid">
+                <a class="navbar-brand fs-2" href="../index.html">INTEGRADOR</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas"
+                    data-bs-target="#offcanvasNavbar2" aria-controls="offcanvasNavbar2" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="offcanvasNavbar2"
+                    aria-labelledby="offcanvasNavbar2Label">
+                    <div class="offcanvas-header">
+                        <h5 class="offcanvas-title" id="offcanvasNavbar2Label">ADMINISTRAR</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="offcanvas-body pt-0">
+                        <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                            <!-- Administración proveedores -->
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                    PROVEEDORES
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="adm-proveedor.html">VER</a></li>
+                                    <li><a class="dropdown-item" href="form-proveedor.html">AGREGAR</a></li>
+                                </ul>
+                            </li>
+                            <!-- Administración productos -->
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                    PRODUCTOS
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="../productos/adm-producto.html">VER</a></li>
+                                    <li><a class="dropdown-item" href="../productos/form-producto.html">AGREGAR</a></li>
+                                </ul>
+                            </li>
+                            <!-- Administración órdenes de compra -->
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                    ÓRDENES DE COMPRA
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="../ordenes/adm-orden.html">VER</a></li>
+                                    <li><a class="dropdown-item" href="../ordenes/form-orden.html">AGREGAR</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <!-- Main -->
+    <main class="container">
+        <div class="row">
+            <div class="col-auto col-lg-2"></div>
+            <div class="col-12 col-lg-8">
+                <div class="my-5">
+                    <h1 class="text-center mb-2 fw-bold text-decoration-underline ">Agregar Proveedor</h1>
+                </div>
+                <div class="card p-5">
+
+                    <!-- Datos principales -->
+                    <div class="row mt-2">
+                        <div class="col d-flex justify-content-between mx-2">
+                            <div class="me-2">
+                                <label class="form-label" for="razonSocial">Razón Social</label>
+                                <input id="txtEmpresa" class="form-control" name="razonSocial" type="text"
+                                    placeholder="Ingrese razón social" required>
+                            </div>
+                            <div class="me-2">
+                                <label for="rubro" class="form-label">Rubro</label>
+                                <input id="txtRubro" type="text" name="rubro" class="form-control"
+                                    placeholder="Ingrese el rubro" required>
+                            </div>
+                            <div class="w-50">
+                                <label for="webSite" class="form-label">Sitio Web</label>
+                                <input type="text" name="webSite" class="form-control" placeholder="https://example.com"
+                                    required>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Datos de contacto -->
+                    <div class="row mt-5">
+                        <div class="row">
+                            <div class="col d-flex justify-content-center mx-2">
+                                <div class="me-2 w-50 ">
+                                    <label class="form-label" for="nombre">Nombre</label>
+                                    <input class="form-control" name="nombre" type="text"
+                                        placeholder="Ingrese el nombre" required>
+                                </div>
+                                <div class="me-2 w-50">
+                                    <label for="apellido" class="form-label">Apellido</label>
+                                    <input type="text" name="apellido" class="form-control"
+                                        placeholder="Ingrese el apellido" required>
+                                </div>
+                                <div class="w-50">
+                                    <label for="telefono" class="form-label">Teléfono</label>
+                                    <input id="txtTelefono" type="text" name="telefono" class="form-control"
+                                        placeholder="+1 (123) 456-7890" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-5">
+                            <div class="col d-flex justify-content-around  mx-2">
+                                <div class="me-2 w-50">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input id="txtEmail" type="email" name="email" class="form-control"
+                                        placeholder="www.example@gmail.com" required>
+                                </div>
+                                <div class="w-auto">
+                                    <label for="rol" class="form-label">Rol</label>
+                                    <input type="text" name="rol" class="form-control" placeholder="Ingrese el rol"
+                                        required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Datos fiscales -->
+                    <div class="row mt-5">
+                        <div class="col d-flex justify-content-evenly ">
+                            <div class="me-2 w-50">
+                                <label for="cuit" class="form-label">CUIT</label>
+                                <input type="text" name="cuit" class="form-control" placeholder="Ingrese el cuit"
+                                    required>
+                            </div>
+                            <div class="w-50">
+                                <label for="condicionIva" class="form-label">IVA</label>
+                                <input type="text" name="condicionIva" class="form-control" placeholder="Ingrese el IVA"
+                                    required>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Dirección -->
+                    <div class="row mt-5">
+                        <div class="row">
+                            <div class="col d-flex justify-content-center  ">
+                                <div class="me-2">
+                                    <label for="calle" class="form-label">Calle</label>
+                                    <input type="text" name="calle" class="form-control" placeholder="Ingrese la calle"
+                                        required>
+                                </div>
+                                <div class="me-2">
+                                    <label for="nroCalle" class="form-label">Número</label>
+                                    <input type="text" name="nroCalle" class="form-control" placeholder="0123" required>
+                                </div>
+                                <div class="">
+                                    <label for="codPostal" class="form-label">Código Postal</label>
+                                    <input type="text" name="codPostal" class="form-control" placeholder="C.P" required>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-5">
+                            <div class="col d-flex">
+                                <div class="w-50 me-2">
+                                    <label for="localidad" class="form-label">Localidad</label>
+                                    <input type="text" name="localidad" class="form-control"
+                                        placeholder="Ingrese la localidad" required>
+                                </div>
+                                <div class="w-50 me-2">
+                                    <label for="provincia" class="form-label">Provincia</label>
+                                    <input type="text" name="provincia" class="form-control"
+                                        placeholder="Ingrese la provincia" required>
+                                </div>
+                                <div class="w-50">
+                                    <label for="pais" class="form-label">Pais</label>
+                                    <input type="text" name="pais" class="form-control" placeholder="Ingrese el país"
+                                        required>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Botón -->
+                    <div class="text-end mt-4">
+                        <button class="btn btn-dark" type="" onclick="agregarProveedor()">Agregar</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-auto col-lg-2"></div>
+        </div>
+    </main>
+    <!-- Footer -->
+    <div class="container">
+        <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+            <div class="col-md-4 d-flex align-items-center">
+                <a href="/" class="mb-3 me-2 mb-md-0 text-body-secondary text-decoration-none lh-1">
+                    <svg class="bi" width="30" height="24">
+                        <use xlink:href="#bootstrap"></use>
+                    </svg>
+                </a>
+                <span class="mb-3 mb-md-0 text-body-secondary">© 2023 Mauro Gallo</span>
+            </div>
+        </footer>
+    </div>
+
+    <script src="../scripts/script-form-proveedor.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Integrador</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+    crossorigin="anonymous"></script>
+    
+</head>
+<body class="bg-body-tertiary ">
+    <!-- Header -->
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark" aria-label="Offcanvas navbar large">
+            <div class="container-fluid">
+                <a class="navbar-brand fs-2" href="../index.html">INTEGRADOR</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas"
+                    data-bs-target="#offcanvasNavbar2" aria-controls="offcanvasNavbar2" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="offcanvasNavbar2"
+                    aria-labelledby="offcanvasNavbar2Label">
+                    <div class="offcanvas-header">
+                        <h5 class="offcanvas-title" id="offcanvasNavbar2Label">ADMINISTRAR</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="offcanvas-body pt-0">
+                        <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                            <!-- Administración proveedores -->
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                    PROVEEDORES
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="../proveedores/adm-proveedor.html">VER</a></li>
+                                    <li><a class="dropdown-item" href="../proveedores/form-proveedor.html">AGREGAR</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <!-- Administración productos -->
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                    PRODUCTOS
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="../productos/adm-producto.html">VER</a></li>
+                                    <li><a class="dropdown-item" href="../productos/form-producto.html">AGREGAR</a></li>
+                                </ul>
+                            </li>
+                            <!-- Administración órdenes de compra -->
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                    ÓRDENES DE COMPRA
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="adm-orden.html">VER</a></li>
+                                    <li><a class="dropdown-item" href="form-orden.html">AGREGAR</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <!-- Main -->
+    <main class="container">
+        <div class="row">
+            <div class="col-auto col-lg-2"></div>
+            <div class="col-12 col-lg-8">
+                <div class="my-5">
+                    <h1 class="text-center mb-2 fw-bold text-decoration-underline ">Agregar Orden de Compra</h1>
+                </div>
+                <div class="card p-5">
+                    <!-- Datos -->
+                    <div class="row mt-2">
+                        <div class="col d-flex justify-content-evenly mx-2">
+                            <div class="me-2 w-25">
+                                <label class="form-label" for="fechaEmision">Fecha de emisión</label>
+                                <input id="txtFechaEmision" class="form-control" name="fechaEmision" type="date"
+                                    required>
+                            </div>
+                            <div class="me-2 w-25">
+                                <label for="fechaEntrega" class="form-label">Fecha de entrega</label>
+                                <input id="txtFechaEntrega" class="form-control" name="fechaEntrega" type="date"
+                                    required>
+                            </div>
+                            <div class="w-50">
+                                <label for="direccion" class="form-label">Dirección de recepción</label>
+                                <input type="text" id="txtDIreccion" name="direccion" class="form-control" placeholder="Ingrese la dirección">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row mt-5">
+                        <div class="col d-flex justify-content-around  mx-2">
+                            <div class="me-2 w-50">
+                                <label for="proveedor" class="form-label">Proveedor</label>
+                                <select id="selectProveedor" class="form-select " name="proveedor">
+                                    <option value="proveedorA">ProveedorA</option>
+                                    <option value="proovedorB">ProveedorB</option>
+                                    <option value="proovedorC">ProveedorC</option>
+                                </select>
+                            </div>
+                            <div class="me-2 w-50">
+                                <label for="productos" class="form-label">Productos</label>
+                                <select id="selectProductos" class="form-select " name="productos">
+                                    <option value="productoA">ProductoA</option>
+                                    <option value="productoB">ProductoB</option>
+                                    <option value="productoC">ProductoC</option>
+                                </select>
+                            </div>
+                            <div class="me-1">
+                                <label for="cantidad" class="form-label">Cantidad</label>
+                                <input type="number" id="txtCantidad" name="cantidad" class="form-control" placeholder="1" min="1" minvalue="1">
+                            </div>
+                            <div>
+                                <label for="total" class="form-label">Total</label>
+                                <input type="number" id="txtTotal" name="total" class="form-control" placeholder="$0" min="1" minvalue="1">
+                            </div>
+                        </div>
+                    <!-- Botón -->
+                    <div class="text-end mt-4">
+                        <button class="btn btn-dark" type="" onclick="agregarOrden()">Agregar</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-auto col-lg-2"></div>
+        </div>
+    </main>
+    <!-- Footer -->
+    <div class="container">
+        <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+            <div class="col-md-4 d-flex align-items-center">
+                <a href="/" class="mb-3 me-2 mb-md-0 text-body-secondary text-decoration-none lh-1">
+                    <svg class="bi" width="30" height="24">
+                        <use xlink:href="#bootstrap"></use>
+                    </svg>
+                </a>
+                <span class="mb-3 mb-md-0 text-body-secondary">© 2023 Mauro Gallo</span>
+            </div>
+        </footer>
+    </div>
+
+    <script src="../scripts/script-form-orden.js"></script>
+</body>
+</html>

@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Integrador</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
+    crossorigin="anonymous"></script>
+    <!-- Notyf styles -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.css">
+
+</head>
+<body class="bg-body-tertiary ">
+    <!-- Header -->
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-dark" aria-label="Offcanvas navbar large">
+            <div class="container-fluid">
+                <a class="navbar-brand fs-2" href="../index.html">INTEGRADOR</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="offcanvas"
+                    data-bs-target="#offcanvasNavbar2" aria-controls="offcanvasNavbar2" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="offcanvas offcanvas-end text-bg-dark" tabindex="-1" id="offcanvasNavbar2"
+                    aria-labelledby="offcanvasNavbar2Label">
+                    <div class="offcanvas-header">
+                        <h5 class="offcanvas-title" id="offcanvasNavbar2Label">ADMINISTRAR</h5>
+                        <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="offcanvas-body pt-0">
+                        <ul class="navbar-nav justify-content-end flex-grow-1 pe-3">
+                            <!-- Administración proveedores -->
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                    PROVEEDORES
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="../proveedores/adm-proveedor.html">VER</a></li>
+                                    <li><a class="dropdown-item" href="../proveedores/form-proveedor.html">AGREGAR</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <!-- Administración productos -->
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                    PRODUCTOS
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="adm-producto.html">VER</a></li>
+                                    <li><a class="dropdown-item" href="form-producto.html">AGREGAR</a></li>
+                                </ul>
+                            </li>
+                            <!-- Administración órdenes de compra -->
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                    ÓRDENES DE COMPRA
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="../ordenes/adm-orden.html">VER</a></li>
+                                    <li><a class="dropdown-item" href="../ordenes/form-orden.html">AGREGAR</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+    <!-- Main -->
+    <main class="container text-center">
+        <div class="row">
+            <div class="col-auto col-lg-2"></div>
+            <div class="col-12 col-lg-8">
+                <section class="mt-3">
+                    <h1 class="display-4 fw-bold">Gestión de Productos</h1>
+                </section>
+                <!-- Botón agregar -->
+                <div class="text-center text-sm-end  mt-5">
+                    <a class="btn btn-secondary" href="form-producto.html">Agregar producto</a>
+                </div>
+                <!-- Tabla -->
+                <section class="mt-2">
+                    <table class="table table-hover table-bordered border-secondary-subtle">
+                        <thead>
+                            <tr>
+                                <th scope="col">Código</th>
+                                <th scope="col">Nombre</th>
+                                <th scope="col">Precio</th>
+                                <th scope="col">Proveedor</th>
+                                <th scope="col">Categoría</th>
+                                <th scope="col">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-body">
+                            <!-- Productos creados -->
+                        </tbody>
+                    </table>
+                </section>
+            </div>
+            <div class="col-auto col-lg-2"></div>
+        </div>
+    </main>
+    <!-- Footer -->
+    <div class="container">
+        <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+            <div class="col-md-4 d-flex align-items-center">
+                <a href="/" class="mb-3 me-2 mb-md-0 text-body-secondary text-decoration-none lh-1">
+                    <svg class="bi" width="30" height="24">
+                        <use xlink:href="#bootstrap"></use>
+                    </svg>
+                </a>
+                <span class="mb-3 mb-md-0 text-body-secondary">© 2023 Mauro Gallo</span>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Notyf script -->
+    <script src="https://cdn.jsdelivr.net/npm/notyf@3/notyf.min.js"></script>
+    
+    <script src="../scripts/script-adm-producto.js"></script>
+</body>
+</html>
