@@ -54,6 +54,8 @@ function eliminarProveedor(codigo){
     } else{
         localStorage.removeItem("proveedor");
     }
+    //Agrego un localStorage para mantener un contador global de los proveedores que hay. Esto servirá para el index. En este caso se restará cantida.
+    localStorage.setItem("cantProveedores", arrayProveedores.length);
 }
 
 function editarProveedor(){

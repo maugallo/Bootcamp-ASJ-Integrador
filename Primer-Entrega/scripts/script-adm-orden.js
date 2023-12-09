@@ -54,6 +54,8 @@ function eliminarOrden(codigo){
     } else{
         localStorage.removeItem("orden");
     }
+    //Agrego un localStorage para mantener un contador global de los proveedores que hay. Esto servirá para el index.
+    localStorage.setItem("cantOrdenes", arrayOrdenes.length);
 }
 
 function editarOrden(){

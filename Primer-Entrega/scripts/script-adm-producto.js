@@ -54,6 +54,8 @@ function eliminarProducto(codigo){
     } else{
         localStorage.removeItem("producto");
     }
+    //Agrego un localStorage para mantener un contador global de los productos que hay. Esto servirá para el index. En este caso se restará cantida.
+    localStorage.setItem("cantProductos", arrayProductos.length);
 }
 
 function editarProducto(){

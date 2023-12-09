@@ -6,20 +6,22 @@ let txtEmail = document.getElementById("txtEmail");
 let txtTelefono = document.getElementById("txtTelefono");
 
 function agregarProveedor(){
+    let arrayProveedores = [];
     if (localStorage.getItem("proveedor") === null){
         //Si no habia un localStorage previo, entonces pusheamos el objeto 'proveedor' y creamos el localStorage.
-        let arrayProveedores = [];
         let proveedor = {codigo: 1, rubro: txtRubro.value, empresa: txtEmpresa.value, email: txtEmail.value, telefono: txtTelefono.value};
         arrayProveedores.push(proveedor);
         localStorage.setItem("proveedor", JSON.stringify(arrayProveedores));
     } else{
         //Si ya había un localStorage previo, entonces lo devolvemos a un array, le pusheamos el objeto 'proveedor' y pisamos el localStorage con los valores actualizados.
-        let arrayProveedores = JSON.parse(localStorage.getItem("proveedor"));
+        arrayProveedores = JSON.parse(localStorage.getItem("proveedor"));
         let ultimoCodigo = arrayProveedores[arrayProveedores.length - 1].codigo;
         let proveedor = {codigo: ultimoCodigo + 1, rubro: txtRubro.value, empresa: txtEmpresa.value, email: txtEmail.value, telefono: txtTelefono.value};
         arrayProveedores.push(proveedor);
         localStorage.setItem("proveedor", JSON.stringify(arrayProveedores));
     }
+    //Agrego un localStorage para mantener un contador global de los proveedores que hay. Esto servirá para el index.
+    localStorage.setItem("cantProveedores", arrayProveedores.length);
     alert("¡Proveedor agregado correctamente!");
     window.location.href = "adm-proveedor.html";
 }
