@@ -2,36 +2,35 @@ const notyf = new Notyf({position: {x:'center',y:'top'}});
 
 window.addEventListener("load", () => {
     if (localStorage.getItem("orden") === null) {
-        notyf.error("Todavía no hay órdenes creadas");
+        notyf.error("¡No hay elementos en la tabla!");
     } else {
         let = arrayOrdenes = JSON.parse(localStorage.getItem("orden"));
-        let = arrayCodigos = JSON.parse(localStorage.getItem("contadorCodigo"));
         for (let index = 0; index < arrayOrdenes.length; index++) {
             let tableBody = document.getElementById("table-body");
 
             let tr = document.createElement("tr");
 
-            let tdNumero = document.createElement("td");
+            let tdCodigo = document.createElement("td");
             let tdFechaEmision = document.createElement("td");
             let tdFechaEntrega = document.createElement("td");
             let tdProveedor = document.createElement("td");
             let tdTotal = document.createElement("td");
             let tdAcciones = document.createElement("td");
 
-            let txtNumero = document.createTextNode(arrayCodigos[index]);
+            let txtCodigo = document.createTextNode(arrayOrdenes[index].codigo);
             let txtFechaEmision = document.createTextNode(arrayOrdenes[index].fechaEmision);
             let txtFechaEntrega = document.createTextNode(arrayOrdenes[index].fechaEntrega);
             let txtProveedor = document.createTextNode(arrayOrdenes[index].proveedor);
             let txtTotal = document.createTextNode(arrayOrdenes[index].total);
 
-            tdNumero.appendChild(txtNumero);
+            tdCodigo.appendChild(txtCodigo);
             tdFechaEmision.appendChild(txtFechaEmision);
             tdFechaEntrega.appendChild(txtFechaEntrega);
             tdProveedor.appendChild(txtProveedor);
             tdTotal.appendChild(txtTotal);
-            tdAcciones.innerHTML = `<a class="me-2 text-decoration-none" href="" onclick="eliminarOrden()">🗑️</a> <a class="text-decoration-none" href="" onclick="editarOrden()">✏️</a>`;
+            tdAcciones.innerHTML = `<a class="me-2 text-decoration-none" href="" onclick="eliminarOrden(${arrayOrdenes[index].codigo})">🗑️</a> <a class="text-decoration-none" href="" onclick="editarOrden()">✏️</a>`;
 
-            tr.appendChild(tdNumero)
+            tr.appendChild(tdCodigo);
             tr.appendChild(tdFechaEmision);
             tr.appendChild(tdFechaEntrega);
             tr.appendChild(tdProveedor);
@@ -43,8 +42,18 @@ window.addEventListener("load", () => {
     }
 });
 
-function eliminarOrden(){
-    alert("Próximamente!");
+function eliminarOrden(codigo){
+    let arrayOrdenes = JSON.parse(localStorage.getItem("orden"));
+    //Encuentro el index del elemento dentro del array que cumpla la condición especificada.
+    let index = arrayOrdenes.findIndex(orden => orden.codigo === codigo);
+    //Uso el index encontrado para eliminar dicho elemento.
+    arrayOrdenes.splice(index, 1);
+    //Modifico el localStorage. Si el array se queda sin elementos, directamente remuevo el localStorage.
+    if (arrayOrdenes.length > 0){
+        localStorage.setItem("orden", JSON.stringify(arrayOrdenes));
+    } else{
+        localStorage.removeItem("orden");
+    }
 }
 
 function editarOrden(){

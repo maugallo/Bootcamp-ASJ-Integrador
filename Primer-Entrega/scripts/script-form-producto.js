@@ -7,7 +7,7 @@ let selectProveedor = document.getElementById("selectProveedor");
 let selectCategoria = document.getElementById("selectCategoria");
 
 function agregarProducto(){
-    let producto = {nombre: txtNombre.value, codigo: txtCodigo.value, precio: txtPrecio.value, proveedor: selectProveedor.value, categoria: selectCategoria.value};
+    let producto = {codigo: txtCodigo.value, nombre: txtNombre.value, precio: txtPrecio.value, proveedor: selectProveedor.value, categoria: selectCategoria.value};
     if (localStorage.getItem("producto") === null){
         //Si no habia un localStorage previo, entonces pusheamos el objeto 'producto' y creamos el localStorage.
         let arrayProductos = [];

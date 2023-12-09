@@ -2,10 +2,9 @@ const notyf = new Notyf({position: {x:'center',y:'top'}});
 
 window.addEventListener("load", () => {
     if (localStorage.getItem("proveedor") === null) {
-        notyf.error("Todavía no hay proveedores creados");
+        notyf.error("¡No hay elementos en la tabla!");
     } else {
         let = arrayProveedores = JSON.parse(localStorage.getItem("proveedor"));
-        let = arrayCodigos = JSON.parse(localStorage.getItem("contadorCodigo"));
         for (let index = 0; index < arrayProveedores.length; index++) {
             let tableBody = document.getElementById("table-body");
 
@@ -18,7 +17,7 @@ window.addEventListener("load", () => {
             let tdTelefono = document.createElement("td");
             let tdAcciones = document.createElement("td");
 
-            let txtCodigo = document.createTextNode(arrayCodigos[index]);
+            let txtCodigo = document.createTextNode(arrayProveedores[index].codigo);
             let txtRubro = document.createTextNode(arrayProveedores[index].rubro);
             let txtEmpresa = document.createTextNode(arrayProveedores[index].empresa);
             let txtEmail = document.createTextNode(arrayProveedores[index].email);
@@ -29,7 +28,7 @@ window.addEventListener("load", () => {
             tdEmpresa.appendChild(txtEmpresa);
             tdEmail.appendChild(txtEmail);
             tdTelefono.appendChild(txtTelefono);
-            tdAcciones.innerHTML = `<a class="me-2 text-decoration-none" href="" onclick="eliminarProveedor()">🗑️</a> <a class="text-decoration-none" href="" onclick="editarProveedor()">✏️</a>`;
+            tdAcciones.innerHTML = `<a class="me-2 text-decoration-none" href="" onclick="eliminarProveedor(${arrayProveedores[index].codigo})">🗑️</a> <a class="text-decoration-none" href="" onclick="editarProveedor()">✏️</a>`;
 
             tr.appendChild(tdCodigo)
             tr.appendChild(tdRubro);
@@ -43,8 +42,18 @@ window.addEventListener("load", () => {
     }
 });
 
-function eliminarProveedor(){
-    alert("Próximamente!");
+function eliminarProveedor(codigo){
+    let arrayProveedores = JSON.parse(localStorage.getItem("proveedor"));
+    //Encuentro el index del elemento dentro del array que cumpla la condición especificada.
+    let index = arrayProveedores.findIndex(proveedor => proveedor.codigo === codigo);
+    //Uso el index encontrado para eliminar dicho elemento.
+    arrayProveedores.splice(index, 1);
+    //Modifico el localStorage. Si el array se queda sin elementos, directamente remuevo el localStorage.
+    if (arrayProveedores.length > 0){
+        localStorage.setItem("proveedor", JSON.stringify(arrayProveedores));
+    } else{
+        localStorage.removeItem("proveedor");
+    }
 }
 
 function editarProveedor(){

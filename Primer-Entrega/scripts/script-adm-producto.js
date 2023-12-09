@@ -2,7 +2,7 @@ const notyf = new Notyf({position: {x:'center',y:'top'}});
 
 window.addEventListener("load", () => {
     if (localStorage.getItem("producto") === null) {
-        notyf.error("Todavía no hay productos creados");
+        notyf.error("¡No hay elementos en la tabla!");
     } else {
         let = arrayProductos = JSON.parse(localStorage.getItem("producto"));
         for (let index = 0; index < arrayProductos.length; index++) {
@@ -28,7 +28,7 @@ window.addEventListener("load", () => {
             tdPrecio.appendChild(txtPrecio);
             tdProveedor.appendChild(txtProveedor);
             tdCategoria.appendChild(txtCategoria);
-            tdAcciones.innerHTML = `<a class="me-2 text-decoration-none" href="" onclick="eliminarProducto()">🗑️</a> <a class="text-decoration-none" href="" onclick="editarProducto()">✏️</a>`;
+            tdAcciones.innerHTML = `<a class="me-2 text-decoration-none" href="" onclick="eliminarProducto(${arrayProductos[index].codigo})">🗑️</a> <a class="text-decoration-none" href="" onclick="editarProducto()">✏️</a>`;
 
             tr.appendChild(tdCodigo)
             tr.appendChild(tdNombre);
@@ -42,8 +42,18 @@ window.addEventListener("load", () => {
     }
 });
 
-function eliminarProducto(){
-    alert("Próximamente!");
+function eliminarProducto(codigo){
+    let arrayProductos = JSON.parse(localStorage.getItem("producto"));
+    //Encuentro el index del elemento dentro del array que cumpla la condición especificada.
+    let index = arrayProductos.findIndex(producto => producto.codigo === codigo);
+    //Uso el index encontrado para eliminar dicho elemento.
+    arrayProductos.splice(index, 1);
+    //Modifico el localStorage. Si el array se queda sin elementos, directamente remuevo el localStorage.
+    if (arrayProductos.length > 0){
+        localStorage.setItem("producto", JSON.stringify(arrayProductos));
+    } else{
+        localStorage.removeItem("producto");
+    }
 }
 
 function editarProducto(){
