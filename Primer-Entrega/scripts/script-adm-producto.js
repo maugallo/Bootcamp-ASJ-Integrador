@@ -28,7 +28,7 @@ window.addEventListener("load", () => {
             tdPrecio.appendChild(txtPrecio);
             tdProveedor.appendChild(txtProveedor);
             tdCategoria.appendChild(txtCategoria);
-            tdAcciones.innerHTML = `<a class="me-2 text-decoration-none" href="" onclick="eliminarProducto(${arrayProductos[index].codigo})">🗑️</a> <a class="text-decoration-none" href="" onclick="editarProducto()">✏️</a>`;
+            tdAcciones.innerHTML = `<a class="me-2 text-decoration-none" href="" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="abrirModal(${arrayProductos[index].codigo})">🗑️</a> <a class="text-decoration-none" href="" onclick="editarProducto()">✏️</a>`;
 
             tr.appendChild(tdCodigo)
             tr.appendChild(tdNombre);
@@ -42,7 +42,13 @@ window.addEventListener("load", () => {
     }
 });
 
-function eliminarProducto(codigo){
+function abrirModal(codigo){
+    sessionStorage.clear();
+    sessionStorage.setItem("codigoProducto", codigo);
+}
+
+function eliminarProducto(){
+    let codigo = sessionStorage.getItem("codigoProducto");
     let arrayProductos = JSON.parse(localStorage.getItem("producto"));
     //Encuentro el index del elemento dentro del array que cumpla la condición especificada.
     let index = arrayProductos.findIndex(producto => producto.codigo === codigo);
@@ -56,6 +62,7 @@ function eliminarProducto(codigo){
     }
     //Agrego un localStorage para mantener un contador global de los productos que hay. Esto servirá para el index. En este caso se restará cantida.
     localStorage.setItem("cantProductos", arrayProductos.length);
+    window.location.href = "adm-producto.html";
 }
 
 function editarProducto(){

@@ -28,7 +28,7 @@ window.addEventListener("load", () => {
             tdEmpresa.appendChild(txtEmpresa);
             tdEmail.appendChild(txtEmail);
             tdTelefono.appendChild(txtTelefono);
-            tdAcciones.innerHTML = `<a class="me-2 text-decoration-none" href="" onclick="eliminarProveedor(${arrayProveedores[index].codigo})">🗑️</a> <a class="text-decoration-none" href="" onclick="editarProveedor()">✏️</a>`;
+            tdAcciones.innerHTML = `<a class="me-2 text-decoration-none" href="" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="abrirModal(${arrayProveedores[index].codigo})">🗑️</a> <a class="text-decoration-none" href="" onclick="editarProveedor()">✏️</a>`;
 
             tr.appendChild(tdCodigo)
             tr.appendChild(tdRubro);
@@ -42,7 +42,13 @@ window.addEventListener("load", () => {
     }
 });
 
-function eliminarProveedor(codigo){
+function abrirModal(codigo){
+    sessionStorage.clear();
+    sessionStorage.setItem("codigoProveedor", codigo);
+}
+
+function eliminarProveedor(){
+    let codigo = sessionStorage.getItem("codigoProveedor");
     let arrayProveedores = JSON.parse(localStorage.getItem("proveedor"));
     //Encuentro el index del elemento dentro del array que cumpla la condición especificada.
     let index = arrayProveedores.findIndex(proveedor => proveedor.codigo === codigo);
@@ -56,6 +62,7 @@ function eliminarProveedor(codigo){
     }
     //Agrego un localStorage para mantener un contador global de los proveedores que hay. Esto servirá para el index. En este caso se restará cantida.
     localStorage.setItem("cantProveedores", arrayProveedores.length);
+    window.location.href = "adm-proveedor.html";
 }
 
 function editarProveedor(){
