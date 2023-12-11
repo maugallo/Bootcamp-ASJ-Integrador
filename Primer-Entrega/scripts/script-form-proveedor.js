@@ -20,8 +20,6 @@ function agregarProveedor(){
         arrayProveedores.push(proveedor);
         localStorage.setItem("proveedor", JSON.stringify(arrayProveedores));
     }
-    //Agrego un localStorage para mantener un contador global de los proveedores que hay. Esto servirá para el index.
-    localStorage.setItem("cantProveedores", arrayProveedores.length);
     alert("¡Proveedor agregado correctamente!");
     window.location.href = "adm-proveedor.html";
 }

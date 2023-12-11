@@ -4,7 +4,7 @@ window.addEventListener("load", () => {
     if (localStorage.getItem("producto") === null) {
         notyf.error("¡No hay elementos en la tabla!");
     } else {
-        let = arrayProductos = JSON.parse(localStorage.getItem("producto"));
+        let arrayProductos = JSON.parse(localStorage.getItem("producto"));
         for (let index = 0; index < arrayProductos.length; index++) {
             let tableBody = document.getElementById("table-body");
 
@@ -60,8 +60,6 @@ function eliminarProducto(){
     } else{
         localStorage.removeItem("producto");
     }
-    //Agrego un localStorage para mantener un contador global de los productos que hay. Esto servirá para el index. En este caso se restará cantida.
-    localStorage.setItem("cantProductos", arrayProductos.length);
     window.location.href = "adm-producto.html";
 }
 

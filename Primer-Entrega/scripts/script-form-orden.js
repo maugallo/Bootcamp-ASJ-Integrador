@@ -18,8 +18,6 @@ function agregarOrden(){
         arrayOrdenes.push(orden);
         localStorage.setItem("orden", JSON.stringify(arrayOrdenes));
     }
-    //Agrego un localStorage para mantener un contador global de los proveedores que hay. Esto servirá para el index.
-    localStorage.setItem("cantOrdenes", arrayOrdenes.length);
     alert("Orden agregada correctamente!");
     window.location.href = "adm-orden.html";
 }

@@ -4,7 +4,7 @@ window.addEventListener("load", () => {
     if (localStorage.getItem("orden") === null) {
         notyf.error("¡No hay elementos en la tabla!");
     } else {
-        let = arrayOrdenes = JSON.parse(localStorage.getItem("orden"));
+        let arrayOrdenes = JSON.parse(localStorage.getItem("orden"));
         for (let index = 0; index < arrayOrdenes.length; index++) {
             let tableBody = document.getElementById("table-body");
 
@@ -60,8 +60,6 @@ function eliminarOrden(){
     } else{
         localStorage.removeItem("orden");
     }
-    //Agrego un localStorage para mantener un contador global de los proveedores que hay. Esto servirá para el index.
-    localStorage.setItem("cantOrdenes", arrayOrdenes.length);
     window.location.href = "adm-orden.html";
 }
 

@@ -4,7 +4,7 @@ window.addEventListener("load", () => {
     if (localStorage.getItem("proveedor") === null) {
         notyf.error("¡No hay elementos en la tabla!");
     } else {
-        let = arrayProveedores = JSON.parse(localStorage.getItem("proveedor"));
+        let arrayProveedores = JSON.parse(localStorage.getItem("proveedor"));
         for (let index = 0; index < arrayProveedores.length; index++) {
             let tableBody = document.getElementById("table-body");
 
@@ -60,8 +60,6 @@ function eliminarProveedor(){
     } else{
         localStorage.removeItem("proveedor");
     }
-    //Agrego un localStorage para mantener un contador global de los proveedores que hay. Esto servirá para el index. En este caso se restará cantida.
-    localStorage.setItem("cantProveedores", arrayProveedores.length);
     window.location.href = "adm-proveedor.html";
 }
 

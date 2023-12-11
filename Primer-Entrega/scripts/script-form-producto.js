@@ -19,8 +19,6 @@ function agregarProducto(){
         arrayProductos.push(producto);
         localStorage.setItem("producto", JSON.stringify(arrayProductos));
     }
-    //Agrego un localStorage para mantener un contador global de los productos que hay. Esto servirá para el index.
-    localStorage.setItem("cantProductos", arrayProductos.length);
     alert("¡Producto agregado correctamente!");
     window.location.href = "adm-producto.html";
 }
