@@ -1,0 +1,10 @@
+[!NOTE]
+Intenta escribir en ingles los nombres de los archivos y el codigo.
+Buen uso del sessionStorage.
+
+[!TIP]
+Usaría "const" para los elementos del DOM.
+Podes encapsular la lógica del localStorage en una función para reutilizar el código.
+
+* EL RESTO MUY BIEN
+* VALIDAR NO SOLO EN EL FRONT SINO EN EL BACK

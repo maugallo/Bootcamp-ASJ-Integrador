@@ -28,7 +28,7 @@ window.addEventListener("load", () => {
             tdFechaEntrega.appendChild(txtFechaEntrega);
             tdProveedor.appendChild(txtProveedor);
             tdTotal.appendChild(txtTotal);
-            tdAcciones.innerHTML = `<a class="me-2 text-decoration-none" href="" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="abrirModal(${arrayOrdenes[index].codigo})">🗑️</a> <a class="text-decoration-none" href="" onclick="editarOrden()">✏️</a>`;
+            tdAcciones.innerHTML = `<a class="me-2 text-decoration-none" href="" data-bs-toggle="modal" data-bs-target="#exampleModal" onclick="abrirModal(${arrayOrdenes[index].codigo})">🗑️</a> <a class="text-decoration-none" href="" onclick="editarOrden(${arrayOrdenes[index]})">✏️</a>`;
 
             tr.appendChild(tdCodigo);
             tr.appendChild(tdFechaEmision);
@@ -63,6 +63,7 @@ function eliminarOrden(){
     window.location.href = "adm-orden.html";
 }
 
-function editarOrden(){
-    alert("Próximamente!");
+function editarOrden(orden){
+    localStorage.setItem("ordenEditar", orden);
+    window.location.href = "form-orden.html";
 }
