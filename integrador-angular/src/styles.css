@@ -1,0 +1,29 @@
+body{
+    background-color: #FBFEF9;
+}
+
+.bg-blue{
+    background-color: #011d69;
+}
+
+.bg-bone{
+    color: #FBFEF9; 
+}
+
+.font-blue{
+    color: #011d69;
+}
+
+.font-bone{
+    color: #FBFEF9;
+}
+
+.btn-add{
+    background-color: #011d69;
+    color:#FBFEF9;
+}
+
+.btn-add:hover{
+    background-color: #001652;
+    color:#FBFEF9;
+}
