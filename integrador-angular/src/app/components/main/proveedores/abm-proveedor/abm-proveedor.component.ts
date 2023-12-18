@@ -1,24 +1,19 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ServiceProveedorService } from '../../../../services/service-proveedor.service';
+import { Proveedor } from '../../../../models/proveedores';
 
 @Component({
   selector: 'app-abm-proveedor',
   templateUrl: './abm-proveedor.component.html',
   styleUrl: './abm-proveedor.component.css'
 })
-export class AbmProveedorComponent {
-  arrayProveedores: Proveedor[] = [
-    {codigo: 1, rubro: "a", empresa: "a", email: "a", telefono: "a"},
-    {codigo: 2, rubro: "b", empresa: "b", email: "b", telefono: "b"},
-    {codigo: 3, rubro: "c", empresa: "c", email: "c", telefono: "c"},
-    {codigo: 4, rubro: "d", empresa: "d", email: "d", telefono: "d"},  
-    {codigo: 5, rubro: "e", empresa: "e", email: "e", telefono: "e"},
-  ] 
-}
+export class AbmProveedorComponent implements OnInit {
+  
+  arrayProveedores!: Proveedor[];
 
-export interface Proveedor{
-  codigo: number;
-  rubro: string;
-  empresa: string;
-  email: string;
-  telefono: string;
+  constructor(private proveedorService: ServiceProveedorService) {}
+
+  ngOnInit(): void {
+      this.arrayProveedores = this.proveedorService.getProviders();
+  }
 }

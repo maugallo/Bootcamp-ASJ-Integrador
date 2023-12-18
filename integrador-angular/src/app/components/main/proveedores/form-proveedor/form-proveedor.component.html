@@ -12,17 +12,17 @@
                     <div class="col d-flex justify-content-between mx-2">
                         <div class="me-2">
                             <label class="form-label" for="razonSocial">Razón Social</label>
-                            <input id="txtEmpresa" class="form-control" name="razonSocial" type="text"
+                            <input id="txtEmpresa" class="form-control" [(ngModel)]="txtRazonSocial" name="razonSocial" type="text"
                                 placeholder="Ingrese razón social" required>
                         </div>
                         <div class="me-2">
                             <label for="rubro" class="form-label">Rubro</label>
-                            <input id="txtRubro" type="text" name="rubro" class="form-control"
+                            <input id="txtRubro" type="text" [(ngModel)]="txtRubro" name="rubro" class="form-control"
                                 placeholder="Ingrese el rubro" required>
                         </div>
                         <div class="w-50">
                             <label for="webSite" class="form-label">Sitio Web</label>
-                            <input type="text" name="webSite" class="form-control" placeholder="https://example.com"
+                            <input type="text" name="webSite" [(ngModel)]="txtSitioWeb" class="form-control" placeholder="https://example.com"
                                 required>
                         </div>
                     </div>
@@ -33,17 +33,17 @@
                         <div class="col d-flex justify-content-center mx-2">
                             <div class="me-2 w-50 ">
                                 <label class="form-label" for="nombre">Nombre</label>
-                                <input class="form-control" name="nombre" type="text"
-                                    placeholder="Ingrese el nombre" required>
+                                <input class="form-control" [(ngModel)]="txtNombre" name="nombre" type="text" placeholder="Ingrese el nombre"
+                                    required>
                             </div>
                             <div class="me-2 w-50">
                                 <label for="apellido" class="form-label">Apellido</label>
-                                <input type="text" name="apellido" class="form-control"
+                                <input type="text" [(ngModel)]="txtApellido" name="apellido" class="form-control"
                                     placeholder="Ingrese el apellido" required>
                             </div>
                             <div class="w-50">
                                 <label for="telefono" class="form-label">Teléfono</label>
-                                <input id="txtTelefono" type="text" name="telefono" class="form-control"
+                                <input id="txtTelefono" [(ngModel)]="txtTelefono" type="text" name="telefono" class="form-control"
                                     placeholder="+1 (123) 456-7890" required>
                             </div>
                         </div>
@@ -52,12 +52,12 @@
                         <div class="col d-flex justify-content-around  mx-2">
                             <div class="me-2 w-50">
                                 <label for="email" class="form-label">Email</label>
-                                <input id="txtEmail" type="email" name="email" class="form-control"
+                                <input id="txtEmail" type="email" [(ngModel)]="txtEmail" name="email" class="form-control"
                                     placeholder="www.example@gmail.com" required>
                             </div>
                             <div class="w-auto">
                                 <label for="rol" class="form-label">Rol</label>
-                                <input type="text" name="rol" class="form-control" placeholder="Ingrese el rol"
+                                <input type="text" [(ngModel)]="txtRol" name="rol" class="form-control" placeholder="Ingrese el rol"
                                     required>
                             </div>
                         </div>
@@ -66,15 +66,29 @@
                 <!-- Datos fiscales -->
                 <div class="row mt-5">
                     <div class="col d-flex justify-content-evenly ">
-                        <div class="me-2 w-50">
+                        <div class="me-2 w-25">
                             <label for="cuit" class="form-label">CUIT</label>
-                            <input type="text" name="cuit" class="form-control" placeholder="Ingrese el cuit"
-                                required>
+                            <input type="text" [(ngModel)]="txtCuit" name="cuit" class="form-control" placeholder="XX-XXXXXXXX-X" required>
                         </div>
-                        <div class="w-50">
-                            <label for="condicionIva" class="form-label">IVA</label>
-                            <input type="text" name="condicionIva" class="form-control" placeholder="Ingrese el IVA"
-                                required>
+                        <div class="w-75 text-center">
+                            <label for="condicionIva" class="form-label  ">IVA</label>
+                            <div class="d-flex justify-content-evenly">
+                                <label for="responsable" class="form-check-label">
+                                    <span class="me-2">Resp. Inscripto</span>
+                                    <input class="form-check-input" [(ngModel)]="txtIva" id="responsable" type="radio" name="condicionIva"
+                                    value="Responsable Inscripto">
+                                </label>
+                                <label for="monotributista" class="form-check-label">
+                                    <span class="me-2">Monotributista</span>
+                                    <input class="form-check-input" [(ngModel)]="txtIva" id="monotributista" type="radio" name="condicionIva"
+                                    value="Monotributista">
+                                </label>
+                                <label for="exento" class="form-check-label">
+                                    <span class="me-2">Exento</span>
+                                    <input class="form-check-input" [(ngModel)]="txtIva" id="exento" type="radio" name="condicionIva"
+                                    value="Exento">
+                                </label>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -84,16 +98,16 @@
                         <div class="col d-flex justify-content-center  ">
                             <div class="me-2">
                                 <label for="calle" class="form-label">Calle</label>
-                                <input type="text" name="calle" class="form-control" placeholder="Ingrese la calle"
+                                <input type="text" name="calle" [(ngModel)]="txtCalle" class="form-control" placeholder="Ingrese la calle"
                                     required>
                             </div>
                             <div class="me-2">
                                 <label for="nroCalle" class="form-label">Número</label>
-                                <input type="text" name="nroCalle" class="form-control" placeholder="0123" required>
+                                <input type="text" name="nroCalle" [(ngModel)]="txtNum" class="form-control" placeholder="0123" required>
                             </div>
                             <div class="">
                                 <label for="codPostal" class="form-label">Código Postal</label>
-                                <input type="text" name="codPostal" class="form-control" placeholder="C.P" required>
+                                <input type="text" name="codPostal" [(ngModel)]="txtCodPostal" class="form-control" placeholder="C.P" required>
                             </div>
                         </div>
                     </div>
@@ -102,16 +116,16 @@
                             <div class="w-50 me-2">
                                 <label for="localidad" class="form-label">Localidad</label>
                                 <input type="text" name="localidad" class="form-control"
-                                    placeholder="Ingrese la localidad" required>
+                                    placeholder="Ingrese la localidad" [(ngModel)]="txtLocalidad" required>
                             </div>
                             <div class="w-50 me-2">
                                 <label for="provincia" class="form-label">Provincia</label>
                                 <input type="text" name="provincia" class="form-control"
-                                    placeholder="Ingrese la provincia" required>
+                                    placeholder="Ingrese la provincia" [(ngModel)]="txtProvincia" required>
                             </div>
                             <div class="w-50">
                                 <label for="pais" class="form-label">Pais</label>
-                                <input type="text" name="pais" class="form-control" placeholder="Ingrese el país"
+                                <input type="text" name="pais" class="form-control" [(ngModel)]="txtPais" placeholder="Ingrese el país"
                                     required>
                             </div>
                         </div>
@@ -119,7 +133,7 @@
                 </div>
                 <!-- Botón -->
                 <div class="text-end mt-4">
-                    <button class="btn btn-add rounded-0 " type="" onclick="agregarProveedor()">Agregar</button>
+                    <button class="btn btn-add rounded-0 " type="" (click)="addProvider()">Agregar</button>
                 </div>
             </div>
         </div>
