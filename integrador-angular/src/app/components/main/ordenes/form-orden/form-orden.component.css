@@ -11,3 +11,7 @@ label{
     color: #001652;
     font-weight: 500;
 }
+
+.input-width{
+    width: 20vw;
+}

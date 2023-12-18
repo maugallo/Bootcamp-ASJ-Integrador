@@ -9,14 +9,28 @@ import { AbmOrdenComponent } from './components/main/ordenes/abm-orden/abm-orden
 import { FormOrdenComponent } from './components/main/ordenes/form-orden/form-orden.component';
 
 const routes: Routes = [
-  { path: 'home', component: HomeComponent },
-  { path: '', pathMatch: 'full', redirectTo: 'home' },
-  { path: 'proveedores/abm-proveedor', component: AbmProveedorComponent },
-  { path: 'proveedores/form-proveedor', component: FormProveedorComponent },
-  { path: 'productos/abm-producto', component: AbmProductoComponent },
-  { path: 'productos/form-producto', component: FormProductoComponent },
-  { path: 'ordenes/abm-orden', component: AbmOrdenComponent },
-  { path: 'ordenes/form-orden', component: FormOrdenComponent },
+  { path: '', component: HomeComponent },
+  
+
+  { path: 'proveedores',
+  children: [
+    { path: '', component: AbmProveedorComponent},
+    { path: 'form-proveedor', component: FormProveedorComponent}
+  ]},
+
+  { path: 'productos',
+  children: [
+    { path: '', component: AbmProductoComponent},
+    { path: 'form-producto', component: FormProductoComponent}
+  ]},
+  
+  { path: 'ordenes',
+  children: [
+    { path: '', component: AbmOrdenComponent},
+    { path: 'form-orden', component: FormOrdenComponent}
+  ]},
+
+  { path: '**', redirectTo: ''},
 ];
 
 @NgModule({
