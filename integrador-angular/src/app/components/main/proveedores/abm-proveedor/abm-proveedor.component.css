@@ -4,3 +4,6 @@ th{
     border-color: #011d69;
 }
 
+.option:hover{
+    cursor: pointer;
+}

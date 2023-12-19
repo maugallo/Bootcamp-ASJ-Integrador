@@ -41,27 +41,29 @@ export class FormProveedorComponent implements OnInit {
   addProvider() {
     //Creo el objeto Dirección, genero el código autoincrementable y el objeto Proveedor.
     this.direccion = { calle: this.txtCalle, num: Number(this.txtNum), codPostal: Number(this.txtCodPostal), localidad: this.txtLocalidad, provincia: this.txtProvincia, pais: this.txtPais}
-
     this.codigo = this.generateCode;
-
     this.proveedor = { codigo: this.codigo, razonSocial: this.txtRazonSocial, rubro: this.txtRubro, sitioWeb: this.txtSitioWeb, nombre: this.txtNombre, apellido: this.txtApellido, telefono: this.txtTelefono, email: this.txtEmail, rol: this.txtRol, cuit: this.txtCuit, iva: this.txtIva, direccion: this.direccion }
-
-    this.proveedorService.createProvider(this.proveedor);
+    //Llamar al servicio.
+    this.proveedorService.addProvider(this.proveedor);
     alert("Proveedor creado!");
     //Redireccionar hacia la lista.
     this.router.navigate(['proveedores/']);
   }
 
-  //Método para generar el código:
+  //Métodos para generar el código:
   get generateCode(){
     let codigo!: number;
     const proveedoresData = localStorage.getItem("proveedores");
-    if (proveedoresData === null){
+    if (proveedoresData === null || JSON.parse(proveedoresData).length === 0){
       codigo = 1;
     } else{
-      codigo = JSON.parse(proveedoresData).length + 1;
+      codigo = this.getLastCode(JSON.parse(proveedoresData));
     }
     return codigo;
+  }
+
+  getLastCode(array: Proveedor[]){
+    return array[array.length - 1].codigo + 1;
   }
 
   //Métodos de validación:

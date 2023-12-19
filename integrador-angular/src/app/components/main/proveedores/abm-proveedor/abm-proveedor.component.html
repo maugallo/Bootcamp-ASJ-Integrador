@@ -29,7 +29,7 @@
                             <td>{{proveedor.razonSocial}}</td>
                             <td>{{proveedor.email}}</td>
                             <td>{{proveedor.telefono}}</td>
-                            <td> <a class="me-2 text-decoration-none" href="">🗑️</a> <a class="text-decoration-none" href="">✏️</a></td>
+                            <td><a class="me-2 text-decoration-none option" (click)="deleteProvider(proveedor.codigo)">🗑️</a> <a class="text-decoration-none option" (click)="editProvider()">✏️</a></td>
                         </tr>
                     </tbody>
                 </table>
