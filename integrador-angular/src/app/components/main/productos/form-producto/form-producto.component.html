@@ -41,7 +41,9 @@
                             <div class="me-2 w-50">
                                 <label for="proveedor" class="form-label">Proveedor</label>
                                 <select id="selectProveedor" [(ngModel)]="txtProveedor" class="form-select " name="proveedor">
-                                    <option *ngFor="let proveedor of arrayProveedores" [value]="proveedor.codigo">{{proveedor.razonSocial}}</option>
+                                    <option value="proveedorA">ProveedorA</option>
+                                    <option value="proveedorB">ProveedorB</option>
+                                    <option value="proveedorC">ProveedorC</option>
                                 </select>
                             </div>
                             <div class="w-50">

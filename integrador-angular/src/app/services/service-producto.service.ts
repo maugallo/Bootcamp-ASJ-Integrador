@@ -1,22 +1,11 @@
 import { Injectable, OnInit } from '@angular/core';
 import { Producto } from '../models/productos';
-import { ServiceProveedorService } from './service-proveedor.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ServiceProductoService implements OnInit {
+export class ServiceProductoService {
   arrayProductos!: Producto[];
-
-  constructor(private providerService: ServiceProveedorService) { }
-
-  ngOnInit(): void {
-      
-  }
-
-  getProvidersSelect(){
-    return this.providerService.getProviders();
-  }
 
   addProduct(producto: Producto){
     this.arrayProductos = this.getStorage("productos");

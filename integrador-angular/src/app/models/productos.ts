@@ -5,6 +5,6 @@ export interface Producto{
     sku: string;
     precio: number;
     descripcion: string;
-    proveedor: Proveedor;
+    proveedor: string;
     categoria: string;
 }

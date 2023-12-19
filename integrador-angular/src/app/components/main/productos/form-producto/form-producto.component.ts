@@ -11,16 +11,13 @@ import { Router } from '@angular/router';
 })
 export class FormProductoComponent implements OnInit {
 
-  arrayProveedores: Proveedor[] = this.productoService.getProvidersSelect();
-
   producto!: Producto;
-  proveedor!: any;
   
   txtNombre!: string;
   txtSku!: string;
   txtPrecio!: number;
   txtDescripcion!: string;
-  txtProveedor: number = this.arrayProveedores[0].codigo; //Preselecciono el primer elemento en el select.
+  txtProveedor: string = "proveedorA"; //Preselecciono el primer elemento en el select.
   txtCategoria: string = "categoriaA"; //Preselecciono el primer elemento en el select.
 
   constructor(private productoService: ServiceProductoService, private router: Router){}
@@ -30,8 +27,7 @@ export class FormProductoComponent implements OnInit {
   }
 
   addProduct(){
-    this.proveedor = this.arrayProveedores.find(proveedor => proveedor.codigo === Number(this.txtProveedor));
-    this.producto = { nombre: this.txtNombre, sku: this.txtSku, precio: this.txtPrecio, descripcion: this.txtDescripcion, proveedor: this.proveedor,  categoria: this.txtCategoria}
+    this.producto = { nombre: this.txtNombre, sku: this.txtSku, precio: this.txtPrecio, descripcion: this.txtDescripcion, proveedor: this.txtProveedor,  categoria: this.txtCategoria}
 
     this.productoService.addProduct(this.producto);
     alert("Producto creado!");

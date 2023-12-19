@@ -53,11 +53,11 @@ export class FormProveedorComponent implements OnInit {
   //Métodos para generar el código:
   get generateCode(){
     let codigo!: number;
-    const proveedoresData = localStorage.getItem("proveedores");
-    if (proveedoresData === null || JSON.parse(proveedoresData).length === 0){
+    const proveedoresData = this.proveedorService.getStorage("proveedores");
+    if (proveedoresData === null || proveedoresData.length === 0){
       codigo = 1;
     } else{
-      codigo = this.getLastCode(JSON.parse(proveedoresData));
+      codigo = this.getLastCode(proveedoresData);
     }
     return codigo;
   }
