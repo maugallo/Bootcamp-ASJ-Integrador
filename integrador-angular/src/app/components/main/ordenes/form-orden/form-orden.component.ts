@@ -28,7 +28,7 @@ export class FormOrdenComponent {
   }
 
   addOrder() {
-    //Creo el objeto Dirección, genero el código autoincrementable y el objeto Proveedor.
+    this.txtCodigo = this.generateCode;
     this.orden = { codigo: this.txtCodigo, fechaEmision: this.txtFechaEmision, fechaEntrega: this.txtFechaEntrega, direccion: this.txtDireccion, proveedor: this.txtProveedor, producto: this.txtProducto, cantidad: this.txtCantidad, total: this.txtTotal }
     //Llamar al servicio.
     this.ordenService.addOrder(this.orden);

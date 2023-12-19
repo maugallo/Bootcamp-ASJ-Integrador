@@ -11,17 +11,17 @@
                     <div class="col d-flex justify-content-evenly mx-2">
                         <div class="me-2 input-width">
                             <label class="form-label" for="fechaEmision">Fecha de emisión</label>
-                            <input id="txtFechaEmision" class="form-control" name="fechaEmision" type="date"
+                            <input id="txtFechaEmision" [(ngModel)]="txtFechaEmision" class="form-control" name="fechaEmision" type="date"
                                 required>
                         </div>
                         <div class="me-2 input-width">
                             <label for="fechaEntrega" class="form-label">Fecha de entrega</label>
-                            <input id="txtFechaEntrega" class="form-control" name="fechaEntrega" type="date"
+                            <input id="txtFechaEntrega" [(ngModel)]="txtFechaEntrega" class="form-control" name="fechaEntrega" type="date"
                                 required>
                         </div>
                         <div class="w-50">
                             <label for="direccion" class="form-label">Dirección de recepción</label>
-                            <input type="text" id="txtDireccion" name="direccion" class="form-control"
+                            <input type="text" id="txtDireccion" [(ngModel)]="txtDireccion" name="direccion" class="form-control"
                                 placeholder="Ingrese la dirección">
                         </div>
                     </div>
@@ -30,7 +30,7 @@
                     <div class="col d-flex justify-content-around  mx-2">
                         <div class="me-2 w-50">
                             <label for="proveedor" class="form-label">Proveedor</label>
-                            <select id="selectProveedor" class="form-select " name="proveedor">
+                            <select id="selectProveedor" [(ngModel)]="txtProveedor" class="form-select " name="proveedor">
                                 <option value="proveedorA">ProveedorA</option>
                                 <option value="proovedorB">ProveedorB</option>
                                 <option value="proovedorC">ProveedorC</option>
@@ -38,7 +38,7 @@
                         </div>
                         <div class="me-2 w-50">
                             <label for="productos" class="form-label">Productos</label>
-                            <select id="selectProductos" class="form-select " name="productos">
+                            <select id="selectProductos" [(ngModel)]="txtProducto" class="form-select " name="productos">
                                 <option value="productoA">ProductoA</option>
                                 <option value="productoB">ProductoB</option>
                                 <option value="productoC">ProductoC</option>
@@ -46,18 +46,18 @@
                         </div>
                         <div class="me-1">
                             <label for="cantidad" class="form-label">Cantidad</label>
-                            <input type="number" id="txtCantidad" name="cantidad" class="form-control"
+                            <input type="number" id="txtCantidad" [(ngModel)]="txtCantidad" name="cantidad" class="form-control"
                                 placeholder="1" min="1" minvalue="1">
                         </div>
                         <div>
                             <label for="total" class="form-label">Total</label>
-                            <input type="number" id="txtTotal" name="total" class="form-control" placeholder="$0"
+                            <input type="number" id="txtTotal" [(ngModel)]="txtTotal" name="total" class="form-control" placeholder="$0"
                                 min="1" minvalue="1">
                         </div>
                     </div>
                     <!-- Botón -->
                     <div class="text-end mt-4">
-                        <button class="btn btn-add rounded-0" type="" onclick="agregarOrden()">Agregar</button>
+                        <button class="btn btn-add rounded-0" type="" (click)="addOrder()">Agregar</button>
                     </div>
                 </div>
             </div>

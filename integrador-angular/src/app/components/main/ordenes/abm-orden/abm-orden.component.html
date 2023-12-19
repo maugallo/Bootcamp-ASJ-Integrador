@@ -23,7 +23,14 @@
                         </tr>
                     </thead>
                     <tbody id="table-body">
-                        <!-- Órdenes creadas -->
+                        <tr *ngFor="let orden of arrayOrdenes">
+                            <td>{{orden.codigo}}</td>
+                            <td>{{orden.fechaEmision}}</td>
+                            <td>{{orden.fechaEntrega}}</td>
+                            <td>{{orden.proveedor}}</td>
+                            <td>{{orden.total}}</td>
+                            <td><a class="me-2 text-decoration-none option" (click)="deleteOrder(orden.codigo)">🗑️</a> <a class="text-decoration-none option" (click)="editOrder()">✏️</a></td>
+                        </tr>
                     </tbody>
                 </table>
             </section>
