@@ -12,14 +12,13 @@ export class AbmProveedorComponent implements OnInit {
   
   arrayProveedores!: Proveedor[];
 
-  constructor(private proveedorService: ServiceProveedorService, private router: Router) {}
+  constructor(private proveedorService: ServiceProveedorService) {}
 
   ngOnInit(): void {
       this.arrayProveedores = this.proveedorService.getProviders();
   }
 
   deleteProvider(codigo: number){
-    const proveedoresData = localStorage.getItem("proveedores");
     if (this.proveedorService.deleteProvider(codigo)){
       this.arrayProveedores = this.arrayProveedores.filter(proveedor => proveedor.codigo != codigo);
       alert("Elemento eliminado con éxito!");

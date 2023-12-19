@@ -7,7 +7,7 @@
             </section>
             <!-- Botón agregar -->
             <div class="text-center text-sm-end  mt-5">
-                <a class="btn btn-add rounded-0 " routerLink="form-producto">Agregar producto</a>
+                <a class="btn btn-add rounded-0 " routerLink="form-product">Agregar producto</a>
             </div>
             <!-- Tabla -->
             <section class="mt-2">
@@ -23,7 +23,14 @@
                         </tr>
                     </thead>
                     <tbody id="table-body">
-                        <!-- Productos creados -->
+                        <tr *ngFor="let producto of arrayProductos">
+                            <td>{{producto.sku}}</td>
+                            <td>{{producto.nombre}}</td>
+                            <td>{{producto.precio}}</td>
+                            <td>{{producto.proveedor.razonSocial}}</td>
+                            <td>{{producto.categoria}}</td>
+                            <td><a class="me-2 text-decoration-none option" (click)="deleteProduct(producto.sku)">🗑️</a> <a class="text-decoration-none option" (click)="editProduct()">✏️</a></td>
+                        </tr>
                     </tbody>
                 </table>
             </section>

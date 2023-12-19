@@ -12,22 +12,22 @@ const routes: Routes = [
   { path: '', component: HomeComponent },
   
 
-  { path: 'proveedores',
+  { path: 'providers',
   children: [
     { path: '', component: AbmProveedorComponent},
-    { path: 'form-proveedor', component: FormProveedorComponent}
+    { path: 'form-provider', component: FormProveedorComponent}
   ]},
 
-  { path: 'productos',
+  { path: 'products',
   children: [
     { path: '', component: AbmProductoComponent},
-    { path: 'form-producto', component: FormProductoComponent}
+    { path: 'form-product', component: FormProductoComponent}
   ]},
   
-  { path: 'ordenes',
+  { path: 'orders',
   children: [
     { path: '', component: AbmOrdenComponent},
-    { path: 'form-orden', component: FormOrdenComponent}
+    { path: 'form-order', component: FormOrdenComponent}
   ]},
 
   { path: '**', redirectTo: ''},

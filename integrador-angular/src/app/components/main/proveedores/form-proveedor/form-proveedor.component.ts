@@ -23,7 +23,7 @@ export class FormProveedorComponent implements OnInit {
   txtEmail!: string;
   txtRol!: string;
   txtCuit!: string;
-  txtIva!: string;
+  txtIva: string = "Responsable Inscripto"; //Para preseleccionar alguno de los radiobutton cuando carga el form.
 
   txtCalle!: string;
   txtNum!: string;
@@ -47,7 +47,7 @@ export class FormProveedorComponent implements OnInit {
     this.proveedorService.addProvider(this.proveedor);
     alert("Proveedor creado!");
     //Redireccionar hacia la lista.
-    this.router.navigate(['proveedores/']);
+    this.router.navigate(['providers/']);
   }
 
   //Métodos para generar el código:
