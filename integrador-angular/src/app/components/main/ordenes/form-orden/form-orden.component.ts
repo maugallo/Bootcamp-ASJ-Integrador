@@ -16,8 +16,8 @@ export class FormOrdenComponent {
   txtFechaEmision!: Date;
   txtFechaEntrega!: Date;
   txtDireccion!: string;
-  txtProveedor!: string;
-  txtProducto!: string;
+  txtProveedor: string = "proveedorA";
+  txtProducto: string = "productoA";
   txtCantidad!: number;
   txtTotal!: number;
 
