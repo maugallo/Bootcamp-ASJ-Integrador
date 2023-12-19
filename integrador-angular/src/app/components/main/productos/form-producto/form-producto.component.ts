@@ -15,12 +15,12 @@ export class FormProductoComponent implements OnInit {
 
   producto!: Producto;
   proveedor!: any;
-
+  
   txtNombre!: string;
   txtSku!: string;
   txtPrecio!: number;
   txtDescripcion!: string;
-  txtProveedor!: number;
+  txtProveedor: number = this.arrayProveedores[0].codigo; //Preselecciono el primer elemento en el select.
   txtCategoria: string = "categoriaA"; //Preselecciono el primer elemento en el select.
 
   constructor(private productoService: ServiceProductoService, private router: Router){}

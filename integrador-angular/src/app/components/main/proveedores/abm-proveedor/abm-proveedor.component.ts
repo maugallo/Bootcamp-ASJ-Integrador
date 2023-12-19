@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ServiceProveedorService } from '../../../../services/service-proveedor.service';
 import { Proveedor } from '../../../../models/proveedores';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-abm-proveedor',

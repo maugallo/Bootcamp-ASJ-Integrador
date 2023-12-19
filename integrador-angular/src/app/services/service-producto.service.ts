@@ -19,28 +19,20 @@ export class ServiceProductoService implements OnInit {
   }
 
   addProduct(producto: Producto){
-    const productosData = localStorage.getItem("productos");
-    //Si productosData es distinto de null, entonces devuelve el array, de lo contrario crea un array nuevo.
-    this.arrayProductos = productosData != null ? JSON.parse(productosData) : [];
+    this.arrayProductos = this.getStorage("productos");
     this.arrayProductos.push(producto);
-    localStorage.setItem("productos",JSON.stringify(this.arrayProductos));
+    this.setStorage("productos", this.arrayProductos);
   }
 
   getProducts(){
-    const productosData = localStorage.getItem("productos");
-    if (productosData != null){
-      return JSON.parse(productosData)
-    } else{
-      return [];
-    }
+    return this.getStorage("productos");
   }
 
   deleteProduct(sku: string){
-    const productosData = localStorage.getItem("productos");
-    if (productosData){
-      this.arrayProductos = JSON.parse(productosData);
+    this.arrayProductos = this.getStorage("productos");
+    if (this.arrayProductos.length > 0){
       this.arrayProductos = this.arrayProductos.filter(producto => producto.sku != sku);
-      localStorage.setItem("productos", JSON.stringify(this.arrayProductos));
+      this.setStorage("productos", this.arrayProductos);
       return true;
     } else{
       return false;
@@ -49,5 +41,16 @@ export class ServiceProductoService implements OnInit {
 
   editProduct(){
     alert("Próximamente!");
+  }
+
+  //Métodos auxiliares.
+  getStorage(text: string){
+    //Si localStorage.getItem(text) es null o undefined, devuelve el resultado de la derecha. De lo contrario, devuelve el de la izquierda.
+    const array = JSON.parse(localStorage.getItem(text) ?? "[]");
+    return array;
+  }
+
+  setStorage(text: string, array: Producto[]){
+    localStorage.setItem(text, JSON.stringify(array));
   }
 }

@@ -10,31 +10,34 @@ export class ServiceProveedorService {
   constructor() { }
 
   addProvider(proveedor: Proveedor){
-    const proveedoresData = localStorage.getItem("proveedores");
-    //Si proveedoresData es distinto de null, entonces devuelve el array, de lo contrario crea un array nuevo.
-    this.arrayProveedores = proveedoresData != null ? JSON.parse(proveedoresData) : [];
+    this.arrayProveedores = this.getStorage("proveedores");
     this.arrayProveedores.push(proveedor);
-    localStorage.setItem("proveedores",JSON.stringify(this.arrayProveedores));
+    this.setStorage("proveedores", this.arrayProveedores);
   }
 
   getProviders(){
-    const proveedoresData = localStorage.getItem("proveedores");
-    if (proveedoresData != null){
-      return JSON.parse(proveedoresData)
-    } else{
-      return [];
-    }
+    return this.getStorage("proveedores");
   }
 
   deleteProvider(codigo: number){
-    const proveedoresData = localStorage.getItem("proveedores");
-    if (proveedoresData){
-      this.arrayProveedores = JSON.parse(proveedoresData);
+    this.arrayProveedores = this.getStorage("proveedores");
+    if (this.arrayProveedores.length > 0){
       this.arrayProveedores = this.arrayProveedores.filter(proveedor => proveedor.codigo != codigo);
-      localStorage.setItem("proveedores", JSON.stringify(this.arrayProveedores));
+      this.setStorage("proveedores", this.arrayProveedores);
       return true;
     } else{
       return false;
     }
+  }
+
+  //Métodos auxiliares.
+  getStorage(text: string){
+    //Si localStorage.getItem(text) es null o undefined, devuelve el resultado de la derecha. De lo contrario, devuelve el de la izquierda.
+    const array = JSON.parse(localStorage.getItem(text) ?? "[]");
+    return array;
+  }
+
+  setStorage(text: string, array: Proveedor[]){
+    localStorage.setItem(text, JSON.stringify(array));
   }
 }
