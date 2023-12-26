@@ -27,11 +27,6 @@ export class FormProductoComponent implements OnInit {
   }
 
   addProduct(){
-    this.producto = { nombre: this.txtNombre, sku: this.txtSku, precio: this.txtPrecio, descripcion: this.txtDescripcion, proveedor: this.txtProveedor,  categoria: this.txtCategoria}
-
-    this.productoService.addProduct(this.producto);
-    alert("Producto creado!");
-    //Redireccionar hacia la lista.
-    this.router.navigate(['products/']);
+    
   }
 }

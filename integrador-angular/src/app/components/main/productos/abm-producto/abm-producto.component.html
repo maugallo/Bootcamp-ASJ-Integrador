@@ -7,11 +7,11 @@
             </section>
             <!-- Botón agregar -->
             <div class="text-center text-sm-end  mt-5">
-                <a class="btn btn-add rounded-0 " routerLink="form-product">Agregar producto</a>
+                <a class="btn btn-add rounded-0 " [routerLink]="['form-product']">Agregar producto</a>
             </div>
             <!-- Tabla -->
             <section class="mt-2">
-                <table class="table table-hover table-bordered border-secondary-subtle">
+                <table *ngIf="arrayProductos.length > 0" class="table table-hover table-bordered border-secondary-subtle">
                     <thead>
                         <tr>
                             <th>Código</th>
@@ -33,6 +33,9 @@
                         </tr>
                     </tbody>
                 </table>
+                <div *ngIf="arrayProductos.length === 0" class="alert rounded-0 alert-custom">
+                    <span class="fs-4 font-blue">Todavía no hay elementos, puedes agregar uno <a [routerLink]="['/products/form-product']" class="alert-link ">presionando aquí</a></span>
+                </div>
             </section>
         </div>
         <div class="col-auto col-lg-2"></div>

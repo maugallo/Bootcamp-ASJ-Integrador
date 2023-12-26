@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -15,6 +16,8 @@ import { AbmProductoComponent } from './components/main/productos/abm-producto/a
 import { FormProductoComponent } from './components/main/productos/form-producto/form-producto.component';
 import { AbmOrdenComponent } from './components/main/ordenes/abm-orden/abm-orden.component';
 import { FormOrdenComponent } from './components/main/ordenes/form-orden/form-orden.component';
+import { DetailProveedorComponent } from './components/main/proveedores/detail-proveedor/detail-proveedor.component';
+import { DetailProductoComponent } from './components/main/productos/detail-producto/detail-producto.component';
 
 @NgModule({
   declarations: [
@@ -28,13 +31,16 @@ import { FormOrdenComponent } from './components/main/ordenes/form-orden/form-or
     AbmProductoComponent,
     FormProductoComponent,
     AbmOrdenComponent,
-    FormOrdenComponent
+    FormOrdenComponent,
+    DetailProveedorComponent,
+    DetailProductoComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     NgbModule,
-    FormsModule
+    FormsModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

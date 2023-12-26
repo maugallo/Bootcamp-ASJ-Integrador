@@ -1,43 +1,69 @@
 import { Injectable } from '@angular/core';
 import { Proveedor } from '../models/proveedores';
+import { LocalStorageClass } from '../utils/localStorage';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ServiceProveedorService {
+  
+  constructor(private http: HttpClient){}
+
+  private URL_API_COUNTRIES: string = "assets/data/countries.json";
+  private URL_API_STATES: string = "assets/data/states.json";
+  private URL_API_CITIES: string = "assets/data/cities.json";
+
+  private localStorage: LocalStorageClass = new LocalStorageClass();
+
   arrayProveedores!: Proveedor[];
 
-  constructor() { }
+  //CRUD Providers:
+  getProviders(){
+    return this.localStorage.getStorage("proveedores");
+  }
+
+  getProvider(codigo: string){
+    return this.localStorage.getStorage("proveedores").find((proveedor: Proveedor) => { return proveedor.codigo === codigo });
+  }
 
   addProvider(proveedor: Proveedor){
-    this.arrayProveedores = this.getStorage("proveedores");
+    this.arrayProveedores = this.localStorage.getStorage("proveedores");
     this.arrayProveedores.push(proveedor);
-    this.setStorage("proveedores", this.arrayProveedores);
+    this.localStorage.setStorage("proveedores", this.arrayProveedores);
   }
 
-  getProviders(){
-    return this.getStorage("proveedores");
+  updateProvider(proveedor: Proveedor){
+    this.arrayProveedores = this.localStorage.getStorage("proveedores");
+    
+    let index = this.arrayProveedores.findIndex((proveedorOriginal) => { return proveedorOriginal.codigo === proveedor.codigo })
+    this.arrayProveedores[index] = proveedor;
+    this.localStorage.setStorage("proveedores", this.arrayProveedores);
   }
 
-  deleteProvider(codigo: number){
-    this.arrayProveedores = this.getStorage("proveedores");
+  deleteProvider(codigo: string){
+    this.arrayProveedores = this.localStorage.getStorage("proveedores");
     if (this.arrayProveedores.length > 0){
       this.arrayProveedores = this.arrayProveedores.filter(proveedor => proveedor.codigo != codigo);
-      this.setStorage("proveedores", this.arrayProveedores);
+      this.localStorage.setStorage("proveedores", this.arrayProveedores);
       return true;
     } else{
       return false;
     }
   }
 
-  //Métodos auxiliares.
-  getStorage(text: string){
-    //Si localStorage.getItem(text) es null o undefined, devuelve el resultado de la derecha. De lo contrario, devuelve el de la izquierda.
-    const array = JSON.parse(localStorage.getItem(text) ?? "[]");
-    return array;
+  //Form methods:
+  getCountries(): Observable<any>{
+    return this.http.get(this.URL_API_COUNTRIES);
   }
 
-  setStorage(text: string, array: Proveedor[]){
-    localStorage.setItem(text, JSON.stringify(array));
+  getStates(): Observable<any>{
+    return this.http.get(this.URL_API_STATES);
   }
+
+  getCities(): Observable<any>{
+    return this.http.get(this.URL_API_CITIES);
+  }
+
 }

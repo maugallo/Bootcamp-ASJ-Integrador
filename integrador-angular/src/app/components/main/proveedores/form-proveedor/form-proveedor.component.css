@@ -1,8 +1,4 @@
-.card-border-blue{
-    border-color: #001652;
-}
-
-input{
+input, select{
     border-color: #001652;
     border-radius: 0;
 }
@@ -10,4 +6,12 @@ input{
 label{
     color: #001652;
     font-weight: 500;
+}
+
+.card-border-blue{
+    border-color: #001652;
+}
+
+.subtitle{
+    border-bottom: 1px solid #00165270;
 }

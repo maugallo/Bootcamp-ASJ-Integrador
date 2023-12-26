@@ -7,6 +7,8 @@ import { AbmProductoComponent } from './components/main/productos/abm-producto/a
 import { FormProductoComponent } from './components/main/productos/form-producto/form-producto.component';
 import { AbmOrdenComponent } from './components/main/ordenes/abm-orden/abm-orden.component';
 import { FormOrdenComponent } from './components/main/ordenes/form-orden/form-orden.component';
+import { DetailProveedorComponent } from './components/main/proveedores/detail-proveedor/detail-proveedor.component';
+import { DetailProductoComponent } from './components/main/productos/detail-producto/detail-producto.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -15,13 +17,17 @@ const routes: Routes = [
   { path: 'providers',
   children: [
     { path: '', component: AbmProveedorComponent},
-    { path: 'form-provider', component: FormProveedorComponent}
+    { path: 'form-provider', component: FormProveedorComponent},
+    { path: ':id', component: DetailProveedorComponent},
+    { path: 'form-provider/:id', component: FormProveedorComponent}
   ]},
 
   { path: 'products',
   children: [
     { path: '', component: AbmProductoComponent},
-    { path: 'form-product', component: FormProductoComponent}
+    { path: 'form-product', component: FormProductoComponent},
+    { path: ':id', component: DetailProductoComponent},
+    { path: 'form-product/:id', component: FormProductoComponent}
   ]},
   
   { path: 'orders',

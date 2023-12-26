@@ -1,5 +1,5 @@
 export interface Proveedor{
-    codigo: number;
+    codigo: string;
     razonSocial: string;
     rubro: string;
     sitioWeb: string;
@@ -10,13 +10,9 @@ export interface Proveedor{
     rol: string;
     cuit: string;
     iva: string;
-    direccion: Direccion;
-}
-
-export interface Direccion{
     calle: string;
-    num: number;
-    codPostal: number;
+    num: number | undefined;
+    codPostal: number | undefined;
     localidad: string;
     provincia: string;
     pais: string;

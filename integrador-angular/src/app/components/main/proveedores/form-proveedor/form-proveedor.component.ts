@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ServiceProveedorService } from '../../../../services/service-proveedor.service';
 import { Proveedor } from '../../../../models/proveedores';
-import { Direccion } from '../../../../models/proveedores';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { NgForm } from '@angular/forms';
 
 @Component({
   selector: 'app-form-proveedor',
@@ -10,64 +10,130 @@ import { Router } from '@angular/router';
   styleUrl: './form-proveedor.component.css'
 })
 export class FormProveedorComponent implements OnInit {
-  proveedor!: Proveedor;
-  codigo!: number;
-  direccion!: Direccion;
+  //Objeto Proveedor que se enlazará mediante ngModel en el form:
+  proveedor: Proveedor = {
+    codigo: "",
+    razonSocial: "",
+    rubro: "",
+    sitioWeb: "",
+    nombre: "",
+    apellido: "",
+    telefono: "",
+    email: "",
+    rol: "",
+    cuit: "",
+    iva: "Responsable Inscripto", //Para inicializar marcado alguno de los radiobutton cuando carga el form.
+    calle: "",
+    num: undefined,
+    codPostal: undefined,
+    localidad: "",
+    provincia: "",
+    pais: ""
+  }
 
-  txtRazonSocial!: string;
-  txtRubro!: string;
-  txtSitioWeb!: string;
-  txtNombre!: string;
-  txtApellido!: string;
-  txtTelefono!: string;
-  txtEmail!: string;
-  txtRol!: string;
-  txtCuit!: string;
-  txtIva: string = "Responsable Inscripto"; //Para preseleccionar alguno de los radiobutton cuando carga el form.
+  //Select de países, provincias y localidades que se renderizará en el form.
+  countries: any[] = [];
+  states: any[] = [];
+  cities: any[] = [];
 
-  txtCalle!: string;
-  txtNum!: string;
-  txtCodPostal!: string;
-  txtLocalidad!: string;
-  txtProvincia!: string;
-  txtPais!: string;
+  //Variables para manejar el tíutlo y nombre del botón:
+  title: string = "AGREGAR PROVEEDOR";
+  buttonName: string = "Agregar";
 
-  constructor(private proveedorService: ServiceProveedorService, private router: Router) { }
+  //Variable para determinar si se editará o creará un proveedor:
+  codigoParam!: string;
+
+  constructor(public proveedorService: ServiceProveedorService, private router: Router, private activatedRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
+    this.getCountries();
+
+    this.codigoParam = this.activatedRoute.snapshot.params['id'];
+    
+      if (this.proveedorService.getProvider(this.codigoParam) !== undefined){
+        this.proveedor = this.proveedorService.getProvider(this.codigoParam);
+        this.getStates();
+        this.getCities();
+        this.title = "EDITAR PROVEEDOR";
+        this.buttonName = "Editar";
+      } else{
+        this.router.navigate(['providers/form-provider']);
+      }
 
   }
 
-  addProvider() {
-    //Creo el objeto Dirección, genero el código autoincrementable y el objeto Proveedor.
-    this.direccion = { calle: this.txtCalle, num: Number(this.txtNum), codPostal: Number(this.txtCodPostal), localidad: this.txtLocalidad, provincia: this.txtProvincia, pais: this.txtPais}
-    this.codigo = this.generateCode;
-    this.proveedor = { codigo: this.codigo, razonSocial: this.txtRazonSocial, rubro: this.txtRubro, sitioWeb: this.txtSitioWeb, nombre: this.txtNombre, apellido: this.txtApellido, telefono: this.txtTelefono, email: this.txtEmail, rol: this.txtRol, cuit: this.txtCuit, iva: this.txtIva, direccion: this.direccion }
-    //Llamar al servicio.
-    this.proveedorService.addProvider(this.proveedor);
-    alert("Proveedor creado!");
-    //Redireccionar hacia la lista.
-    this.router.navigate(['providers/']);
-  }
-
-  //Métodos para generar el código:
-  get generateCode(){
-    let codigo!: number;
-    const proveedoresData = this.proveedorService.getStorage("proveedores");
-    if (proveedoresData === null || proveedoresData.length === 0){
-      codigo = 1;
-    } else{
-      codigo = this.getLastCode(proveedoresData);
+  onSubmit(form: NgForm) {
+    if (form.valid){
+      this.proveedor = { codigo: this.proveedor.codigo.toUpperCase(), razonSocial: this.proveedor.razonSocial, rubro: this.proveedor.rubro, sitioWeb: this.proveedor.sitioWeb, nombre: this.proveedor.nombre, apellido: this.proveedor.apellido, telefono: this.proveedor.telefono, email: this.proveedor.email, rol: this.proveedor.rol, cuit: this.proveedor.cuit, iva: this.proveedor.iva, calle: this.proveedor.calle, num: Number(this.proveedor.num), codPostal: Number(this.proveedor.codPostal), localidad: this.proveedor.localidad, provincia: this.proveedor.provincia, pais: this.proveedor.pais };
+      if (this.buttonName === "Agregar"){
+        if (this.isCodeRepeated(this.proveedor.codigo)){
+          alert("El código del proveedor ya existe");
+        } else{
+          this.proveedorService.addProvider(this.proveedor);
+          alert("Proveedor creado!"); //(Cambiar por otra alerta)
+          this.router.navigate(['providers/']);
+        }
+      } else if (this.buttonName === "Editar"){
+        this.proveedorService.updateProvider(this.proveedor);
+        alert("Proveedor editado!"); //(Cambiar por otra alerta)
+        this.router.navigate(['providers/']);
+      }
     }
-    return codigo;
+  }
+  
+  selectCountry(){
+    this.states = []; //Limpio el select de provincias.
+    this.cities = []; //Limpio el select de localidades.
+    this.proveedor.provincia = "";
+    this.proveedor.localidad = "";
+
+    this.getStates();
   }
 
-  getLastCode(array: Proveedor[]){
-    return array[array.length - 1].codigo + 1;
+  selectState(){
+    this.cities = []; //Limpio el select de localidades.
+    this.proveedor.localidad = "";
+
+    this.getCities();
+  }
+
+  //Llamadas a la API:
+  getCountries(){
+    this.proveedorService.getCountries().subscribe((data) => {
+      this.countries = data;
+
+      this.countries = this.filterCountries();
+    });
+  }
+
+  getStates(){
+    this.proveedorService.getStates().subscribe((data) => {
+      this.states = data.filter((state: any) => (state.country_name === this.proveedor.pais));
+    });
+  }
+
+  getCities(){
+    this.proveedorService.getCities().subscribe((data) =>{
+      this.cities = data.filter((city: any) => (city.state_name === this.proveedor.provincia));
+    });
+  }
+
+  //Métodos auxiliares:
+  filterCountries(){
+    return this.countries.filter((country) => (country.region === "Americas" || country.region === "Europe"));
+  }
+
+  isCodeRepeated(codigo: string){
+    let index = this.proveedorService.getProviders().findIndex((proveedor: Proveedor) => proveedor.codigo === codigo);
+    if (index != -1){
+      return true;
+    } else{
+      return false;
+    }
   }
 
   //Métodos de validación:
-  get validateData() {
+  /* get validateData() {
     return null;
   }
 
@@ -93,5 +159,5 @@ export class FormProveedorComponent implements OnInit {
     } else {
       return false;
     }
-  }
+  } */
 }
