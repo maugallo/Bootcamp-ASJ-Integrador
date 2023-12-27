@@ -16,16 +16,7 @@ export class AbmOrdenComponent {
       this.arrayOrdenes = this.ordenService.getOrders();
   }
 
-  deleteOrder(codigo: number){
-    if (this.ordenService.deleteOrder(codigo)){
-      this.arrayOrdenes = this.arrayOrdenes.filter(orden => orden.codigo != codigo);
-      alert("Elemento eliminado con éxito!");
-    } else{
-      alert("Ocurrió un error al eliminar el elemento");
-    }
-  }
-
-  editOrder(){
-    alert("Próximamente!");
+  openModal(nroOrden: number | undefined){
+    
   }
 }

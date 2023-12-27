@@ -4,8 +4,9 @@ export interface Producto{
     imagen: string;
     nombre: string;
     sku: string;
-    precio: number;
+    precio: number | undefined;
     descripcion: string;
-    proveedor: Proveedor;
+    proveedor: Proveedor | undefined;
     categoria: string;
+    habilitado: boolean;
 }

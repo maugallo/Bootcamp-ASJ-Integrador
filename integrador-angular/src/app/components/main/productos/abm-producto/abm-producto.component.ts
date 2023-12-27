@@ -8,24 +8,33 @@ import { Producto } from '../../../../models/productos';
   styleUrl: './abm-producto.component.css'
 })
 export class AbmProductoComponent {
-  arrayProductos!: Producto[];
+
+  arrayHabilitados!: Producto[];
+  arrayDeshabilitados!: Producto[];
+  selectedSku!: string;
+  verDeshabilitados: boolean = false;
 
   constructor(private productoService: ServiceProductoService) {}
 
   ngOnInit(): void {
-      this.arrayProductos = this.productoService.getProducts();
+    this.renderTables();
   }
 
-  deleteProduct(sku: string){
-    if (this.productoService.deleteProduct(sku)){
-      this.arrayProductos = this.arrayProductos.filter(producto => producto.sku != sku);
+  openModal(sku: string){
+    this.selectedSku = sku;
+  }
+
+  deleteProduct(){
+    if (this.productoService.deleteProduct(this.selectedSku)){
+      this.renderTables();
       alert("Elemento eliminado con éxito!");
     } else{
       alert("Ocurrió un error al eliminar el elemento");
     }
   }
 
-  editProduct(){
-    alert("Próximamente!");
+  renderTables(){
+    this.arrayHabilitados = this.productoService.getEnabledProducts().sort((a:Producto, b:Producto) => (a.nombre > b.nombre ? 1 : -1));
+    this.arrayDeshabilitados = this.productoService.getDisabledProducts().sort((a:Producto, b:Producto) => (a.nombre > b.nombre ? 1 : -1));
   }
 }

@@ -9,6 +9,7 @@ import { AbmOrdenComponent } from './components/main/ordenes/abm-orden/abm-orden
 import { FormOrdenComponent } from './components/main/ordenes/form-orden/form-orden.component';
 import { DetailProveedorComponent } from './components/main/proveedores/detail-proveedor/detail-proveedor.component';
 import { DetailProductoComponent } from './components/main/productos/detail-producto/detail-producto.component';
+import { DetailOrdenComponent } from './components/main/ordenes/detail-orden/detail-orden.component';
 
 const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -33,7 +34,9 @@ const routes: Routes = [
   { path: 'orders',
   children: [
     { path: '', component: AbmOrdenComponent},
-    { path: 'form-order', component: FormOrdenComponent}
+    { path: 'form-order', component: FormOrdenComponent},
+    { path: ':id', component: DetailOrdenComponent},
+    { path: 'form-order/:id', component: FormOrdenComponent}
   ]},
 
   { path: '**', redirectTo: ''},

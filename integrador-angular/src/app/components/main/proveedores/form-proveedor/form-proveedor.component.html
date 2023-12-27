@@ -6,7 +6,7 @@
                 <div class="my-5">
                     <h2 class="text-center mb-2 display-5 fw-semibold font-blue">{{title}}</h2>
                 </div>
-                <p><a class=" fs-6 font-blue" routerLink="/providers">VOLVER</a></p>
+                <p><a class=" fs-6 font-blue" [routerLink]="['/providers']">VOLVER</a></p>
             </section>
             <section class="card p-5 rounded-0 card-border-blue">
                 <form #providersForm="ngForm" (ngSubmit)="onSubmit(providersForm)">
@@ -21,8 +21,7 @@
                             <div class="me-2">
                                 <label for="codigo" class="form-label">Código</label>
                                 <input class="form-control" #codigo="ngModel" [(ngModel)]="proveedor.codigo"
-                                    name="codigo" type="text" placeholder="AB12" required minlength="4" maxlength="10"
-                                    pattern="^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ ]+$" [disabled]="codigoParam">
+                                    name="codigo" type="text" placeholder="AB12" required minlength="4" maxlength="10" [disabled]="codigoParam">
                                 <!-- Mensaje de error -->
                                 <div *ngIf="codigo.touched && codigo.errors?.['required']" class="text-danger ">
                                     <p><small>Este campo no puede estar vacío</small></p>
@@ -30,24 +29,17 @@
                                 <div *ngIf="codigo.touched && codigo.errors?.['minlength']" class="text-danger">
                                     <p><small>No pueden haber menos de 4 caracteres</small></p>
                                 </div>
-                                <div *ngIf="codigo.touched && codigo.errors?.['pattern']" class="text-danger">
-                                    <p><small>No pueden haber caracteres especiales</small></p>
-                                </div>
                             </div>
                             <div class="me-2">
                                 <label class="form-label" for="razonSocial">Razón Social</label>
                                 <input id="txtEmpresa" #razonSocial="ngModel" class="form-control"
                                     [(ngModel)]="proveedor.razonSocial" name="razonSocial" type="text"
-                                    placeholder="Ingrese razón social" required minlength="5" maxlength="60"
+                                    placeholder="Ingrese razón social" required maxlength="60"
                                     pattern="^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ ]+$">
                                 <!-- Mensaje de error -->
                                 <div *ngIf="razonSocial.touched && razonSocial.errors?.['required']"
                                     class="text-danger ">
                                     <p><small>Este campo no puede estar vacío</small></p>
-                                </div>
-                                <div *ngIf="razonSocial.touched && razonSocial.errors?.['minlength']"
-                                    class="text-danger">
-                                    <p><small>No pueden haber menos de 5 caracteres</small></p>
                                 </div>
                                 <div *ngIf="razonSocial.touched && razonSocial.errors?.['pattern']" class="text-danger">
                                     <p><small>No pueden haber caracteres especiales</small></p>
@@ -116,7 +108,7 @@
                                     <label for="codPostal" class="form-label">Código Postal</label>
                                     <input type="text" #codPostal="ngModel" name="codPostal"
                                         [(ngModel)]="proveedor.codPostal" class="form-control" placeholder="C.P"
-                                        required minlength="4" maxlength="4" pattern="^[0-9]+$">
+                                        required minlength="4" maxlength="6" pattern="^[0-9]+$">
                                     <!-- Mensaje de error -->
                                     <div *ngIf="codPostal.touched && codPostal.errors?.['required']"
                                         class="text-danger ">
@@ -124,7 +116,7 @@
                                     </div>
                                     <div *ngIf="codPostal.touched && codPostal.errors?.['minlength']"
                                         class="text-danger ">
-                                        <p><small>La longitud debe ser de 4 caracteres</small></p>
+                                        <p><small>La longitud no debe ser menor a 4 caracteres</small></p>
                                     </div>
                                     <div *ngIf="codPostal.touched && codPostal.errors?.['pattern']"
                                         class="text-danger ">
@@ -188,7 +180,7 @@
                                 <label for="cuit" class="form-label">CUIT</label>
                                 <input type="text" #cuit="ngModel" [(ngModel)]="proveedor.cuit" name="cuit"
                                     class="form-control" placeholder="XX-XXXXXXXX-X" required
-                                    pattern="^[0-9]{2}-[0-9]{8}-[0-9]$">
+                                    pattern="^[0-9]{2}-[0-9]{8}-[0-9]$" [disabled]="codigoParam">
                                 <!-- Mensaje de error -->
                                 <div *ngIf="cuit.touched && cuit.errors?.['required']" class="text-danger ">
                                     <p><small>Este campo no puede estar vacío</small></p>

@@ -15,3 +15,7 @@ label{
 .input-width{
     width: 20vw;
 }
+
+.subtitle{
+    border-bottom: 1px solid #00165270;
+}

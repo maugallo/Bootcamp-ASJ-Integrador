@@ -14,7 +14,8 @@
                             <p class="font-blue">¿Está seguro que quiere eliminar este elemento?</p>
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary rounded-0" data-bs-dismiss="modal">Cerrar</button>
+                            <button type="button" class="btn btn-secondary rounded-0"
+                                data-bs-dismiss="modal">Cerrar</button>
                             <button type="button" class="btn btn-add rounded-0" data-bs-dismiss="modal"
                                 (click)="deleteProvider()">Eliminar</button>
                         </div>
@@ -26,11 +27,17 @@
             </section>
             <!-- Botón agregar -->
             <div class="text-center text-sm-end  mt-5">
-                <a class="btn btn-add rounded-0 " [routerLink]="['/providers/form-provider']">Agregar proveedor</a>
+                <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
+                    <input type="checkbox" [(ngModel)]="verDeshabilitados" class="btn-check" id="btncheck1"
+                        autocomplete="off">
+                    <label class="btn btn-outline-primary checkbox-custom rounded-0" for="btncheck1">Ver eliminados</label>
+                </div>
+                <a class="btn btn-add rounded-0 ms-2" [routerLink]="['/providers/form-provider']">Agregar proveedor</a>
             </div>
             <!-- Tabla -->
             <section class="mt-2">
-                <table *ngIf="arrayProveedores.length > 0" class="table table-hover table-bordered border-secondary-subtle">
+                <table *ngIf="arrayHabilitados.length > 0 || (verDeshabilitados === true && arrayDeshabilitados.length > 0)"
+                    class="table table-hover table-bordered border-secondary-subtle">
                     <thead>
                         <tr>
                             <th>Código</th>
@@ -41,32 +48,56 @@
                         </tr>
                     </thead>
                     <tbody id="table-body">
-                        <tr *ngFor="let proveedor of arrayProveedores">
-                            <td>{{proveedor.codigo}}</td>
-                            <td>{{proveedor.razonSocial}}</td>
-                            <td>
-                                <div>
-                                    {{proveedor.sitioWeb}}
-                                </div>
-                                <div>
-                                    {{proveedor.email}}
-                                </div>
-                                <div>
-                                    {{proveedor.telefono}}
-                                </div>
-                            </td>
-                            <td>{{proveedor.nombre}} {{proveedor.apellido}}</td>
-                            <td>
-                                <a class="fs-5 me-2 text-decoration-none option" data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="openModal(proveedor.codigo)">🗑️</a>
-                                <a class="fs-5 me-2 text-decoration-none option" [routerLink]="['form-provider', proveedor.codigo]">✏️</a>
-                                <a class="fs-5 text-decoration-none option" [routerLink]="['/providers', proveedor.codigo]">👁️</a>
-                            </td>
-                        </tr>
+                        <!-- Elementos activos -->
+                        <ng-container *ngIf="verDeshabilitados === false">
+                            <tr *ngFor="let proveedor of arrayHabilitados">
+                                <td>{{proveedor.codigo}}</td>
+                                <td>{{proveedor.razonSocial}}</td>
+                                <td>
+                                    <div>
+                                        {{proveedor.sitioWeb}}
+                                    </div>
+                                    <div>
+                                        {{proveedor.email}}
+                                    </div>
+                                    <div>
+                                        {{proveedor.telefono}}
+                                    </div>
+                                </td>
+                                <td>{{proveedor.nombre}} {{proveedor.apellido}}</td>
+                                <td>
+                                    <a class="fs-5 me-2 text-decoration-none option" data-bs-toggle="modal"
+                                        data-bs-target="#exampleModal" (click)="openModal(proveedor.codigo)">🗑️</a>
+                                    <a class="fs-5 me-2 text-decoration-none option"
+                                        [routerLink]="['form-provider', proveedor.codigo]">✏️</a>
+                                    <a class="fs-5 text-decoration-none option"
+                                        [routerLink]="['/providers', proveedor.codigo]">👁️</a>
+                                </td>
+                            </tr>
+                        </ng-container>
+                        <!-- Elementos deshabilitados -->
+                        <ng-container *ngIf="verDeshabilitados === true && arrayDeshabilitados.length > 0">
+                            <tr class="table-secondary " *ngFor="let proveedor of arrayDeshabilitados">
+                                <td>{{proveedor.codigo}}</td>
+                                <td>{{proveedor.razonSocial}}</td>
+                                <td>
+                                    <div>
+                                        {{proveedor.sitioWeb}}
+                                    </div>
+                                    <div>
+                                        {{proveedor.email}}
+                                    </div>
+                                    <div>
+                                        {{proveedor.telefono}}
+                                    </div>
+                                </td>
+                                <td>{{proveedor.nombre}} {{proveedor.apellido}}</td>
+                                <td>Eliminado</td>
+                            </tr>
+                        </ng-container>
                     </tbody>
-
-                    <!--  Código, Razón social, [Sitio web, email, teléfono] (estos últimos 3 datos en una sóla columna) y Nombre - apellido del contacto. -->
                 </table>
-                <div *ngIf="arrayProveedores.length === 0" class="alert alert-primary  rounded-0 alert-custom">
+                <div *ngIf="arrayHabilitados.length === 0 && (arrayDeshabilitados.length === 0 || verDeshabilitados === false)" class="alert alert-primary  rounded-0 alert-custom">
                     <span class="fs-4 font-blue">Todavía no hay elementos, puedes agregar uno <a [routerLink]="['/providers/form-provider']" class="alert-link ">presionando aquí</a></span>
                 </div>
             </section>

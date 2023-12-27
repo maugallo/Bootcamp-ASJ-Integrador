@@ -10,13 +10,15 @@ import { Router } from '@angular/router';
 })
 export class AbmProveedorComponent implements OnInit {
   
-  arrayProveedores!: Proveedor[];
+  arrayHabilitados!: Proveedor[];
+  arrayDeshabilitados!: Proveedor[];
   selectedCode!: string;
+  verDeshabilitados: boolean = false;
 
   constructor(private proveedorService: ServiceProveedorService, private router: Router) {}
 
   ngOnInit(): void {
-    this.arrayProveedores = this.proveedorService.getProviders();
+    this.renderTables();
   }
 
   openModal(codigo: string){
@@ -25,10 +27,15 @@ export class AbmProveedorComponent implements OnInit {
 
   deleteProvider(){
     if (this.proveedorService.deleteProvider(this.selectedCode)){
-      this.arrayProveedores = this.arrayProveedores.filter(proveedor => proveedor.codigo != this.selectedCode); //Filtramos la variable nuevamente para que se renderice la tabla en el momento.
+      this.renderTables();
       alert("Elemento eliminado con éxito!");
     } else{
       alert("Ocurrió un error al eliminar el elemento");
     }
+  }
+
+  renderTables(){
+    this.arrayHabilitados = this.proveedorService.getEnabledProviders();
+    this.arrayDeshabilitados = this.proveedorService.getDisabledProviders();
   }
 }

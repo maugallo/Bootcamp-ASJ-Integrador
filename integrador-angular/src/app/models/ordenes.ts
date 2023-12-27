@@ -1,13 +1,14 @@
-import { Producto } from "./productos";
+import { ItemOrden } from "./itemOrden";
 import { Proveedor } from "./proveedores";
 
 export interface Orden{
-    codigo: number,
-    fechaEmision: Date;
-    fechaEntrega: Date;
+    nroOrden: number | undefined;
+    fechaEmision: Date | undefined;
+    fechaEntrega: Date | undefined;
+    infoRecepcion: string;
     direccion: string;
-    proveedor: string;
-    producto: string;
-    cantidad: number;
-    total: number;
+    proveedor: Proveedor | undefined;
+    listaItems: ItemOrden[];
+    total: number | undefined;
+    habilitado: boolean;
 }

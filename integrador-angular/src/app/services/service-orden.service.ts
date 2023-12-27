@@ -1,43 +1,89 @@
 import { Injectable } from '@angular/core';
 import { Orden } from '../models/ordenes';
+import { LocalStorageClass } from '../utils/localStorage';
+import { ServiceProveedorService } from './service-proveedor.service';
+import { ServiceProductoService } from './service-producto.service';
+import { Producto } from '../models/productos';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ServiceOrdenService {
+
+  constructor(private proveedorService: ServiceProveedorService, private productoService: ServiceProductoService) { }
+
+  private localStorage: LocalStorageClass = new LocalStorageClass();
+
   arrayOrdenes!: Orden[];
 
-  constructor() { }
+   //CRUD Orders:
+   getOrders(){
+    return this.localStorage.getStorage("ordenes");
+  }
+
+  getEnabledOrders(){
+    return this.localStorage.getStorage("ordenes").filter((orden: Orden) => orden.habilitado === true);
+  }
+
+  getDisabledOrders(){
+    return this.localStorage.getStorage("ordenes").filter((orden: Orden) => orden.habilitado === false);
+  }
+
+  getOrder(nroOrden: number){
+    return this.localStorage.getStorage("ordenes").find((orden: Orden) => orden.nroOrden === nroOrden );
+  }
 
   addOrder(orden: Orden){
-    this.arrayOrdenes = this.getStorage("ordenes");
+    this.arrayOrdenes = this.localStorage.getStorage("ordenes");
     this.arrayOrdenes.push(orden);
-    this.setStorage("ordenes", this.arrayOrdenes);
+    this.localStorage.setStorage("ordenes", this.arrayOrdenes);
   }
 
-  getOrders(){
-    return this.getStorage("ordenes");
+  updateOrder(orden: Orden){
+    this.arrayOrdenes = this.localStorage.getStorage("ordenes");
+
+    let index = this.arrayOrdenes.findIndex((ordenOriginal: Orden) => ordenOriginal.nroOrden === orden.nroOrden );
+    this.arrayOrdenes[index] = orden;
+    this.localStorage.setStorage("ordenes", this.arrayOrdenes);
   }
 
-  deleteOrder(codigo: number){
-    this.arrayOrdenes = this.getStorage("ordenes");
+  deleteOrder(nroOrden: number){
+    this.arrayOrdenes = this.localStorage.getStorage("ordenes");
     if (this.arrayOrdenes.length > 0){
-      this.arrayOrdenes = this.arrayOrdenes.filter(orden => orden.codigo != codigo);
-      this.setStorage("ordenes", this.arrayOrdenes);
+      let index = this.arrayOrdenes.findIndex((orden) => orden.nroOrden === nroOrden);
+      this.arrayOrdenes[index].habilitado = false;
+      this.localStorage.setStorage("ordenes", this.arrayOrdenes);
       return true;
     } else{
       return false;
     }
   }
 
-  //Métodos auxiliares.
-  getStorage(text: string){
-    //Si localStorage.getItem(text) es null o undefined, devuelve el resultado de la derecha. De lo contrario, devuelve el de la izquierda.
-    const array = JSON.parse(localStorage.getItem(text) ?? "[]");
-    return array;
+  getProvidersForSelect(){
+    return this.proveedorService.getEnabledProviders();
   }
 
-  setStorage(text: string, array: Orden[]){
-    localStorage.setItem(text, JSON.stringify(array));
+  getProductsForSelect(codigo: string){
+    return this.productoService.getEnabledProducts().filter((producto: any) => producto.proveedor.codigo === codigo);
+  }
+
+  //Métodos para generar el número de órden:
+  generateCode(){
+    let codigo!: number;
+    const arrayOrdenes = this.getOrders();
+    if (arrayOrdenes.length === 0){
+      codigo = 1;
+    } else{
+      codigo = this.getLastCode(arrayOrdenes);
+    }
+    return codigo;
+  }
+
+  getLastCode(array: Orden[]){
+    return this.getLastElement(array).nroOrden + 1;
+  }
+
+  getLastElement(array: any){
+    return array[array.length - 1];
   }
 }

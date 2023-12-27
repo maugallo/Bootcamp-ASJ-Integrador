@@ -18,6 +18,7 @@ import { AbmOrdenComponent } from './components/main/ordenes/abm-orden/abm-orden
 import { FormOrdenComponent } from './components/main/ordenes/form-orden/form-orden.component';
 import { DetailProveedorComponent } from './components/main/proveedores/detail-proveedor/detail-proveedor.component';
 import { DetailProductoComponent } from './components/main/productos/detail-producto/detail-producto.component';
+import { DetailOrdenComponent } from './components/main/ordenes/detail-orden/detail-orden.component';
 
 @NgModule({
   declarations: [
@@ -33,7 +34,8 @@ import { DetailProductoComponent } from './components/main/productos/detail-prod
     AbmOrdenComponent,
     FormOrdenComponent,
     DetailProveedorComponent,
-    DetailProductoComponent
+    DetailProductoComponent,
+    DetailOrdenComponent
   ],
   imports: [
     BrowserModule,

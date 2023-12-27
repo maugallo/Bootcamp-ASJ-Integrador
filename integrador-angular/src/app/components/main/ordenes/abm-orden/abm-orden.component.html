@@ -7,29 +7,40 @@
             </section>
             <!-- Botón agregar -->
             <div class="text-center text-sm-end  mt-5">
-                <a class="btn btn-add rounded-0 " routerLink="form-order">Agregar órden</a>
+                <a class="btn btn-add rounded-0 " [routerLink]="['form-order']">Agregar órden</a>
             </div>
             <!-- Tabla -->
             <section class="mt-2">
                 <table class="table table-hover table-bordered border-secondary-subtle">
                     <thead>
                         <tr>
-                            <th>Número de órden</th>
+                            <th>N° de órden</th>
                             <th>Fecha de emisión</th>
                             <th>Fecha de entrega</th>
+                            <th>Recepción</th>
                             <th>Proveedor</th>
-                            <th>Total</th>
+                            <th>Detalle de órden</th>
                             <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody id="table-body">
                         <tr *ngFor="let orden of arrayOrdenes">
-                            <td>{{orden.codigo}}</td>
+                            <td>{{orden.nroOrden}}</td>
                             <td>{{orden.fechaEmision}}</td>
                             <td>{{orden.fechaEntrega}}</td>
-                            <td>{{orden.proveedor}}</td>
-                            <td>{{orden.total}}</td>
-                            <td><a class="me-2 text-decoration-none option" (click)="deleteOrder(orden.codigo)">🗑️</a> <a class="text-decoration-none option" (click)="editOrder()">✏️</a></td>
+                            <td>{{orden.infoRecepcion}}</td>
+                            <td>{{orden.proveedor?.razonSocial}}</td>
+                            <td>
+                                <ng-container *ngFor="let item of orden.listaItems">
+                                    <div>* {{item.cantidad}} - {{item.producto.nombre}} - ${{item.producto.precio}}</div>
+                                </ng-container>
+                                * Total - ${{orden.total}}
+                            </td>
+                            <td>
+                                <a class="fs-5 me-2 text-decoration-none option" data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="openModal(orden.nroOrden)">🗑️</a>
+                                <a class="fs-5 me-2 text-decoration-none option" [routerLink]="['form-product', orden.nroOrden]">✏️</a>
+                                <a class="fs-5 text-decoration-none option" [routerLink]="['/products', orden.nroOrden]">👁️</a>
+                            </td>
                         </tr>
                     </tbody>
                 </table>

@@ -28,7 +28,8 @@ export class FormProveedorComponent implements OnInit {
     codPostal: undefined,
     localidad: "",
     provincia: "",
-    pais: ""
+    pais: "",
+    habilitado: true,
   }
 
   //Select de países, provincias y localidades que se renderizará en el form.
@@ -49,7 +50,6 @@ export class FormProveedorComponent implements OnInit {
     this.getCountries();
 
     this.codigoParam = this.activatedRoute.snapshot.params['id'];
-    
       if (this.proveedorService.getProvider(this.codigoParam) !== undefined){
         this.proveedor = this.proveedorService.getProvider(this.codigoParam);
         this.getStates();
@@ -64,7 +64,7 @@ export class FormProveedorComponent implements OnInit {
 
   onSubmit(form: NgForm) {
     if (form.valid){
-      this.proveedor = { codigo: this.proveedor.codigo.toUpperCase(), razonSocial: this.proveedor.razonSocial, rubro: this.proveedor.rubro, sitioWeb: this.proveedor.sitioWeb, nombre: this.proveedor.nombre, apellido: this.proveedor.apellido, telefono: this.proveedor.telefono, email: this.proveedor.email, rol: this.proveedor.rol, cuit: this.proveedor.cuit, iva: this.proveedor.iva, calle: this.proveedor.calle, num: Number(this.proveedor.num), codPostal: Number(this.proveedor.codPostal), localidad: this.proveedor.localidad, provincia: this.proveedor.provincia, pais: this.proveedor.pais };
+      this.proveedor.codigo = this.proveedor.codigo.toUpperCase();
       if (this.buttonName === "Agregar"){
         if (this.isCodeRepeated(this.proveedor.codigo)){
           alert("El código del proveedor ya existe");
@@ -101,8 +101,6 @@ export class FormProveedorComponent implements OnInit {
   getCountries(){
     this.proveedorService.getCountries().subscribe((data) => {
       this.countries = data;
-
-      this.countries = this.filterCountries();
     });
   }
 
@@ -119,12 +117,8 @@ export class FormProveedorComponent implements OnInit {
   }
 
   //Métodos auxiliares:
-  filterCountries(){
-    return this.countries.filter((country) => (country.region === "Americas" || country.region === "Europe"));
-  }
-
   isCodeRepeated(codigo: string){
-    let index = this.proveedorService.getProviders().findIndex((proveedor: Proveedor) => proveedor.codigo === codigo);
+    let index = this.proveedorService.getProviders().findIndex((proveedor: Proveedor) => (proveedor.codigo === codigo));
     if (index != -1){
       return true;
     } else{

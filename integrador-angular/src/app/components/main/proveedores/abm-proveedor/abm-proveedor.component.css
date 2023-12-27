@@ -12,3 +12,22 @@ th{
     border-color: #011d69;
     background-color: #adadad35;
 }
+
+.checkbox-custom{
+    border-color: #011d69;
+    color:#011d69;
+}
+
+.checkbox-custom:hover{
+    border-color: #011d69;
+    color:#011d69;
+}
+
+/* Indicamos que cuando el input con la clase 'btn-check' esté chekeado (:checked), entonces el elemento que le siga al btn-check,
+se le aplicará el estilo que se ve. En este caso, se le aplicará el estilo al label mediante su clase checkbox-custom.
+"Si el checkbox está marcado, cambiale el estilo al label". */
+.btn-check:checked + .checkbox-custom {
+    background-color: #011d69;
+    border-color: #011d69;
+    color: #FBFEF9;
+}

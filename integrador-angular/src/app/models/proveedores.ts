@@ -16,4 +16,5 @@ export interface Proveedor{
     localidad: string;
     provincia: string;
     pais: string;
+    habilitado: boolean;
 }

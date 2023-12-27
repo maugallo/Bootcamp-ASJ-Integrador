@@ -2,37 +2,85 @@
     <div class="row">
         <div class="col-auto col-lg-2"></div>
         <div class="col-12 col-lg-8">
-            <div class="my-5">
-                <h1 class="text-center mb-2 display-5 fw-semibold font-blue ">AGREGAR PRODUCTO</h1>
-            </div>
-            <div class="card p-5 rounded-0 card-border-blue">
-                <!-- Datos -->
-                <div class="row mt-2">
-                    <div class="col d-flex justify-content-between mx-2">
-                        <div class="me-2">
-                            <label class="form-label" for="nombre">Nombre</label>
-                            <input id="txtNombre" [(ngModel)]="txtNombre" class="form-control" name="nombre" type="text"
-                                placeholder="Ingrese el nombre" required>
-                        </div>
-                        <div class="me-2">
-                            <label for="sku" class="form-label">SKU</label>
-                            <input id="txtCodigo" [(ngModel)]="txtSku" type="text" name="sku" class="form-control"
-                                placeholder="#SAF03" min="0" minlength="1" required>
-                        </div>
-                        <div class="me">
-                            <label for="precio" class="form-label">Precio</label>
-                            <input id="txtPrecio" [(ngModel)]="txtPrecio" type="number" name="precio" class="form-control" placeholder="$0"
-                                min="0" minlength="1" required>
+            <section>
+                <div class="my-5">
+                    <h1 class="text-center mb-2 display-5 fw-semibold font-blue ">{{title}}</h1>
+                </div>
+                <p><a class=" fs-6 font-blue" [routerLink]="['/products']">VOLVER</a></p>
+            </section>
+            <section class="card p-5 rounded-0 card-border-blue">
+                <form #productsForm="ngForm" (ngSubmit)="onSubmit(productsForm)">
+                    <!-- Datos -->
+                    <div class="row mt-2">
+                        <div class="col d-flex justify-content-between mx-2">
+                            <div class="me-2">
+                                <label class="form-label" for="nombre">Nombre</label>
+                                <input id="txtNombre" #nombre="ngModel" [(ngModel)]="producto.nombre"
+                                    class="form-control" name="nombre" type="text" placeholder="Ingrese el nombre"
+                                    required maxlength="50">
+                                <!-- Mensaje de error -->
+                                <div *ngIf="nombre.touched && nombre.errors?.['required']" class="text-danger ">
+                                    <p><small>Este campo no puede estar vacío</small></p>
+                                </div>
+                            </div>
+                            <div class="me-2">
+                                <label for="sku" class="form-label">SKU</label>
+                                <input id="txtCodigo" [(ngModel)]="producto.sku" type="text" name="sku"
+                                    class="form-control" #sku="ngModel" placeholder="SAF03WJ2OE" min="0" minlength="1"
+                                    required required minlength="4" maxlength="10" pattern="^[A-Za-z0-9]+$" [disabled]="skuParam">
+                                <!-- Mensaje de error -->
+                                <div *ngIf="sku.touched && sku.errors?.['required']" class="text-danger ">
+                                    <p><small>Este campo no puede estar vacío</small></p>
+                                </div>
+                                <div *ngIf="sku.touched && sku.errors?.['pattern']" class="text-danger ">
+                                    <p><small>Este campo solo aceptas letras y números</small></p>
+                                </div>
+                            </div>
+                            <div class="me">
+                                <label for="precio" class="form-label">Precio</label>
+                                <input id="txtPrecio" #precio="ngModel" [(ngModel)]="producto.precio" type="text"
+                                    name="precio" class="form-control" placeholder="$0" required min="0" minlength="1"
+                                    maxlength="6" pattern="^[0-9.]+$">
+                                <!-- Mensaje de error -->
+                                <div *ngIf="precio.touched && precio.errors?.['required']" class="text-danger ">
+                                    <p><small>Este campo no puede estar vacío</small></p>
+                                </div>
+                                <div *ngIf="precio.touched && precio.errors?.['pattern']" class="text-danger ">
+                                    <p><small>Este campo solo acepta números</small></p>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="row mt-5">
+                    <div class="row my-5">
+                        <div class="col">
+                            <div class="me-2 w-100">
+                                <label class="form-label" for="imagen">Imagen</label>
+                                <input name="imagen" type="text" #imagen="ngModel" class="form-control"
+                                    [(ngModel)]="producto.imagen" placeholder="Ingrese la URL" required pattern="^https?:\/\/[\w\-\.]+(\.[a-zA-Z]{2,3})?(:\d+)?(\/[^\s]*)?$">
+                                <!-- Mensaje de error -->
+                                <div *ngIf="imagen.touched && imagen.errors?.['required']" class="text-danger ">
+                                    <p><small>Este campo no puede estar vacío</small></p>
+                                </div>
+                                <!-- Mensaje de error -->
+                                <div *ngIf="imagen.touched && imagen.errors?.['pattern']" class="text-danger ">
+                                    <p><small>Este campo debe ser una url</small></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="row">
-                        <div class="col d-flex justify-content-center mx-2">
+                        <div class="col">
                             <div class="me-2 w-100">
                                 <label class="form-label" for="descripcion">Descripción</label>
-                                <textarea id="txtDescripcion" [(ngModel)]="txtDescripcion" class="form-control" name="descripcion" id=""
-                                    cols="30" rows="5" placeholder="Ingrese la descripción"></textarea>
+                                <textarea #descripcion="ngModel" [(ngModel)]="producto.descripcion" class="form-control"
+                                    name="descripcion" cols="30" rows="5" placeholder="Ingrese la descripción" required
+                                    maxlength="200">
+                                </textarea>
+                                <!-- Mensaje de error -->
+                                <div *ngIf="descripcion.touched && descripcion.errors?.['required']"
+                                    class="text-danger ">
+                                    <p><small>Este campo no puede estar vacío</small></p>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -40,28 +88,42 @@
                         <div class="col d-flex justify-content-around  mx-2">
                             <div class="me-2 w-50">
                                 <label for="proveedor" class="form-label">Proveedor</label>
-                                <select id="selectProveedor" [(ngModel)]="txtProveedor" class="form-select " name="proveedor">
-                                    <option value="proveedorA">ProveedorA</option>
-                                    <option value="proveedorB">ProveedorB</option>
-                                    <option value="proveedorC">ProveedorC</option>
+                                <select id="selectProveedor" #proveedor="ngModel" [(ngModel)]="codigoProveedor" class="form-select "
+                                    name="proveedor" required>
+                                    <option *ngFor="let proveedor of proveedores" value="{{proveedor.codigo}}">
+                                        {{proveedor.razonSocial}}</option>
                                 </select>
+                                <!-- Mensaje de error -->
+                                <div *ngIf="proveedor.touched && proveedor.errors?.['required']"
+                                    class="text-danger ">
+                                    <p><small>Este campo no puede estar vacío</small></p>
+                                </div>
                             </div>
                             <div class="w-50">
                                 <label for="categoria" class="form-label">Categoría</label>
-                                <select id="selectCategoria" [(ngModel)]="txtCategoria" class="form-select " name="categoria">
-                                    <option value="categoriaA">CategoríaA</option>
-                                    <option value="categoriaB">CategoríaB</option>
-                                    <option value="categoriaC">CategoríaC</option>
+                                <select id="selectCategoria" #categoria="ngModel" [(ngModel)]="producto.categoria" class="form-select "
+                                    name="categoria" required>
+                                    <option value="Alimentos">Alimentos</option>
+                                    <option value="Deportes">Deportes</option>
+                                    <option value="Electrodomesticos">Electrodomésticos</option>
+                                    <option value="Higiene">Higiene</option>
+                                    <option value="Ropa">Ropa</option>
+                                    <option value="Tecnologia">Tecnología</option>
                                 </select>
+                                <!-- Mensaje de error -->
+                                <div *ngIf="categoria.touched && categoria.errors?.['required']"
+                                    class="text-danger ">
+                                    <p><small>Este campo no puede estar vacío</small></p>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
-                <!-- Botón -->
-                <div class="text-end mt-4">
-                    <button class="btn btn-add rounded-0" type="" (click)="addProduct()">Agregar</button>
-                </div>
-            </div>
+                    <!-- Botón -->
+                    <div class="text-end mt-4">
+                        <button class="btn btn-add rounded-0" [disabled]="productsForm.invalid" type="submit" >{{buttonName}}</button>
+                    </div>
+                </form>
+            </section>
         </div>
         <div class="col-auto col-lg-2"></div>
     </div>

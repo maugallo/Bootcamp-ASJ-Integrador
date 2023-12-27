@@ -1,45 +1,69 @@
 import { Injectable, OnInit } from '@angular/core';
 import { Producto } from '../models/productos';
+import { LocalStorageClass } from '../utils/localStorage';
+import { ServiceProveedorService } from './service-proveedor.service';
+import { Proveedor } from '../models/proveedores';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ServiceProductoService {
+
+  constructor(private proveedorService: ServiceProveedorService) { }
+  
+  private localStorage: LocalStorageClass = new LocalStorageClass();
+
   arrayProductos!: Producto[];
 
-  addProduct(producto: Producto){
-    this.arrayProductos = this.getStorage("productos");
-    this.arrayProductos.push(producto);
-    this.setStorage("productos", this.arrayProductos);
+  //CRUD Products:
+  getProducts(){
+    return this.localStorage.getStorage("productos");
   }
 
-  getProducts(){
-    return this.getStorage("productos");
+  getEnabledProducts(){
+    return this.getProducts().filter((producto: Producto) => producto.habilitado === true);
+  }
+
+  getDisabledProducts(){
+    return this.getProducts().filter((producto: Producto) => producto.habilitado === false);
+  }
+
+  getProduct(sku: string){
+    return this.localStorage.getStorage("productos").find((producto: Producto) => producto.sku === sku );
+  }
+
+  addProduct(producto: Producto){
+    this.arrayProductos = this.localStorage.getStorage("productos");
+    this.arrayProductos.push(producto);
+    this.localStorage.setStorage("productos", this.arrayProductos);
+  }
+
+  updateProduct(producto: Producto){
+    this.arrayProductos = this.localStorage.getStorage("productos");
+
+    let index = this.arrayProductos.findIndex((productoOriginal: Producto) => productoOriginal.sku === producto.sku );
+    this.arrayProductos[index] = producto;
+    this.localStorage.setStorage("productos", this.arrayProductos);
   }
 
   deleteProduct(sku: string){
-    this.arrayProductos = this.getStorage("productos");
+    this.arrayProductos = this.localStorage.getStorage("productos");
     if (this.arrayProductos.length > 0){
-      this.arrayProductos = this.arrayProductos.filter(producto => producto.sku != sku);
-      this.setStorage("productos", this.arrayProductos);
+      let index = this.arrayProductos.findIndex((producto) => producto.sku === sku );
+      this.arrayProductos[index].habilitado = false;
+      this.localStorage.setStorage("productos", this.arrayProductos);
       return true;
     } else{
       return false;
     }
   }
 
-  editProduct(){
-    alert("Próximamente!");
+  //Form methods:
+  getProvidersForSelect(){
+    return this.proveedorService.getEnabledProviders();
   }
 
-  //Métodos auxiliares.
-  getStorage(text: string){
-    //Si localStorage.getItem(text) es null o undefined, devuelve el resultado de la derecha. De lo contrario, devuelve el de la izquierda.
-    const array = JSON.parse(localStorage.getItem(text) ?? "[]");
-    return array;
-  }
-
-  setStorage(text: string, array: Producto[]){
-    localStorage.setItem(text, JSON.stringify(array));
+  getProvider(codigo: string){
+    return this.proveedorService.getProvider(codigo);
   }
 }
