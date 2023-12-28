@@ -38,15 +38,18 @@
                             </div>
                             <div class="me">
                                 <label for="precio" class="form-label">Precio</label>
-                                <input id="txtPrecio" #precio="ngModel" [(ngModel)]="producto.precio" type="text"
-                                    name="precio" class="form-control" placeholder="$0" required min="0" minlength="1"
-                                    maxlength="9" pattern="^[0-9.]+$">
+                                <input id="txtPrecio" #precio="ngModel" [(ngModel)]="producto.precio" type="number"
+                                    name="precio" class="form-control" placeholder="$0" required min="1" max="9999999" minlength="1"
+                                    maxlength="9">
                                 <!-- Mensaje de error -->
                                 <div *ngIf="precio.touched && precio.errors?.['required']" class="text-danger ">
                                     <p><small>Este campo no puede estar vacío</small></p>
                                 </div>
-                                <div *ngIf="precio.touched && precio.errors?.['pattern']" class="text-danger ">
-                                    <p><small>Este campo solo acepta números</small></p>
+                                <div *ngIf="precio.touched && precio.errors?.['min']" class="text-danger ">
+                                    <p><small>Este campo no puede ser menor a 1</small></p>
+                                </div>
+                                <div *ngIf="precio.touched && precio.errors?.['max']" class="text-danger ">
+                                    <p><small>Este campo no puede ser mayor a 9.999.999</small></p>
                                 </div>
                             </div>
                         </div>
