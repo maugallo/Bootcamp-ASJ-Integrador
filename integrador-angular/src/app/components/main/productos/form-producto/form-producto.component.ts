@@ -28,7 +28,7 @@ export class FormProductoComponent implements OnInit {
   codProveedorSeleccionado!: string;
 
   //Variables para manejar el título y nombre del botón:
-  title: string = "AGREGAR PROVEEDOR";
+  title: string = "AGREGAR PRODUCTO";
   buttonName: string = "Agregar";
 
   //Variable para determinar si se editará o creará un proveedor en el form [diabled]="skuParam"
@@ -44,7 +44,7 @@ export class FormProductoComponent implements OnInit {
     if (productByParam){
       this.producto = productByParam;
       this.codProveedorSeleccionado = this.producto.proveedor!.codigo; //Preseleccionar en el select, el proveedor del producto.
-      this.title = "EDITAR PROVEEDOR";
+      this.title = "EDITAR PRODUCTO";
       this.buttonName = "Editar";
     } else{
       this.router.navigate(['products/form-product']);

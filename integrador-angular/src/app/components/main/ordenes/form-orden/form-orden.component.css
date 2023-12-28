@@ -28,3 +28,7 @@ label{
     max-height: 10rem;
     overflow-y: auto;
 }
+
+.remove:hover{
+    cursor: pointer;
+}

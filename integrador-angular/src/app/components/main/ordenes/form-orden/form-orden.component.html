@@ -4,7 +4,7 @@
         <div class="col-12 col-lg-10">
             <section>
                 <div class="my-5">
-                    <h1 class="text-center mb-2 display-5 fw-semibold font-blue">{{title}}</h1>
+                    <h1 class="text-center mb-2 display-5 fw-semibold font-blue">{{title}} <i class="bi bi-clipboard-plus"></i></h1>
                 </div>
                 <p><a class=" fs-6 font-blue" [routerLink]="['/orders']">VOLVER</a></p>
             </section>
@@ -116,20 +116,20 @@
                                             <th class="fw-medium font-blue">Producto</th>
                                             <th class="fw-medium font-blue">Cantidad</th>
                                             <th class="fw-medium font-blue">Subtotal</th>
-                                            <th class="fw-medium font-blue">Config</th>
+                                            <th class="fw-medium font-blue"><i class="bi bi-gear-fill" style="width: 32px; width: 32px;"></i></th>
                                           </tr>
                                         </thead>
                                         <tbody>
                                           <tr *ngFor="let item of orden.listaItems" class="text-center">
                                             <td  class="fw-medium font-blue">{{item.producto?.nombre}}</td>
                                             <td  class="fw-medium font-blue">x{{item.cantidad}}</td>
-                                            <td  class="fw-medium font-blue">${{item.producto?.precio! * item.cantidad!}}</td>
-                                            <td><button class="btn btn-add rounded-0" (click)="removeItem(item.producto?.sku!)">Quitar</button></td>
+                                            <td  class="fw-medium font-blue">{{(item.producto?.precio! * item.cantidad!) | currency}}</td>
+                                            <td><a class="text-decoration-none font-blue" (click)="removeItem(item.producto?.sku!)"><i class="bi bi-x-circle remove"></i></a></td>
                                           </tr>
                                           <tr class="text-center ">
                                             <td></td>
                                             <td class="fw-medium font-blue">Total</td>
-                                            <td class="fw-medium font-blue">${{orden.total}}</td>
+                                            <td class="fw-medium font-blue">{{orden.total | currency}}</td>
                                           </tr>
                                         </tbody>
                                       </table>
