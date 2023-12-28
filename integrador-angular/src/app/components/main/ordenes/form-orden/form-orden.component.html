@@ -1,81 +1,139 @@
 <div class="container">
     <div class="row">
-        <div class="col-auto col-lg-2"></div>
-        <div class="col-12 col-lg-8">
+        <div class="col-auto col-lg-1"></div>
+        <div class="col-12 col-lg-10">
             <section>
                 <div class="my-5">
                     <h1 class="text-center mb-2 display-5 fw-semibold font-blue">{{title}}</h1>
                 </div>
                 <p><a class=" fs-6 font-blue" [routerLink]="['/orders']">VOLVER</a></p>
             </section>
-            <div class="card p-5 rounded-0 card-border-blue">
-                <form #ordersForm="ngForm" (ngSubmit)="onSubmit(ordersForm)">
-                    <!-- Datos -->
-                    <div class="row mt-2">
-                        <div class="col d-flex justify-content-evenly mx-2">
-                            <div class="me-2 input-width">
+            <div class="row">
+                <!-- Form de Items -->
+                <div class="col card rounded-0 p-3 card-border-blue me-2">
+                    <div class="subtitle mb-4">
+                        <h2 class="fs-5 font-blue">Agregar Item</h2>
+                    </div>
+                    <form #listItemForm="ngForm" (ngSubmit)="addItem()">
+                        <div class="row">
+                            <div class="col">
+                                <div class="w-100">
+                                    <label for="proveedor" class="form-label">Proveedor</label>
+                                    <select [disabled]="orden.listaItems.length > 0" (change)="selectProvider()" #proveedor="ngModel" id="selectProveedor"
+                                        [(ngModel)]="codigoProveedor" class="form-select " name="proveedor" required>
+                                        <option *ngFor="let proveedor of proveedores" value="{{proveedor.codigo}}">
+                                            {{proveedor.razonSocial}}</option>
+                                    </select>
+                                    <!-- Mensaje de error -->
+                                    <div *ngIf="proveedor.touched && proveedor.errors?.['required']"
+                                        class="text-danger ">
+                                        <p><small>Este campo no puede estar vacío</small></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col d-flex justify-content-between ">
+                                <div class="w-75 me-2">
+                                    <label for="productos" class="form-label">Producto</label>
+                                    <select id="selectProductos" #producto="ngModel" [(ngModel)]="skuProducto"
+                                        class="form-select " name="productos" required>
+                                        <option *ngFor="let producto of productos" value="{{producto.sku}}">
+                                            {{producto.nombre}}</option>
+                                    </select>
+                                    <!-- Mensaje de error -->
+                                    <div *ngIf="producto.touched && producto.errors?.['required']" class="text-danger ">
+                                        <p><small>Este campo no puede estar vacío</small></p>
+                                    </div>
+                                </div>
+                                <div class="w-25">
+                                    <label for="cantidad" class="form-label">Cantidad</label>
+                                    <input type="number" #cantidad="ngModel" id="txtCantidad"
+                                        [(ngModel)]="cantidadProducto" name="cantidad" class="form-control"
+                                        placeholder="1" min="1" max="9999" required>
+                                    <!-- Mensaje de error -->
+                                    <div *ngIf="cantidad.touched && cantidad.errors?.['min']" class="text-danger ">
+                                        <p><small>El valor del campo debe ser mayor a 0</small></p>
+                                    </div>
+                                    <div *ngIf="cantidad.touched && cantidad.errors?.['max']" class="text-danger ">
+                                        <p><small>El valor del campo debe ser menor a 9.999</small></p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col text-end">
+                                <button class="btn btn-add rounded-0" [disabled]="listItemForm.invalid" type="submit">Agregar Item</button>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <!-- Form de órdenes -->
+                <div class="col card rounded-0 p-3 card-border-blue">
+                    <div class="subtitle mb-4">
+                        <h2 class="fs-5 font-blue">Agregar Orden</h2>
+                    </div>
+                    <form #ordersForm="ngForm" (ngSubmit)="onSubmit(ordersForm)">
+                        <div class="row">
+                            <div class="col">
                                 <label class="form-label" for="fechaEmision">Fecha de emisión</label>
                                 <input id="txtFechaEmision" [(ngModel)]="orden.fechaEmision" class="form-control"
                                     name="fechaEmision" type="date" required>
                             </div>
-                            <div class="me-2 input-width">
+                            <div class="col">
                                 <label for="fechaEntrega" class="form-label">Fecha de entrega</label>
                                 <input id="txtFechaEntrega" [(ngModel)]="orden.fechaEntrega" class="form-control"
                                     name="fechaEntrega" type="date" required>
                             </div>
-                            <div class="w-50">
+                        </div>
+                        <div class="row mt-4">
+                            <div class="col">
                                 <label for="direccion" class="form-label">Información de recepción</label>
-                                <input type="text" id="txtDireccion" [(ngModel)]="orden.infoRecepcion" name="direccion"
-                                    class="form-control" placeholder="Ingrese la dirección">
+                                <textarea id="txtDireccion" [(ngModel)]="orden.infoRecepcion" name="direccion"
+                                    class="form-control" placeholder="Ingrese la información de recepción"></textarea>
                             </div>
                         </div>
-                    </div>
-                    <div class="row mt-5">
-                        <div class="col mx-2">
-                            <div class="w-100">
-                                <label for="proveedor" class="form-label">Proveedor</label>
-                                <select (change)="selectProvider()" id="selectProveedor" [(ngModel)]="codigoProveedor"
-                                    class="form-select " name="proveedor">
-                                    <option *ngFor="let proveedor of proveedores" value="{{proveedor.codigo}}">
-                                        {{proveedor.razonSocial}}</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col card rounded-0 p-3 card-border-blue">
-                            <div class="row">
-                                <div class="col">
-                                    <div class="w-100">
-                                        <label for="productos" class="form-label">Producto</label>
-                                        <select id="selectProductos" [(ngModel)]="skuProducto" class="form-select "
-                                            name="productos">
-                                            <option *ngFor="let producto of productos" value="{{producto.sku}}">
-                                                {{producto.nombre}}</option>
-                                        </select>
+                        <div class="row mt-4">
+                            <div class="col">
+                                <div class="card rounded-0 p-2 card-border-blue">
+                                    <div class="scrollable">
+                                    
+                                    
+                                    <table *ngIf="orden.listaItems.length > 0" class="table m-0">
+                                        <thead>
+                                          <tr class="text-center">
+                                            <th class="fw-medium font-blue">Producto</th>
+                                            <th class="fw-medium font-blue">Cantidad</th>
+                                            <th class="fw-medium font-blue">Subtotal</th>
+                                          </tr>
+                                        </thead>
+                                        <tbody>
+                                          <tr *ngFor="let item of orden.listaItems" class="text-center">
+                                            <td  class="fw-medium font-blue">{{item.producto?.nombre}}</td>
+                                            <td  class="fw-medium font-blue">x{{item.cantidad}}</td>
+                                            <td  class="fw-medium font-blue">${{item.producto?.precio! * item.cantidad!}}</td>
+                                          </tr>
+                                          <tr class="text-center ">
+                                            <td></td>
+                                            <td class="fw-medium font-blue">Total</td>
+                                            <td class="fw-medium font-blue">${{orden.total}}</td>
+                                          </tr>
+                                        </tbody>
+                                      </table>
                                     </div>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col d-flex align-items-end">
-                                    <div class="w-100">
-                                        <label for="cantidad" class="form-label">Cantidad</label>
-                                        <input type="text" id="txtCantidad" [(ngModel)]="orden.listaItems" name="cantidad"
-                                               class="form-control" placeholder="1" min="1" minvalue="1">
-                                    </div>
-                                    <div class="ms-2">
-                                        <button class="btn btn-add rounded-0 align-bottom">Agregar Item</button>
-                                    </div>
+                                    <p *ngIf="orden.listaItems.length === 0" class="text-secondary ">Todavía no hay items agregados</p>
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Botón -->
-                        <div class="text-end mt-4">
-                            <button class="btn btn-add rounded-0" type="submit">{{buttonName}}</button>
+                        <div class="row mt-4">
+                            <div class="col text-end">
+                                <button class="btn btn-add rounded-0" [disabled]="ordersForm.invalid" type="submit">Agregar</button>
+                            </div>
                         </div>
-                    </div>
-                </form>
+                    </form>
+                </div>
             </div>
-            <div class="col-auto col-lg-2"></div>
+            <div class="col-auto col-lg-1"></div>
         </div>
     </div>
 </div>

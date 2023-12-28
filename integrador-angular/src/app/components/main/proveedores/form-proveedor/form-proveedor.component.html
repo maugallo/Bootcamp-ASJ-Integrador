@@ -143,8 +143,8 @@
                                     <label for="provincia" class="form-label">Provincia</label>
                                     <select type="text" #provincia="ngModel" name="provincia" class="form-select"
                                         (change)="selectState()" [(ngModel)]="proveedor.provincia" required>
-                                        <option *ngFor="let state of states" value="{{state.name}}">{{state.name}}
-                                        </option>
+                                        <option *ngFor="let state of states" value="{{state.name}}">{{state.name}}</option>
+                                        <option *ngIf="states.length === 0" value="Sin Provincia">--------</option>
                                     </select>
                                     <!-- Mensaje de error -->
                                     <div *ngIf="provincia.touched && provincia.errors?.['required']"
@@ -171,7 +171,7 @@
                     <!-- Datos fiscales -->
                     <div class="row">
                         <div class="col font-blue subtitle mt-5">
-                            <h2 class="fs-5">Datos fiscales</h2>
+                            <h2 class="fs-5 ">Datos fiscales</h2>
                         </div>
                     </div>
                     <div class="row mt-5">

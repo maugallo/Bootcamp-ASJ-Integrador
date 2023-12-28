@@ -1,6 +1,6 @@
 import { Producto } from "./productos";
 
 export interface ItemOrden{
-    producto: Producto;
-    cantidad: number;
+    producto: Producto | undefined;
+    cantidad: number | undefined;
 }

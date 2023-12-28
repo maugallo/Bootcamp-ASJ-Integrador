@@ -2,7 +2,7 @@
     border-color: #001652;
 }
 
-input, select{
+input, select, textarea{
     border-color: #001652;
     border-radius: 0;
 }
@@ -18,4 +18,13 @@ label{
 
 .subtitle{
     border-bottom: 1px solid #00165270;
+}
+
+.font-blue{
+    color: #001652;
+}
+
+.scrollable{
+    max-height: 10rem;
+    overflow-y: auto;
 }
