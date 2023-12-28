@@ -8,6 +8,17 @@ th{
     cursor: pointer;
 }
 
+.img-border{
+    border: 1px solid lightgray;
+}
+
+.product-img{
+    max-height: 15rem;
+    min-height: 15rem;
+    width: 100%;
+    object-fit: cover;
+}
+
 .alert-custom{
     border-color: #011d69;
     background-color: #adadad35;

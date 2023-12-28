@@ -1,7 +1,7 @@
 <div class="container text-center">
     <div class="row">
-        <div class="col-auto col-lg-2"></div>
-        <div class="col-12 col-lg-8">
+        <div class="col-auto col-lg-1"></div>
+        <div class="col-12 col-lg-10">
             <!-- Modal de eliminación -->
             <section class="modal fade rounded-0" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
                 aria-hidden="true">
@@ -51,12 +51,12 @@
                         <ng-container *ngIf="verDeshabilitados === false">
                             <tr *ngFor="let producto of arrayHabilitados">
                                 <td class="card-img" style="width: 20rem;">
-                                    <img class="img-fluid" style="max-height: 15rem; width: 100%; object-fit: cover;" src="{{producto.imagen}}" alt="{{producto.nombre}}">
+                                    <img class="img-fluid product-img" src="{{producto.imagen}}" alt="{{producto.nombre}}">
                                 </td>
                                 <td>{{producto.nombre}}</td>
                                 <td>{{producto.categoria}}</td>
                                 <td>{{producto.proveedor?.razonSocial}}</td>
-                                <td>${{producto.precio}}</td>                            
+                                <td>{{producto.precio | currency }}</td>                            
                                 <td>
                                     <a class="fs-5 me-2 text-decoration-none option" data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="openModal(producto.sku)">🗑️</a>
                                     <a class="fs-5 me-2 text-decoration-none option" [routerLink]="['form-product', producto.sku]">✏️</a>
@@ -84,6 +84,6 @@
                 </div>
             </section>
         </div>
-        <div class="col-auto col-lg-2"></div>
+        <div class="col-auto col-lg-1"></div>
     </div>
 </div>

@@ -40,7 +40,7 @@
                                 <label for="precio" class="form-label">Precio</label>
                                 <input id="txtPrecio" #precio="ngModel" [(ngModel)]="producto.precio" type="text"
                                     name="precio" class="form-control" placeholder="$0" required min="0" minlength="1"
-                                    maxlength="6" pattern="^[0-9.]+$">
+                                    maxlength="9" pattern="^[0-9.]+$">
                                 <!-- Mensaje de error -->
                                 <div *ngIf="precio.touched && precio.errors?.['required']" class="text-danger ">
                                     <p><small>Este campo no puede estar vacío</small></p>
@@ -88,9 +88,9 @@
                         <div class="col d-flex justify-content-around  mx-2">
                             <div class="me-2 w-50">
                                 <label for="proveedor" class="form-label">Proveedor</label>
-                                <select id="selectProveedor" #proveedor="ngModel" [(ngModel)]="codigoProveedor" class="form-select "
+                                <select id="selectProveedor" #proveedor="ngModel" [(ngModel)]="codProveedorSeleccionado" class="form-select "
                                     name="proveedor" required>
-                                    <option *ngFor="let proveedor of proveedores" value="{{proveedor.codigo}}">
+                                    <option *ngFor="let proveedor of selectProveedores" value="{{proveedor.codigo}}">
                                         {{proveedor.razonSocial}}</option>
                                 </select>
                                 <!-- Mensaje de error -->

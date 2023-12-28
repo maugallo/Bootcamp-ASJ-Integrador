@@ -8,15 +8,35 @@ import { ServiceOrdenService } from '../../../../services/service-orden.service'
   styleUrl: './abm-orden.component.css'
 })
 export class AbmOrdenComponent {
-  arrayOrdenes!: Orden[];
+
+  arrayHabilitados!: Orden[];
+  arrayDeshabilitados!: Orden[];
+
+  verDeshabilitados: boolean = false;
+
+  selectedOrderNumber!: number;
 
   constructor(private ordenService: ServiceOrdenService) {}
 
   ngOnInit(): void {
-      this.arrayOrdenes = this.ordenService.getOrders();
+    this.renderTables();
   }
 
-  openModal(nroOrden: number | undefined){
-    
+  openModal(nroOrden: number){
+    this.selectedOrderNumber = nroOrden;
+  }
+
+  deleteOrder(){
+    if (this.ordenService.deleteOrder(this.selectedOrderNumber)){
+      this.renderTables();
+      alert("Elemento eliminado con éxito!");
+    } else{
+      alert("Ocurrió un error al eliminar el elemento");
+    }
+  }
+
+  renderTables(){
+    this.arrayHabilitados = this.ordenService.getEnabledOrders();
+    this.arrayDeshabilitados = this.ordenService.getDisabledOrders();
   }
 }

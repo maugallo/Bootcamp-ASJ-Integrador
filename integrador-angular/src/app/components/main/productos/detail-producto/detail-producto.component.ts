@@ -18,8 +18,10 @@ export class DetailProductoComponent implements OnInit {
 
   ngOnInit(): void {
     this.skuParam = this.activatedRoute.snapshot.params['id'];
-      if (this.productoService.getProduct(this.skuParam) !== undefined){
-        this.producto = this.productoService.getProduct(this.skuParam);
+    let productoByparam = this.productoService.getProduct(this.skuParam);
+
+      if (productoByparam){
+        this.producto = productoByparam;
       } else{
         this.router.navigate(['products/form-provider']);
       }

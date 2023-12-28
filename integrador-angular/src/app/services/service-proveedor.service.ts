@@ -3,7 +3,6 @@ import { Proveedor } from '../models/proveedores';
 import { LocalStorageClass } from '../utils/localStorage';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Producto } from '../models/productos';
 
 @Injectable({
   providedIn: 'root'
@@ -59,23 +58,23 @@ export class ServiceProveedorService {
       this.arrayProveedores[index].habilitado = false;
       this.localStorage.setStorage("proveedores", this.arrayProveedores);
       //Eliminación lógica de sus productos:
-      let arrayProductos = this.localStorage.getStorage("productos");
-      arrayProductos = arrayProductos.map((producto: any) => { 
-        if (producto.proveedor.codigo === codigo){
-          producto.habilitado = false;
-        }
-        return producto;
-       });
-      
-      this.localStorage.setStorage("productos", arrayProductos);
+      this.deleteProductsFromProvider(codigo);
       return true;
     } else{
       return false;
     }
   }
 
-  deleteProductsFromProvider(proveedor: Proveedor){
+  deleteProductsFromProvider(codigo: string){
+    let arrayProductos = this.localStorage.getStorage("productos");
+    arrayProductos = arrayProductos.map((producto: any) => { 
+      if (producto.proveedor.codigo === codigo){
+        producto.habilitado = false;
+      }
+      return producto;
+      });
     
+    this.localStorage.setStorage("productos", arrayProductos);
   }
 
   //Form methods:

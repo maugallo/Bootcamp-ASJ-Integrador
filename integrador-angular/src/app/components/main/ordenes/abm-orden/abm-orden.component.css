@@ -7,3 +7,23 @@ th{
 .option:hover{
     cursor: pointer;
 }
+
+.alert-custom{
+    border-color: #011d69;
+    background-color: #adadad35;
+}
+
+.checkbox-custom{
+    border-color: #011d69;
+    color:#011d69;
+}
+
+.checkbox-custom:hover{
+    border-color: #011d69;
+    color:#011d69;
+}
+.btn-check:checked + .checkbox-custom {
+    background-color: #011d69;
+    border-color: #011d69;
+    color: #FBFEF9;
+}

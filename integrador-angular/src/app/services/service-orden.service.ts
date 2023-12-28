@@ -30,7 +30,7 @@ export class ServiceOrdenService {
   }
 
   getOrder(nroOrden: number){
-    return this.localStorage.getStorage("ordenes").find((orden: Orden) => orden.nroOrden === nroOrden );
+    return this.localStorage.getStorage("ordenes").find((orden: Orden) => orden.nroOrden === nroOrden);
   }
 
   addOrder(orden: Orden){

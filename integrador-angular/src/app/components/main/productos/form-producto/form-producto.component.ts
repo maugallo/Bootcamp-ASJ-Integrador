@@ -19,30 +19,31 @@ export class FormProductoComponent implements OnInit {
     precio: undefined,
     descripcion: "",
     proveedor: undefined,
-    categoria: "alimentos", //Preselecciono el primer elemento en el select.
+    categoria: "", //Preselecciono el primer elemento en el select.
     habilitado: true,
   }
   
   //Select de proveedores que se renderizará en el form.
-  proveedores!: Proveedor[];
-  codigoProveedor!: string | undefined;
+  selectProveedores!: Proveedor[];
+  codProveedorSeleccionado!: string;
 
   //Variables para manejar el título y nombre del botón:
   title: string = "AGREGAR PROVEEDOR";
   buttonName: string = "Agregar";
 
   //Variable para determinar si se editará o creará un proveedor en el form [diabled]="skuParam"
-  skuParam!: string; //Si es una cadena de string vacía, el elemento enlazado estará habilitado. Si es una cadena con algún valor, el elemento enlazado estará deshabilitado.
+  skuParam!: string; //Si es una cadena de string vacía o null, el elemento enlazado estará habilitado. Si es una cadena con algún valor, el elemento enlazado estará deshabilitado.
   
   constructor(private productoService: ServiceProductoService, private router: Router, private activatedRoute: ActivatedRoute){}
 
   ngOnInit(): void {
-    this.proveedores = this.productoService.getProvidersForSelect();
+    this.renderProvidersSelect();
 
-    this.skuParam = this.activatedRoute.snapshot.params['id'];
-    if (this.productoService.getProduct(this.skuParam) !== undefined){
-      this.producto = this.productoService.getProduct(this.skuParam);
-      this.codigoProveedor = this.producto.proveedor?.codigo; //Preseleccionar en el select, el proveedor del producto.
+    this.skuParam = this.getParameter();
+    let productByParam = this.productoService.getProduct(this.skuParam);
+    if (productByParam){
+      this.producto = productByParam;
+      this.codProveedorSeleccionado = this.producto.proveedor!.codigo; //Preseleccionar en el select, el proveedor del producto.
       this.title = "EDITAR PROVEEDOR";
       this.buttonName = "Editar";
     } else{
@@ -50,18 +51,31 @@ export class FormProductoComponent implements OnInit {
     }
   }
 
+  getParameter(){
+    return this.activatedRoute.snapshot.params['id'];
+  }
+
+  renderProvidersSelect(){
+    this.selectProveedores = this.productoService.getProvidersForSelect();
+  }
+
+  //Métodos de formulario para agregar productos:
   onSubmit(form: NgForm){
     if (form.valid){
-      this.producto.proveedor = this.proveedores.find((proveedor) => proveedor.codigo === this.codigoProveedor); //Obtenemos el objeto de proveedor seleccionado.
       if (this.buttonName === "Agregar"){
         if (this.isSkuRepeated(this.producto.sku)){
           alert("El SKU del producto ya existe");
-        } else{
+        }
+
+        else{
+          this.producto.proveedor = this.selectProveedores.find((proveedor) => proveedor.codigo === this.codProveedorSeleccionado); //Obtenemos el objeto de proveedor seleccionado.
           this.productoService.addProduct(this.producto);
           alert("Producto creado!");
           this.router.navigate(['/products']);
         }
-      } else if (this.buttonName === "Editar"){
+      }
+      
+      else if (this.buttonName === "Editar"){
         this.productoService.updateProduct(this.producto);
         alert("Producto modificado!");
         this.router.navigate(['/products']);
@@ -69,7 +83,6 @@ export class FormProductoComponent implements OnInit {
     }
   }
 
-  //Métodos auxiliares:
   isSkuRepeated(sku: string){
     let index = this.productoService.getProducts().findIndex((producto: Producto) => producto.sku === sku);
     if (index != -1){

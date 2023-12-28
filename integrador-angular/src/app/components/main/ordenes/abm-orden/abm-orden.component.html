@@ -1,17 +1,40 @@
 <div class="container text-center">
     <div class="row">
-        <div class="col-auto col-lg-2"></div>
-        <div class="col-12 col-lg-8">
+        <div class="col">
+            <!-- Modal de eliminación -->
+            <section class="modal fade rounded-0" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content rounded-0">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5 font-blue" id="exampleModalLabel">Cancelar orden de compra</h1>
+                        </div>
+                        <div class="modal-body">
+                            <p class="font-blue">¿Está seguro que quiere cancelar la orden de compra?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary rounded-0" data-bs-dismiss="modal">Cerrar</button>
+                            <button type="button" class="btn btn-add rounded-0" data-bs-dismiss="modal"
+                                (click)="deleteOrder()">Eliminar</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
             <section class="mt-3">
                 <h1 class="display-5 fw-semibold font-blue">GESTIÓN DE ÓRDENES DE COMPRA</h1>
             </section>
             <!-- Botón agregar -->
             <div class="text-center text-sm-end  mt-5">
-                <a class="btn btn-add rounded-0 " [routerLink]="['form-order']">Agregar órden</a>
+                <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
+                    <input type="checkbox" [(ngModel)]="verDeshabilitados" class="btn-check" id="btncheck1"
+                        autocomplete="off">
+                    <label class="btn btn-outline-primary checkbox-custom rounded-0" for="btncheck1">Ver órdenes canceladas</label>
+                </div>
+                <a class="btn btn-add rounded-0 ms-2" [routerLink]="['form-order']">Agregar órden</a>
             </div>
             <!-- Tabla -->
             <section class="mt-2">
-                <table class="table table-hover table-bordered border-secondary-subtle">
+                <table *ngIf="arrayHabilitados.length > 0 || (verDeshabilitados === true && arrayDeshabilitados.length > 0)" class="table table-hover table-bordered border-secondary-subtle">
                     <thead>
                         <tr>
                             <th>N° de órden</th>
@@ -24,28 +47,50 @@
                         </tr>
                     </thead>
                     <tbody id="table-body">
-                        <tr *ngFor="let orden of arrayOrdenes">
-                            <td>{{orden.nroOrden}}</td>
-                            <td>{{orden.fechaEmision}}</td>
-                            <td>{{orden.fechaEntrega}}</td>
-                            <td>{{orden.infoRecepcion}}</td>
-                            <td>{{orden.proveedor?.razonSocial}}</td>
-                            <td>
-                                <ng-container *ngFor="let item of orden.listaItems">
-                                    <div>* {{item.cantidad}} - {{item.producto.nombre}} - ${{item.producto.precio}}</div>
-                                </ng-container>
-                                * Total - ${{orden.total}}
-                            </td>
-                            <td>
-                                <a class="fs-5 me-2 text-decoration-none option" data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="openModal(orden.nroOrden)">🗑️</a>
-                                <a class="fs-5 me-2 text-decoration-none option" [routerLink]="['form-product', orden.nroOrden]">✏️</a>
-                                <a class="fs-5 text-decoration-none option" [routerLink]="['/products', orden.nroOrden]">👁️</a>
-                            </td>
-                        </tr>
+                        <!-- Elementos activos -->
+                        <ng-container *ngIf="verDeshabilitados === false">
+                            <tr *ngFor="let orden of arrayHabilitados">
+                                <td>{{orden.nroOrden}}</td>
+                                <td>{{orden.fechaEmision | date: 'dd/MM/yyyy'}}</td>
+                                <td>{{orden.fechaEntrega | date: 'dd/MM/yyyy'}}</td>
+                                <td>{{orden.infoRecepcion}}</td>
+                                <td>{{orden.proveedor?.razonSocial}}</td>
+                                <td class="text-start ">
+                                    <ng-container *ngFor="let item of orden.listaItems">
+                                        <div class="mb-2">{{item.producto!.nombre}} x({{item.cantidad}}) ${{item.producto!.precio}}</div>
+                                    </ng-container>
+                                    Total ${{orden.total}}
+                                </td>
+                                <td class="">
+                                    <a class="fs-5 me-2 text-decoration-none option" data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="openModal(orden.nroOrden!)">❌</a>
+                                    <a class="fs-5 me-2 text-decoration-none option" [routerLink]="['form-order', orden.nroOrden]">✏️</a>
+                                    <a class="fs-5 text-decoration-none option" [routerLink]="['/orders', orden.nroOrden]">👁️</a>
+                                </td>
+                            </tr>
+                        </ng-container>
+                        <!-- Elementos deshabilitados -->
+                        <ng-container *ngIf="verDeshabilitados === true && arrayDeshabilitados.length > 0">
+                            <tr class="table-secondary" *ngFor="let orden of arrayDeshabilitados">
+                                <td>{{orden.nroOrden}}</td>
+                                <td>{{orden.fechaEmision | date: 'dd/MM/yyyy'}}</td>
+                                <td>{{orden.fechaEntrega | date: 'dd/MM/yyyy'}}</td>
+                                <td>{{orden.infoRecepcion}}</td>
+                                <td>{{orden.proveedor?.razonSocial}}</td>
+                                <td class="text-start ">
+                                    <ng-container *ngFor="let item of orden.listaItems">
+                                        <div class="mb-2">{{item.producto!.nombre}} x({{item.cantidad}}) ${{item.producto!.precio}}</div>
+                                    </ng-container>
+                                    Total ${{orden.total}}
+                                </td>
+                                <td>Cancelada</td>
+                            </tr>
+                        </ng-container>
                     </tbody>
                 </table>
+                <div *ngIf="arrayHabilitados.length === 0 && (arrayDeshabilitados.length === 0 || verDeshabilitados === false)" class="alert rounded-0 alert-custom">
+                    <span class="fs-4 font-blue">Todavía no hay elementos, puedes agregar uno <a [routerLink]="['/orders/form-order']" class="alert-link ">presionando aquí</a></span>
+                </div>
             </section>
         </div>
-        <div class="col-auto col-lg-2"></div>
     </div>
 </div>

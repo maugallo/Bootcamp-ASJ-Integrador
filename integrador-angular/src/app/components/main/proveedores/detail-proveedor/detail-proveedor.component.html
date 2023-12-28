@@ -1,17 +1,73 @@
-<p>{{proveedor.codigo}}</p>
-<p>{{proveedor.razonSocial}}</p>
-<p>{{proveedor.rubro}}</p>
-<p>{{proveedor.sitioWeb}}</p>
-<p>{{proveedor.nombre}}</p>
-<p>{{proveedor.apellido}}</p>
-<p>{{proveedor.telefono}}</p>
-<p>{{proveedor.email}}</p>
-<p>{{proveedor.rol}}</p>
-<p>{{proveedor.cuit}}</p>
-<p>{{proveedor.iva}}</p>
-<p>{{proveedor.calle}}</p>
-<p>{{proveedor.num}}</p>
-<p>{{proveedor.codPostal}}</p>
-<p>{{proveedor.localidad}}</p>
-<p>{{proveedor.provincia}}</p>
-<p>{{proveedor.pais}}</p>
+<div class="row">
+    <div class="col-1"></div>
+    <div class="col-10">
+        <h2 class="text-center display-4 fw-semibold font-blue my-4">{{proveedor.razonSocial}}</h2>
+        <p><a class=" fs-6 font-blue" [routerLink]="['/providers']">VOLVER</a></p>
+        <div class="row">
+            <section class="col card card-border-blue rounded-0 text-start me-3">
+                <section class="font-blue subtitle my-3">
+                    <h3 class="fs-1 fw-semibold text-center ">Datos principales</h3>
+                </section>
+                <section>
+                    <p class="fs-2"><span class="font-blue fw-semibold">Código:</span> {{proveedor.codigo}}</p>
+                </section>
+                <section>
+                    <p class="fs-2"><span class="font-blue fw-semibold">Rubro:</span> {{proveedor.rubro}}</p>
+                </section>
+                <section>
+                    <p class="fs-2"><span class="font-blue fw-semibold">Direción:</span> {{proveedor.calle}} {{proveedor.num}} C.P {{proveedor.codPostal}}</p>
+                </section>
+                <section>
+                    <p class="fs-2"><span class="font-blue fw-semibold">País:</span> {{proveedor.pais}}</p>
+                </section>
+                <section>
+                    <p class="fs-2"><span class="font-blue fw-semibold">Provincia:</span> {{proveedor.provincia}}</p>
+                </section>
+                <section>
+                    <p class="fs-2"><span class="font-blue fw-semibold">Localidad:</span> {{proveedor.localidad}}</p>
+                </section>
+                <section class="">
+                    <p class="fs-2"><span class="font-blue fw-semibold">Sitio web: </span><a class="text-decoration-none font-blue link" target="_blank" href="{{proveedor.sitioWeb}}">{{proveedor.sitioWeb}}</a></p>
+                </section>
+            </section>
+            <section class="col">
+                <div class="row mb-3">
+                    <div class="col card card-border-blue rounded-0">
+                        <section class="font-blue subtitle my-3">
+                            <h3 class="fs-1 fw-semibold text-center ">Datos de contacto</h3>
+                        </section>
+                        <section>
+                            <p class="fs-2"><span class="font-blue fw-semibold">Nombre:</span> {{proveedor.nombre}}</p>
+                        </section>
+                        <section>
+                            <p class="fs-2"><span class="font-blue fw-semibold">Apellido:</span> {{proveedor.apellido}}</p>
+                        </section>
+                        <section>
+                            <p class="fs-2"><span class="font-blue fw-semibold">Teléfono:</span> {{proveedor.telefono}}</p>
+                        </section>
+                        <section>
+                            <p class="fs-2"><span class="font-blue fw-semibold">Email: </span> <a class="text-decoration-none font-blue" href="mailto:{{proveedor.email}}">{{proveedor.email}}</a> </p>
+                        </section>
+                        <section>
+                            <p class="fs-2"><span class="font-blue fw-semibold">Rol:</span> {{proveedor.rol}}</p>
+                        </section>
+                    </div>
+                </div>
+                <div class="row">
+                    <section class="col card card-border-blue rounded-0">
+                        <section class="font-blue subtitle my-3">
+                            <h3 class="fs-1 fw-semibold text-center ">Datos fiscales</h3>
+                        </section>
+                        <section>
+                            <p class="fs-2"><span class="font-blue fw-semibold">CUIT:</span> {{proveedor.cuit}}</p>
+                        </section>
+                        <section>
+                            <p class="fs-2"><span class="font-blue fw-semibold">Condición IVA:</span> {{proveedor.iva}}</p>
+                        </section>
+                    </section>
+                </div>
+            </section>
+        </div>
+    </div>
+    <div class="col-1"></div>
+</div>

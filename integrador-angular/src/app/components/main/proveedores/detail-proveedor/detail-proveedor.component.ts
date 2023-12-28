@@ -17,9 +17,12 @@ export class DetailProveedorComponent implements OnInit {
   constructor(private proveedorService: ServiceProveedorService, private router: Router, private activatedRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
+
       this.codigoParam = this.activatedRoute.snapshot.params['id'];
-      if (this.proveedorService.getProvider(this.codigoParam) !== undefined){
-        this.proveedor = this.proveedorService.getProvider(this.codigoParam);
+      let proveedorByParam = this.proveedorService.getProvider(this.codigoParam);
+
+      if (proveedorByParam){
+        this.proveedor = proveedorByParam;
       } else{
         this.router.navigate(['providers/form-provider']);
       }

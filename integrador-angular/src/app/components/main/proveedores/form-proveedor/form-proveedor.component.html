@@ -130,8 +130,8 @@
                                 <div class="w-50 me-2">
                                     <label for="pais" class="form-label">Pais</label>
                                     <select type="select" #pais="ngModel" name="pais" class="form-select"
-                                        (change)="selectCountry()" [(ngModel)]="proveedor.pais" required>
-                                        <option *ngFor="let country of countries" value="{{country.name}}">
+                                        (change)="chooseCountry()" [(ngModel)]="proveedor.pais" required>
+                                        <option *ngFor="let country of selectCountries" value="{{country.name}}">
                                             {{country.name}}</option>
                                     </select>
                                     <!-- Mensaje de error -->
@@ -142,9 +142,9 @@
                                 <div class="w-50 me-2">
                                     <label for="provincia" class="form-label">Provincia</label>
                                     <select type="text" #provincia="ngModel" name="provincia" class="form-select"
-                                        (change)="selectState()" [(ngModel)]="proveedor.provincia" required>
-                                        <option *ngFor="let state of states" value="{{state.name}}">{{state.name}}</option>
-                                        <option *ngIf="states.length === 0" value="Sin Provincia">--------</option>
+                                        (change)="chooseState()" [(ngModel)]="proveedor.provincia" required>
+                                        <option *ngFor="let state of selectStates" value="{{state.name}}">{{state.name}}</option>
+                                        <option *ngIf="selectStates.length === 0" value="Sin Provincia">--------</option>
                                     </select>
                                     <!-- Mensaje de error -->
                                     <div *ngIf="provincia.touched && provincia.errors?.['required']"
@@ -156,8 +156,8 @@
                                 <div class="w-50">
                                     <label for="localidad" class="form-label">Localidad</label>
                                     <select type="text" #localidad="ngModel" name="localidad" class="form-select" [(ngModel)]="proveedor.localidad" required>
-                                        <option *ngFor="let city of cities" value="{{city.name}}">{{city.name}}</option>
-                                        <option *ngIf="cities.length === 0" value="Sin Localidad">--------</option>
+                                        <option *ngFor="let city of selectCities" value="{{city.name}}">{{city.name}}</option>
+                                        <option *ngIf="selectCities.length === 0" value="Sin Localidad">--------</option>
                                     </select>
                                     <!-- Mensaje de error -->
                                     <div *ngIf="localidad.touched && localidad.errors?.['required']"

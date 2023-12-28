@@ -1,4 +1,5 @@
 export class LocalStorageClass {
+    
     constructor(){}
 
     public getStorage(text: string){

@@ -1,9 +1,46 @@
-<p>{{producto.imagen}}</p>
-<p>{{producto.nombre}}</p>
-<p>{{producto.sku}}</p>
-<p>{{producto.precio}}</p>
-<p>{{producto.descripcion}}</p>
-<p>{{producto.proveedor}}</p>
-<p>{{producto.proveedor?.razonSocial}}</p>
-<p>{{producto.categoria}}</p>
-<p>{{producto.habilitado}}</p>
+<div class="row">
+    <div class="col-1"></div>
+    <div class="col-10">
+        <p class="my-4"><a class=" fs-6 font-blue" [routerLink]="['/products']">VOLVER</a></p>
+        <div class="row">
+            <section class="col card card-border-blue rounded-0 p-0 me-2">
+                <div class="card-img">
+                    <img class="img-fluid" style="max-height: 42rem; min-height: 42rem; width: 100%; object-fit: cover;" src="{{producto.imagen}}" alt="{{producto.nombre}}">
+                </div>
+            </section>
+            <div class="col card card-border-blue rounded-0">
+                <section class="font-blue subtitle my-3">
+                    <h3 class="fs-1 fw-semibold text-center ">{{producto.nombre}}</h3>
+                </section>
+                <section>
+                    <p class="fs-1 text-center"><span class="font-blue fw-semibold">{{producto.precio | currency}}</span></p>
+                </section>
+                <section class="row mb-3">
+                    <section class="col text-center ">
+                        <div>
+                            <p class="fs-2 font-blue fw-semibold">Proveedor:</p>
+                        </div>
+                        <div>
+                            <span class="fs-2">{{producto.proveedor?.razonSocial}}</span>
+                        </div>
+                    </section>
+                    <section class="col text-center">
+                        <div>
+                            <p class="fs-2 font-blue fw-semibold">Categoría:</p>
+                        </div>
+                        <div>
+                            <span class="fs-2">{{producto.categoria}}</span>
+                        </div>
+                    </section>
+                </section>
+                <section class="card rounded-0 p-2" style="height: 20rem;">
+                    <p class="fs-5"><span class="font-blue fw-semibold"></span>{{producto.descripcion}}</p>
+                </section>
+                <section class="ps-1">
+                    <p class="text-secondary">SKU: {{producto.sku}}</p>
+                </section>
+            </div>
+        </div>
+    </div>
+    <div class="col-1"></div>
+</div>

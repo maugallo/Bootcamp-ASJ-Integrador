@@ -20,8 +20,8 @@
                                 <div class="w-100">
                                     <label for="proveedor" class="form-label">Proveedor</label>
                                     <select [disabled]="orden.listaItems.length > 0" (change)="selectProvider()" #proveedor="ngModel" id="selectProveedor"
-                                        [(ngModel)]="codigoProveedor" class="form-select " name="proveedor" required>
-                                        <option *ngFor="let proveedor of proveedores" value="{{proveedor.codigo}}">
+                                        [(ngModel)]="codProveedorSeleccionado" class="form-select " name="proveedor" required>
+                                        <option *ngFor="let proveedor of selectProveedores" value="{{proveedor.codigo}}">
                                             {{proveedor.razonSocial}}</option>
                                     </select>
                                     <!-- Mensaje de error -->
@@ -36,9 +36,9 @@
                             <div class="col d-flex justify-content-between ">
                                 <div class="w-75 me-2">
                                     <label for="productos" class="form-label">Producto</label>
-                                    <select id="selectProductos" #producto="ngModel" [(ngModel)]="skuProducto"
+                                    <select id="selectProductos" #producto="ngModel" [(ngModel)]="skuProductoSeleccionado"
                                         class="form-select " name="productos" required>
-                                        <option *ngFor="let producto of productos" value="{{producto.sku}}">
+                                        <option *ngFor="let producto of selectProductos" value="{{producto.sku}}">
                                             {{producto.nombre}}</option>
                                     </select>
                                     <!-- Mensaje de error -->
@@ -49,7 +49,7 @@
                                 <div class="w-25">
                                     <label for="cantidad" class="form-label">Cantidad</label>
                                     <input type="number" #cantidad="ngModel" id="txtCantidad"
-                                        [(ngModel)]="cantidadProducto" name="cantidad" class="form-control"
+                                        [(ngModel)]="cantidadProductoSeleccionado" name="cantidad" class="form-control"
                                         placeholder="1" min="1" max="9999" required>
                                     <!-- Mensaje de error -->
                                     <div *ngIf="cantidad.touched && cantidad.errors?.['min']" class="text-danger ">
@@ -77,34 +77,46 @@
                         <div class="row">
                             <div class="col">
                                 <label class="form-label" for="fechaEmision">Fecha de emisión</label>
-                                <input id="txtFechaEmision" [(ngModel)]="orden.fechaEmision" class="form-control"
+                                <input id="txtFechaEmision" #fechaEmision="ngModel" [(ngModel)]="orden.fechaEmision" class="form-control"
                                     name="fechaEmision" type="date" required>
+                                <!-- Mensaje de error -->
+                                <div *ngIf="fechaEmision.touched && fechaEmision.errors?.['required']" class="text-danger ">
+                                    <p><small>Este campo no puede estar vacío</small></p>
+                                </div>
                             </div>
                             <div class="col">
                                 <label for="fechaEntrega" class="form-label">Fecha de entrega</label>
-                                <input id="txtFechaEntrega" [(ngModel)]="orden.fechaEntrega" class="form-control"
+                                <input id="txtFechaEntrega" #fechaEntrega="ngModel" [(ngModel)]="orden.fechaEntrega" class="form-control"
                                     name="fechaEntrega" type="date" required>
+                                <!-- Mensaje de error -->
+                                <div *ngIf="fechaEntrega.touched && fechaEntrega.errors?.['required']" class="text-danger ">
+                                    <p><small>Este campo no puede estar vacío</small></p>
+                                </div>
                             </div>
                         </div>
                         <div class="row mt-4">
                             <div class="col">
                                 <label for="direccion" class="form-label">Información de recepción</label>
-                                <textarea id="txtDireccion" [(ngModel)]="orden.infoRecepcion" name="direccion"
-                                    class="form-control" placeholder="Ingrese la información de recepción"></textarea>
+                                <textarea id="txtDireccion" #recepcion="ngModel" [(ngModel)]="orden.infoRecepcion" name="direccion"
+                                    class="form-control" placeholder="Ingrese la información de recepción" required maxlength="300"></textarea>
+                                <!-- Mensaje de error -->
+                                <div *ngIf="recepcion.touched && recepcion.errors?.['required']" class="text-danger ">
+                                    <p><small>Este campo no puede estar vacío</small></p>
+                                </div>
                             </div>
                         </div>
                         <div class="row mt-4">
                             <div class="col">
                                 <div class="card rounded-0 p-2 card-border-blue">
                                     <div class="scrollable">
-                                    
-                                    
+                                    <!-- Tabla de items agregados -->
                                     <table *ngIf="orden.listaItems.length > 0" class="table m-0">
                                         <thead>
                                           <tr class="text-center">
                                             <th class="fw-medium font-blue">Producto</th>
                                             <th class="fw-medium font-blue">Cantidad</th>
                                             <th class="fw-medium font-blue">Subtotal</th>
+                                            <th class="fw-medium font-blue">Config</th>
                                           </tr>
                                         </thead>
                                         <tbody>
@@ -112,6 +124,7 @@
                                             <td  class="fw-medium font-blue">{{item.producto?.nombre}}</td>
                                             <td  class="fw-medium font-blue">x{{item.cantidad}}</td>
                                             <td  class="fw-medium font-blue">${{item.producto?.precio! * item.cantidad!}}</td>
+                                            <td><button class="btn btn-add rounded-0" (click)="removeItem(item.producto?.sku!)">Quitar</button></td>
                                           </tr>
                                           <tr class="text-center ">
                                             <td></td>
@@ -127,7 +140,7 @@
                         </div>
                         <div class="row mt-4">
                             <div class="col text-end">
-                                <button class="btn btn-add rounded-0" [disabled]="ordersForm.invalid" type="submit">Agregar</button>
+                                <button class="btn btn-add rounded-0" [disabled]="ordersForm.invalid" type="submit">{{buttonName}}</button>
                             </div>
                         </div>
                     </form>

@@ -32,12 +32,12 @@ export class FormProveedorComponent implements OnInit {
     habilitado: true,
   }
 
-  //Select de países, provincias y localidades que se renderizará en el form.
-  countries: any[] = [];
-  states: any[] = [];
-  cities: any[] = [];
+  //Select de países, provincias y localidades que se renderizarán en el form.
+  selectCountries: any[] = [];
+  selectStates: any[] = [];
+  selectCities: any[] = [];
 
-  //Variables para manejar el tíutlo y nombre del botón:
+  //Variables para manejar el título y nombre del botón:
   title: string = "AGREGAR PROVEEDOR";
   buttonName: string = "Agregar";
 
@@ -47,76 +47,66 @@ export class FormProveedorComponent implements OnInit {
   constructor(public proveedorService: ServiceProveedorService, private router: Router, private activatedRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
-    this.getCountries();
+    this.renderCountriesSelect();
 
-    this.codigoParam = this.activatedRoute.snapshot.params['id'];
-      if (this.proveedorService.getProvider(this.codigoParam) !== undefined){
-        this.proveedor = this.proveedorService.getProvider(this.codigoParam);
-        this.getStates();
-        this.getCities();
+    this.codigoParam = this.getParameter();
+    let proveedorByParam = this.proveedorService.getProvider(this.codigoParam);
+      if (proveedorByParam){
+        this.proveedor = proveedorByParam;
+        this.renderStatesSelect();
+        this.renderCitiesSelect();
         this.title = "EDITAR PROVEEDOR";
         this.buttonName = "Editar";
       } else{
         this.router.navigate(['providers/form-provider']);
       }
-
   }
 
+  getParameter(){
+    return this.activatedRoute.snapshot.params['id'];
+  }
+
+  renderCountriesSelect(){
+    this.proveedorService.getCountries().subscribe((data) => {
+      this.selectCountries = data.filter((pais: any) => pais.subregion === "South America");
+    });
+  }
+
+  renderStatesSelect(){
+    this.proveedorService.getStates().subscribe((data) => {
+      this.selectStates = data.filter((state: any) => (state.country_name === this.proveedor.pais));
+    });
+  }
+
+  renderCitiesSelect(){
+    this.proveedorService.getCities().subscribe((data) =>{
+      this.selectCities = data.filter((city: any) => (city.state_name === this.proveedor.provincia && city.country_name === this.proveedor.pais));
+    });
+  }
+
+  //Métodos de formulario para agregar proveedores:
   onSubmit(form: NgForm) {
     if (form.valid){
-      this.proveedor.codigo = this.proveedor.codigo.toUpperCase();
       if (this.buttonName === "Agregar"){
         if (this.isCodeRepeated(this.proveedor.codigo)){
           alert("El código del proveedor ya existe");
-        } else{
+        }
+
+        else{
+          this.proveedor.codigo = this.proveedor.codigo.toUpperCase();
           this.proveedorService.addProvider(this.proveedor);
-          alert("Proveedor creado!"); //(Cambiar por otra alerta)
+          alert("Proveedor creado!");
           this.router.navigate(['providers/']);
         }
+
       } else if (this.buttonName === "Editar"){
         this.proveedorService.updateProvider(this.proveedor);
-        alert("Proveedor editado!"); //(Cambiar por otra alerta)
+        alert("Proveedor editado!");
         this.router.navigate(['providers/']);
       }
     }
   }
   
-  selectCountry(){
-    this.states = []; //Limpio el select de provincias.
-    this.cities = []; //Limpio el select de localidades.
-    this.proveedor.provincia = "";
-    this.proveedor.localidad = "";
-
-    this.getStates();
-  }
-
-  selectState(){
-    this.cities = []; //Limpio el select de localidades.
-    this.proveedor.localidad = "";
-
-    this.getCities();
-  }
-
-  //Llamadas a la API:
-  getCountries(){
-    this.proveedorService.getCountries().subscribe((data) => {
-      this.countries = data;
-    });
-  }
-
-  getStates(){
-    this.proveedorService.getStates().subscribe((data) => {
-      this.states = data.filter((state: any) => (state.country_name === this.proveedor.pais));
-    });
-  }
-
-  getCities(){
-    this.proveedorService.getCities().subscribe((data) =>{
-      this.cities = data.filter((city: any) => (city.state_name === this.proveedor.provincia));
-    });
-  }
-
-  //Métodos auxiliares:
   isCodeRepeated(codigo: string){
     let index = this.proveedorService.getProviders().findIndex((proveedor: Proveedor) => (proveedor.codigo === codigo));
     if (index != -1){
@@ -126,32 +116,27 @@ export class FormProveedorComponent implements OnInit {
     }
   }
 
-  //Métodos de validación:
-  /* get validateData() {
-    return null;
+  chooseCountry(){ //Método del evento (change) del select de países.
+    this.clearStateSelect();
+    this.clearCitySelect();
+
+    this.renderStatesSelect();
   }
 
-  isEmptyOrWhiteSpaces(text: string) {
-    if ((text === undefined) || text.match(/^\s*$/) != null) {
-      return true;
-    } else {
-      return false;
-    }
+  chooseState(){ //Método del evento (change) del select de provincias.
+    this.clearCitySelect();
+
+    this.renderCitiesSelect();
   }
 
-  isNumeric(text: string) {
-    if (text.match(/^[0-9+()#]*$/) != null) {
-      return true;
-    } else {
-      return false;
-    }
+  //Métodos auxiliares:
+  clearStateSelect(){
+    this.selectStates = []; //Limpio el select de provincias.
+    this.proveedor.provincia = "";
   }
 
-  isCuit(text: string) {
-    if (text.match(/^\d{2}-\d{8}-\d{1}$/) != null) {
-      return true;
-    } else {
-      return false;
-    }
-  } */
+  clearCitySelect(){
+    this.selectCities = []; //Limpio el select de localidades.
+    this.proveedor.localidad = "";
+  }
 }
