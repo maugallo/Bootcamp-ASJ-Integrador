@@ -11,14 +11,14 @@ export class ServiceHomeService {
   constructor(private proveedorService: ServiceProveedorService, private productoService: ServiceProductoService, private ordenService: ServiceOrdenService) { }
 
   getProvidersCount(){
-    return this.proveedorService.getEnabledProviders.length;
+    return this.proveedorService.getEnabledProviders().length;
   }
 
   getProductsCount(){
-    return this.productoService.getEnabledProducts.length;
+    return this.productoService.getEnabledProducts().length;
   }
 
   getOrdersCount(){
-    return this.ordenService.getEnabledOrders.length;
+    return this.ordenService.getEnabledOrders().length;
   }
 }
