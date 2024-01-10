@@ -176,21 +176,34 @@ WHERE  purchase_orders.id = 4;
 Al realizar la eliminación de un producto, primero necesitaremos eliminar todos aquellos detalles de compra que tengan como FK el id del producto.
 Una vez eliminados los detalles, eliminaremos todas aquellas órdenes de compra que no tengan ningún detalle, y por ende, estén vacías.
 Finalmente eliminaremos el producto.
+
+Si ocurre algún error durante la transacción, se ejecuta un rollback para evitar que haya algún cambio.
+Si no ocurre ningún error y se llega al final de la transacción, se ejecuta un commit para que todos los deletes se apliquen.
 */
 
 /*
-DELETE FROM orders_details
-FROM orders_details
-JOIN products
-ON orders_details.product_id = products.id
-WHERE products.id = 5;
+BEGIN try
+    BEGIN TRANSACTION
 
-DELETE FROM purchase_orders
-WHERE id NOT IN (SELECT orders.id
-				FROM purchase_orders orders
-				JOIN orders_details
-				ON orders.id = orders_details.order_id);
+    DELETE FROM orders_details
+    FROM   orders_details
+           JOIN products
+             ON orders_details.product_id = products.id
+    WHERE  products.id = 1;
 
-DELETE FROM products
-WHERE  id = 5;
+    DELETE FROM purchase_orders
+    WHERE  id NOT IN (SELECT orders.id
+                      FROM   purchase_orders orders
+                             JOIN orders_details
+                               ON orders.id = orders_details.order_id);
+
+    DELETE FROM products
+    WHERE  id = 1;
+
+    COMMIT TRANSACTION;
+END try
+
+BEGIN catch
+    ROLLBACK TRANSACTION;
+END catch 
 */
