@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { Orden } from '../../../../models/ordenes';
+import { Order } from '../../../../models/orders';
 import { ServiceOrdenService } from '../../../../services/service-orden.service';
 
 @Component({
@@ -9,8 +9,8 @@ import { ServiceOrdenService } from '../../../../services/service-orden.service'
 })
 export class AbmOrdenComponent {
 
-  arrayHabilitados!: Orden[];
-  arrayDeshabilitados!: Orden[];
+  arrayHabilitados!: Order[];
+  arrayDeshabilitados!: Order[];
 
   verDeshabilitados: boolean = false;
 

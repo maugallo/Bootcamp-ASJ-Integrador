@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Orden } from '../../../../models/ordenes';
+import { Order } from '../../../../models/orders';
 import { ServiceOrdenService } from '../../../../services/service-orden.service';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -10,7 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class DetailOrdenComponent implements OnInit {
 
-  orden!: Orden;
+  orden!: Order;
 
   nroOrdenParam!: number;
 

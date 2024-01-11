@@ -1,11 +1,11 @@
 import { Component } from '@angular/core';
 import { ServiceOrdenService } from '../../../../services/service-orden.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Orden } from '../../../../models/ordenes';
+import { Order } from '../../../../models/orders';
 import { NgForm } from '@angular/forms';
-import { Proveedor } from '../../../../models/proveedores';
-import { Producto } from '../../../../models/productos';
-import { ItemOrden } from '../../../../models/itemOrden';
+import { Provider } from '../../../../models/provider';
+import { Product } from '../../../../models/product';
+import { OrderDetail } from '../../../../models/orderDetails';
 import { ServiceProductoService } from '../../../../services/service-producto.service';
 
 @Component({
@@ -15,31 +15,30 @@ import { ServiceProductoService } from '../../../../services/service-producto.se
 })
 export class FormOrdenComponent {
   //Objeto Orden que se enlazará mediante ngModel en el form:
-  orden: Orden = {
-    nroOrden: undefined,
-    fechaEmision: undefined,
-    fechaEntrega: undefined,
-    infoRecepcion: "",
-    direccion: "",
-    proveedor: undefined,
-    listaItems: [],
+  orden: Order = {
+    orderNumber: 0,
+    issueDate: new Date('0000-00-00'),
+    deliveryDate: new Date('0000-00-00'),
+    receptionInfo: "",
+    provider: {} as Provider,
+    orderDetails: [],
     total: 0,
-    habilitado: true,
+    enabled: true,
   }
 
-  item: ItemOrden = {
-    producto: undefined,
-    cantidad: undefined,
+  item: OrderDetail = {
+    product: {} as Product,
+    quantity: 0,
   }
 
   //Select de proveedores que se renderizará en el form.
-  selectProveedores!: Proveedor[];
+  selectProveedores!: Provider[];
   codProveedorSeleccionado!: string;
 
   //Select de productos que se rendizará en el form.
-  selectProductos!: Producto[];
+  selectProductos!: Product[];
   skuProductoSeleccionado: string = "";
-  cantidadProductoSeleccionado!: number | undefined;
+  cantidadProductoSeleccionado!: number;
 
   //Variables para manejar el título y nombre del botón:
   title: string = "AGREGAR ORDEN DE COMPRA";
@@ -58,7 +57,7 @@ export class FormOrdenComponent {
     let ordenByParam = this.ordenService.getOrder(this.nroOrdenParam);
     if (ordenByParam){
       this.orden = ordenByParam;
-      this.codProveedorSeleccionado = this.orden.proveedor!.codigo; //Preseleccionar en el select, el proveedor de la orden.
+      this.codProveedorSeleccionado = this.orden.provider!.code; //Preseleccionar en el select, el proveedor de la orden.
       this.renderProductsSelect();
       this.title = "EDITAR ORDEN DE COMPRA";
       this.buttonName = "Editar";
@@ -96,8 +95,8 @@ export class FormOrdenComponent {
 
       else{
         if (this.buttonName === "Agregar"){
-          this.orden.nroOrden = this.ordenService.generateCode();
-          this.orden.proveedor = this.selectProveedores.find((proveedor) => proveedor.codigo === this.codProveedorSeleccionado);
+          this.orden.orderNumber = this.ordenService.generateCode();
+          this.orden.provider = this.selectProveedores.find((proveedor) => proveedor.code === this.codProveedorSeleccionado)!;
 
           this.ordenService.addOrder(this.orden);
           alert("Orden creada!");
@@ -114,7 +113,7 @@ export class FormOrdenComponent {
   }
 
   isItemListValid(){
-    if (this.orden.listaItems.length === 0){
+    if (this.orden.orderDetails.length === 0){
       return false;
     } else{
       return true;
@@ -122,7 +121,7 @@ export class FormOrdenComponent {
   }
 
   areDatesCorrect(){
-    if (this.orden.fechaEmision! >= this.orden.fechaEntrega!){
+    if (this.orden.issueDate! >= this.orden.deliveryDate!){
       return false;
     } else{
       return true;
@@ -130,7 +129,7 @@ export class FormOrdenComponent {
   }
 
   isDatePresent(){
-    let fechaEmision = new Date(this.orden.fechaEmision!); //Transformamos en formato Date crudo así podemos comparar con la fecha actual.
+    let fechaEmision = new Date(this.orden.issueDate!); //Transformamos en formato Date crudo así podemos comparar con la fecha actual.
     fechaEmision.setDate(fechaEmision.getDate() + 1); //Le seteo 1 día más para que funcione.
     fechaEmision.setHours(0, 0, 0, 0);
     let fechaHoy = new Date();
@@ -146,16 +145,16 @@ export class FormOrdenComponent {
   //Métodos de formulario para agregar items a la orden de compra:
   addItem(){
     if (this.isProductRepeated() === false){
-      this.item = {producto: this.productoService.getProduct(this.skuProductoSeleccionado), cantidad: this.cantidadProductoSeleccionado};
-      this.orden.listaItems.push(this.item);
+      this.item = {product: this.productoService.getProduct(this.skuProductoSeleccionado), quantity: this.cantidadProductoSeleccionado};
+      this.orden.orderDetails.push(this.item);
     }
     this.calculateTotal();
   }
 
   isProductRepeated(){
-    for(let item of this.orden.listaItems){
-      if (item.producto?.sku === this.skuProductoSeleccionado){
-        item.cantidad! += this.cantidadProductoSeleccionado!;
+    for(let item of this.orden.orderDetails){
+      if (item.product?.sku === this.skuProductoSeleccionado){
+        item.quantity! += this.cantidadProductoSeleccionado!;
         return true;
       }
     }
@@ -168,17 +167,17 @@ export class FormOrdenComponent {
 
   calculateTotal(){
     this.orden.total = 0;
-    this.orden.listaItems.forEach((item) => {
+    this.orden.orderDetails.forEach((item) => {
       this.orden.total! += this.calculateSubtotal(item);
     })
   }
 
-  calculateSubtotal(item: ItemOrden){
-    return (item.producto?.precio! * item.cantidad!);
+  calculateSubtotal(item: OrderDetail){
+    return (item.product?.price! * item.quantity!);
   }
 
   removeItem(sku: string){
-    this.orden.listaItems = this.orden.listaItems.filter((item) => item.producto?.sku != sku);
+    this.orden.orderDetails = this.orden.orderDetails.filter((item) => item.product?.sku != sku);
     this.calculateTotal();
   }
 }

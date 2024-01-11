@@ -20,7 +20,7 @@
                         <div class="col d-flex justify-content-between mx-2">
                             <div class="me-2">
                                 <label for="codigo" class="form-label">Código</label>
-                                <input class="form-control" #codigo="ngModel" [(ngModel)]="proveedor.codigo"
+                                <input class="form-control" #codigo="ngModel" [(ngModel)]="proveedor.code"
                                     name="codigo" type="text" placeholder="AB12" required minlength="4" maxlength="10" [disabled]="codigoParam">
                                 <!-- Mensaje de error -->
                                 <div *ngIf="codigo.touched && codigo.errors?.['required']" class="text-danger ">
@@ -33,7 +33,7 @@
                             <div class="me-2">
                                 <label class="form-label" for="razonSocial">Razón Social</label>
                                 <input id="txtEmpresa" #razonSocial="ngModel" class="form-control"
-                                    [(ngModel)]="proveedor.razonSocial" name="razonSocial" type="text"
+                                    [(ngModel)]="proveedor.companyName" name="razonSocial" type="text"
                                     placeholder="Ingrese razón social" required maxlength="60"
                                     pattern="^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ ]+$">
                                 <!-- Mensaje de error -->
@@ -47,7 +47,7 @@
                             </div>
                             <div class="me-2">
                                 <label for="rubro" class="form-label">Rubro</label>
-                                <input id="txtRubro" #rubro="ngModel" type="text" [(ngModel)]="proveedor.rubro"
+                                <input id="txtRubro" #rubro="ngModel" type="text" [(ngModel)]="proveedor.sector"
                                     name="rubro" class="form-control" placeholder="Ingrese el rubro" required
                                     minlength="5" maxlength="60" pattern="^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ ]+$">
                                 <!-- Mensaje de error -->
@@ -67,7 +67,7 @@
                         <div class="col">
                             <div class="w-100">
                                 <label for="webSite" class="form-label">Sitio Web</label>
-                                <input type="text" name="webSite" [(ngModel)]="proveedor.sitioWeb" class="form-control"
+                                <input type="text" name="webSite" [(ngModel)]="proveedor.website" class="form-control"
                                     placeholder="https://example.com">
                             </div>
                         </div>
@@ -77,7 +77,7 @@
                             <div class="col d-flex justify-content-center">
                                 <div class="me-2 w-75">
                                     <label for="calle" class="form-label">Calle</label>
-                                    <input type="text" #calle="ngModel" name="calle" [(ngModel)]="proveedor.calle"
+                                    <input type="text" #calle="ngModel" name="calle" [(ngModel)]="proveedor.street"
                                         class="form-control" placeholder="Ingrese la calle" required minlength="5"
                                         pattern="^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ ]+$">
                                     <!-- Mensaje de error -->
@@ -93,7 +93,7 @@
                                 </div>
                                 <div class="me-2">
                                     <label for="nroCalle" class="form-label">Número</label>
-                                    <input type="text" #num="ngModel" name="nroCalle" [(ngModel)]="proveedor.num"
+                                    <input  type="text" #num="ngModel" name="nroCalle" [(ngModel)]="proveedor.num"
                                         class="form-control" placeholder="0123" required maxlength="5"
                                         pattern="^[0-9]+$">
                                     <!-- Mensaje de error -->
@@ -107,7 +107,7 @@
                                 <div>
                                     <label for="codPostal" class="form-label">Código Postal</label>
                                     <input type="text" #codPostal="ngModel" name="codPostal"
-                                        [(ngModel)]="proveedor.codPostal" class="form-control" placeholder="C.P"
+                                        [(ngModel)]="proveedor.zipCode" class="form-control" placeholder="C.P"
                                         required minlength="4" maxlength="6" pattern="^[0-9]+$">
                                     <!-- Mensaje de error -->
                                     <div *ngIf="codPostal.touched && codPostal.errors?.['required']"
@@ -130,7 +130,7 @@
                                 <div class="w-50 me-2">
                                     <label for="pais" class="form-label">Pais</label>
                                     <select type="select" #pais="ngModel" name="pais" class="form-select"
-                                        (change)="chooseCountry()" [(ngModel)]="proveedor.pais" required>
+                                        (change)="chooseCountry()" [(ngModel)]="proveedor.country" required>
                                         <option *ngFor="let country of selectCountries" value="{{country.name}}">
                                             {{country.name}}</option>
                                     </select>
@@ -142,7 +142,7 @@
                                 <div class="w-50 me-2">
                                     <label for="provincia" class="form-label">Provincia</label>
                                     <select type="text" #provincia="ngModel" name="provincia" class="form-select"
-                                        (change)="chooseState()" [(ngModel)]="proveedor.provincia" required>
+                                        (change)="chooseState()" [(ngModel)]="proveedor.province" required>
                                         <option *ngFor="let state of selectStates" value="{{state.name}}">{{state.name}}</option>
                                         <option *ngIf="selectStates.length === 0" value="Sin Provincia">--------</option>
                                     </select>
@@ -155,7 +155,7 @@
 
                                 <div class="w-50">
                                     <label for="localidad" class="form-label">Localidad</label>
-                                    <select type="text" #localidad="ngModel" name="localidad" class="form-select" [(ngModel)]="proveedor.localidad" required>
+                                    <select type="text" #localidad="ngModel" name="localidad" class="form-select" [(ngModel)]="proveedor.locality" required>
                                         <option *ngFor="let city of selectCities" value="{{city.name}}">{{city.name}}</option>
                                         <option *ngIf="selectCities.length === 0" value="Sin Localidad">--------</option>
                                     </select>
@@ -194,17 +194,17 @@
                                 <div class="d-flex justify-content-evenly">
                                     <label for="responsable" class="form-check-label">
                                         <span class="me-2">Resp. Inscripto</span>
-                                        <input class="form-check-input" [(ngModel)]="proveedor.iva" id="responsable"
+                                        <input class="form-check-input" [(ngModel)]="proveedor.vat" id="responsable"
                                             type="radio" name="condicionIva" value="Responsable Inscripto">
                                     </label>
                                     <label for="monotributista" class="form-check-label">
                                         <span class="me-2">Monotributista</span>
-                                        <input class="form-check-input" [(ngModel)]="proveedor.iva" id="monotributista"
+                                        <input class="form-check-input" [(ngModel)]="proveedor.vat" id="monotributista"
                                             type="radio" name="condicionIva" value="Monotributista">
                                     </label>
                                     <label for="exento" class="form-check-label">
                                         <span class="me-2">Exento</span>
-                                        <input class="form-check-input" [(ngModel)]="proveedor.iva" id="exento"
+                                        <input class="form-check-input" [(ngModel)]="proveedor.vat" id="exento"
                                             type="radio" name="condicionIva" value="Exento">
                                     </label>
                                 </div>
@@ -222,7 +222,7 @@
                             <div class="col d-flex justify-content-center mx-2">
                                 <div class="me-2 w-50 ">
                                     <label class="form-label" for="nombre">Nombre</label>
-                                    <input class="form-control" #nombre="ngModel" [(ngModel)]="proveedor.nombre"
+                                    <input class="form-control" #nombre="ngModel" [(ngModel)]="proveedor.name"
                                         name="nombre" type="text" placeholder="Ingrese el nombre" required
                                         maxlength="50" pattern="^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$">
                                     <!-- Mensaje de error -->
@@ -235,7 +235,7 @@
                                 </div>
                                 <div class="me-2 w-50">
                                     <label for="apellido" class="form-label">Apellido</label>
-                                    <input type="text" #apellido="ngModel" [(ngModel)]="proveedor.apellido"
+                                    <input type="text" #apellido="ngModel" [(ngModel)]="proveedor.sirname"
                                         name="apellido" class="form-control" placeholder="Ingrese el apellido" required
                                         maxlength="50" pattern="^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$">
                                     <!-- Mensaje de error -->
@@ -248,7 +248,7 @@
                                 </div>
                                 <div class="w-50">
                                     <label for="telefono" class="form-label">Teléfono</label>
-                                    <input id="txtTelefono" #telefono="ngModel" [(ngModel)]="proveedor.telefono"
+                                    <input id="txtTelefono" #telefono="ngModel" [(ngModel)]="proveedor.telephone"
                                         type="text" name="telefono" class="form-control" placeholder="1234567890"
                                         required pattern="^[0-9]+$" minlength="7" maxlength="12">
                                     <!-- Mensaje de error -->
@@ -284,7 +284,7 @@
                                 </div>
                                 <div class="w-auto">
                                     <label for="rol" class="form-label">Rol</label>
-                                    <input type="text" #rol="ngModel" [(ngModel)]="proveedor.rol" name="rol"
+                                    <input type="text" #rol="ngModel" [(ngModel)]="proveedor.role" name="rol"
                                         class="form-control" placeholder="Ingrese el rol" required maxlength="50"
                                         pattern="^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ ]+$">
                                     <!-- Mensaje de error -->

@@ -50,35 +50,35 @@
                         <!-- Elementos activos -->
                         <ng-container *ngIf="verDeshabilitados === false">
                             <tr *ngFor="let orden of arrayHabilitados">
-                                <td>{{orden.nroOrden}}</td>
-                                <td>{{orden.fechaEmision | date: 'dd/MM/yyyy'}}</td>
-                                <td>{{orden.fechaEntrega | date: 'dd/MM/yyyy'}}</td>
-                                <td>{{orden.infoRecepcion}}</td>
-                                <td>{{orden.proveedor?.razonSocial}}</td>
+                                <td>{{orden.orderNumber}}</td>
+                                <td>{{orden.issueDate | date: 'dd/MM/yyyy'}}</td>
+                                <td>{{orden.deliveryDate | date: 'dd/MM/yyyy'}}</td>
+                                <td>{{orden.receptionInfo}}</td>
+                                <td>{{orden.provider.companyName}}</td>
                                 <td class="text-start ">
-                                    <ng-container *ngFor="let item of orden.listaItems">
-                                        <div class="mb-2">{{item.producto!.nombre}} x({{item.cantidad}}) {{item.producto!.precio | currency}}</div>
+                                    <ng-container *ngFor="let item of orden.orderDetails">
+                                        <div class="mb-2">{{item.product!.title}} x({{item.quantity}}) {{item.product!.price | currency}}</div>
                                     </ng-container>
                                     Total {{orden.total | currency}}
                                 </td>
                                 <td class="">
-                                    <a class="fs-5 me-2 text-decoration-none option" data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="openModal(orden.nroOrden!)">❌</a>
-                                    <a class="fs-5 me-2 text-decoration-none option" [routerLink]="['form-order', orden.nroOrden]">✏️</a>
-                                    <a class="fs-5 text-decoration-none option" [routerLink]="['/orders', orden.nroOrden]">👁️</a>
+                                    <a class="fs-5 me-2 text-decoration-none option" data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="openModal(orden.orderNumber!)">❌</a>
+                                    <a class="fs-5 me-2 text-decoration-none option" [routerLink]="['form-order', orden.orderNumber]">✏️</a>
+                                    <a class="fs-5 text-decoration-none option" [routerLink]="['/orders', orden.orderNumber]">👁️</a>
                                 </td>
                             </tr>
                         </ng-container>
                         <!-- Elementos deshabilitados -->
                         <ng-container *ngIf="verDeshabilitados === true && arrayDeshabilitados.length > 0">
                             <tr class="table-secondary" *ngFor="let orden of arrayDeshabilitados">
-                                <td>{{orden.nroOrden}}</td>
-                                <td>{{orden.fechaEmision | date: 'dd/MM/yyyy'}}</td>
-                                <td>{{orden.fechaEntrega | date: 'dd/MM/yyyy'}}</td>
-                                <td>{{orden.infoRecepcion}}</td>
-                                <td>{{orden.proveedor?.razonSocial}}</td>
+                                <td>{{orden.orderNumber}}</td>
+                                <td>{{orden.issueDate | date: 'dd/MM/yyyy'}}</td>
+                                <td>{{orden.deliveryDate | date: 'dd/MM/yyyy'}}</td>
+                                <td>{{orden.receptionInfo}}</td>
+                                <td>{{orden.provider.companyName}}</td>
                                 <td class="text-start ">
-                                    <ng-container *ngFor="let item of orden.listaItems">
-                                        <div class="mb-2">{{item.producto!.nombre}} x({{item.cantidad}}) {{item.producto!.precio | currency}}</div>
+                                    <ng-container *ngFor="let item of orden.orderDetails">
+                                        <div class="mb-2">{{item.product!.title}} x({{item.quantity}}) {{item.product!.price | currency}}</div>
                                     </ng-container>
                                     Total {{orden.total | currency}}
                                 </td>

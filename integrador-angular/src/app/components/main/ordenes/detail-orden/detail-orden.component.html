@@ -4,7 +4,7 @@
         <p class="my-4"><a class=" fs-6 font-blue" [routerLink]="['/orders']">VOLVER</a></p>
         <div class="card card-border-blue rounded-0 p-3">
             <section class="font-blue subtitle mb-4">
-                <h3 class="fs-1 fw-semibold text-center ">Orden de Compra N°{{orden.nroOrden}}</h3>
+                <h3 class="fs-1 fw-semibold text-center ">Orden de Compra N°{{orden.orderNumber}}</h3>
             </section>
             <div class="row text-center mb-5">
                 <section class="col">
@@ -12,7 +12,7 @@
                         <p class="fs-3 font-blue fw-semibold">Fecha de emisión:</p>
                     </div>
                     <div>
-                        <span class="fs-3">{{orden.fechaEmision | date: 'dd/MM/yyyy'}}</span>
+                        <span class="fs-3">{{orden.issueDate | date: 'dd/MM/yyyy'}}</span>
                     </div>
                 </section>
                 <section class="col">
@@ -20,7 +20,7 @@
                         <p class="fs-3 font-blue fw-semibold">Fecha de entrega:</p>
                     </div>
                     <div>
-                        <span class="fs-3">{{orden.fechaEntrega | date: 'dd/MM/yyyy'}}</span>
+                        <span class="fs-3">{{orden.deliveryDate | date: 'dd/MM/yyyy'}}</span>
                     </div>
                 </section>
                 <section class="col">
@@ -28,7 +28,7 @@
                         <p class="fs-3 font-blue fw-semibold">Proveedor:</p>
                     </div>
                     <div>
-                        <span class="fs-3">{{orden.proveedor!.razonSocial}}</span>
+                        <span class="fs-3">{{orden.provider!.companyName}}</span>
                     </div>
                 </section>
             </div>
@@ -38,7 +38,7 @@
                         <p class="fs-3 font-blue fw-semibold ">Información de recepción:</p>
                     </div>
                     <div>
-                        <span class="fs-5">{{orden.infoRecepcion}}</span>
+                        <span class="fs-5">{{orden.receptionInfo}}</span>
                     </div>
                 </section>
             </div>
@@ -57,11 +57,11 @@
                           </tr>
                         </thead>
                         <tbody>
-                          <tr *ngFor="let item of orden.listaItems" class="text-center">
-                            <td  class="fs-5 fw-medium font-blue">{{item.producto?.nombre}}</td>
-                            <td  class="fs-5 fw-medium font-blue">{{item.producto?.descripcion}}</td>
-                            <td  class="fs-5 fw-medium font-blue">x{{item.cantidad}}</td>
-                            <td  class="fs-5 fw-medium font-blue">${{item.producto?.precio! * item.cantidad!}}</td>
+                          <tr *ngFor="let item of orden.orderDetails" class="text-center">
+                            <td  class="fs-5 fw-medium font-blue">{{item.product?.title}}</td>
+                            <td  class="fs-5 fw-medium font-blue">{{item.product?.description}}</td>
+                            <td  class="fs-5 fw-medium font-blue">x{{item.quantity}}</td>
+                            <td  class="fs-5 fw-medium font-blue">${{item.product?.price! * item.quantity!}}</td>
                           </tr>
                           <tr class="text-center ">
                             <td colspan="2"></td>

@@ -51,12 +51,12 @@
                         <ng-container *ngIf="verDeshabilitados === false">
                             <tr *ngFor="let producto of arrayHabilitados">
                                 <td class="card-img" style="width: 20rem;">
-                                    <img class="img-fluid product-img" src="{{producto.imagen}}" alt="{{producto.nombre}}">
+                                    <img class="img-fluid product-img" src="{{producto.image}}" alt="{{producto.title}}">
                                 </td>
-                                <td>{{producto.nombre}}</td>
-                                <td>{{producto.categoria}}</td>
-                                <td>{{producto.proveedor?.razonSocial}}</td>
-                                <td>{{producto.precio | currency }}</td>                            
+                                <td>{{producto.title}}</td>
+                                <td>{{producto.category}}</td>
+                                <td>{{producto.provider.companyName}}</td>
+                                <td>{{producto.price | currency }}</td>                            
                                 <td>
                                     <a class="fs-5 me-2 text-decoration-none option" data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="openModal(producto.sku)">🗑️</a>
                                     <a class="fs-5 me-2 text-decoration-none option" [routerLink]="['form-product', producto.sku]">✏️</a>
@@ -68,12 +68,12 @@
                         <ng-container *ngIf="verDeshabilitados === true && arrayDeshabilitados.length > 0">
                             <tr class="table-secondary " *ngFor="let producto of arrayDeshabilitados">
                                 <td class="card-img" style="width: 20rem;">
-                                    <img class="img-fluid" style="max-height: 15rem; width: 100%; object-fit: cover;" src="{{producto.imagen}}" alt="{{producto.nombre}}">
+                                    <img class="img-fluid" style="max-height: 15rem; width: 100%; object-fit: cover;" src="{{producto.image}}" alt="{{producto.title}}">
                                 </td>
-                                <td>{{producto.nombre}}</td>
-                                <td>{{producto.categoria}}</td>
-                                <td>{{producto.proveedor?.razonSocial}}</td>
-                                <td>${{producto.precio}}</td>
+                                <td>{{producto.title}}</td>
+                                <td>{{producto.category}}</td>
+                                <td>{{producto.provider.companyName}}</td>
+                                <td>${{producto.price}}</td>
                                 <td>Eliminado</td>
                             </tr>
                         </ng-container>

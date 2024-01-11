@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ServiceProveedorService } from '../../../../services/service-proveedor.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Proveedor } from '../../../../models/proveedores';
+import { Provider } from '../../../../models/provider';
 
 @Component({
   selector: 'app-detail-proveedor',
@@ -10,7 +10,7 @@ import { Proveedor } from '../../../../models/proveedores';
 })
 export class DetailProveedorComponent implements OnInit {
 
-  proveedor!: Proveedor;
+  proveedor!: Provider;
 
   codigoParam!: string;
 

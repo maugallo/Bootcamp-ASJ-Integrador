@@ -15,7 +15,7 @@
                         <div class="col d-flex justify-content-between mx-2">
                             <div class="me-2">
                                 <label class="form-label" for="nombre">Nombre</label>
-                                <input id="txtNombre" #nombre="ngModel" [(ngModel)]="producto.nombre"
+                                <input id="txtNombre" #nombre="ngModel" [(ngModel)]="producto.title"
                                     class="form-control" name="nombre" type="text" placeholder="Ingrese el nombre"
                                     required maxlength="50">
                                 <!-- Mensaje de error -->
@@ -38,9 +38,9 @@
                             </div>
                             <div class="me">
                                 <label for="precio" class="form-label">Precio</label>
-                                <input id="txtPrecio" #precio="ngModel" [(ngModel)]="producto.precio" type="number"
+                                <input id="txtPrecio" #precio="ngModel" [(ngModel)]="producto.price" type="number"
                                     name="precio" class="form-control" placeholder="$0" required min="1" max="9999999" minlength="1"
-                                    maxlength="9">
+                                    maxlength="9" [ngModel]="producto.price === 0 ? '' : producto.price">
                                 <!-- Mensaje de error -->
                                 <div *ngIf="precio.touched && precio.errors?.['required']" class="text-danger ">
                                     <p><small>Este campo no puede estar vacío</small></p>
@@ -59,7 +59,7 @@
                             <div class="me-2 w-100">
                                 <label class="form-label" for="imagen">Imagen</label>
                                 <input name="imagen" type="text" #imagen="ngModel" class="form-control"
-                                    [(ngModel)]="producto.imagen" placeholder="Ingrese la URL" required pattern="^https?:\/\/[\w\-\.]+(\.[a-zA-Z]{2,3})?(:\d+)?(\/[^\s]*)?$">
+                                    [(ngModel)]="producto.image" placeholder="Ingrese la URL" required pattern="^https?:\/\/[\w\-\.]+(\.[a-zA-Z]{2,3})?(:\d+)?(\/[^\s]*)?$">
                                 <!-- Mensaje de error -->
                                 <div *ngIf="imagen.touched && imagen.errors?.['required']" class="text-danger ">
                                     <p><small>Este campo no puede estar vacío</small></p>
@@ -75,7 +75,7 @@
                         <div class="col">
                             <div class="me-2 w-100">
                                 <label class="form-label" for="descripcion">Descripción</label>
-                                <textarea #descripcion="ngModel" [(ngModel)]="producto.descripcion" class="form-control"
+                                <textarea #descripcion="ngModel" [(ngModel)]="producto.description" class="form-control"
                                     name="descripcion" cols="30" rows="5" placeholder="Ingrese la descripción" required
                                     maxlength="200">
                                 </textarea>
@@ -93,8 +93,8 @@
                                 <label for="proveedor" class="form-label">Proveedor</label>
                                 <select id="selectProveedor" #proveedor="ngModel" [(ngModel)]="codProveedorSeleccionado" class="form-select "
                                     name="proveedor" required>
-                                    <option *ngFor="let proveedor of selectProveedores" value="{{proveedor.codigo}}">
-                                        {{proveedor.razonSocial}}</option>
+                                    <option *ngFor="let proveedor of selectProveedores" value="{{proveedor.code}}">
+                                        {{proveedor.companyName}}</option>
                                 </select>
                                 <!-- Mensaje de error -->
                                 <div *ngIf="proveedor.touched && proveedor.errors?.['required']"
@@ -104,7 +104,7 @@
                             </div>
                             <div class="w-50">
                                 <label for="categoria" class="form-label">Categoría</label>
-                                <select id="selectCategoria" #categoria="ngModel" [(ngModel)]="producto.categoria" class="form-select "
+                                <select id="selectCategoria" #categoria="ngModel" [(ngModel)]="producto.category" class="form-select "
                                     name="categoria" required>
                                     <option value="Alimentos">Alimentos</option>
                                     <option value="Deportes">Deportes</option>

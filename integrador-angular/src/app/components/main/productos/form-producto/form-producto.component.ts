@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ServiceProductoService } from '../../../../services/service-producto.service';
-import { Producto } from '../../../../models/productos';
-import { Proveedor } from '../../../../models/proveedores';
+import { Product } from '../../../../models/product';
+import { Provider } from '../../../../models/provider';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
 
@@ -12,20 +12,20 @@ import { NgForm } from '@angular/forms';
 })
 export class FormProductoComponent implements OnInit {
   //Objeto Producto que se enlazará mediante ngModel en el form:
-  producto: Producto = {
-    imagen: "",
-    nombre: "",
+  producto: Product = {
     sku: "",
-    precio: undefined,
-    descripcion: "",
-    proveedor: undefined,
-    categoria: "", //Preselecciono el primer elemento en el select.
-    habilitado: true,
+    image: "",
+    title: "",
+    price: 0,
+    description: "",
+    category: "", //Preselecciono el primer elemento en el select.
+    provider: {} as Provider,
+    enabled: true,
   }
   
   //Select de proveedores que se renderizará en el form.
-  selectProveedores!: Proveedor[];
-  codProveedorSeleccionado!: string;
+  selectProveedores: Provider[] = [];
+  codProveedorSeleccionado: string = "";
 
   //Variables para manejar el título y nombre del botón:
   title: string = "AGREGAR PRODUCTO";
@@ -43,7 +43,7 @@ export class FormProductoComponent implements OnInit {
     let productByParam = this.productoService.getProduct(this.skuParam);
     if (productByParam){
       this.producto = productByParam;
-      this.codProveedorSeleccionado = this.producto.proveedor!.codigo; //Preseleccionar en el select, el proveedor del producto.
+      this.codProveedorSeleccionado = this.producto.provider!.code; //Preseleccionar en el select, el proveedor del producto.
       this.title = "EDITAR PRODUCTO";
       this.buttonName = "Editar";
     } else{
@@ -68,7 +68,7 @@ export class FormProductoComponent implements OnInit {
         }
 
         else{
-          this.producto.proveedor = this.selectProveedores.find((proveedor) => proveedor.codigo === this.codProveedorSeleccionado); //Obtenemos el objeto de proveedor seleccionado.
+          this.producto.provider = this.selectProveedores.find((proveedor) => proveedor.code === this.codProveedorSeleccionado)!; //Obtenemos el objeto de proveedor seleccionado.
           this.productoService.addProduct(this.producto);
           alert("Producto creado!");
           this.router.navigate(['/products']);
@@ -84,7 +84,7 @@ export class FormProductoComponent implements OnInit {
   }
 
   isSkuRepeated(sku: string){
-    let index = this.productoService.getProducts().findIndex((producto: Producto) => producto.sku === sku);
+    let index = this.productoService.getProducts().findIndex((producto: Product) => producto.sku === sku);
     if (index != -1){
       return true;
     } else{

@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Producto } from '../../../../models/productos';
+import { Product } from '../../../../models/product';
 import { ServiceProductoService } from '../../../../services/service-producto.service';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -10,7 +10,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class DetailProductoComponent implements OnInit {
 
-  producto!: Producto;
+  producto!: Product;
 
   skuParam!: string;
 

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ServiceProveedorService } from '../../../../services/service-proveedor.service';
-import { Proveedor } from '../../../../models/proveedores';
+import { Provider } from '../../../../models/provider';
 import { Router } from '@angular/router';
 
 @Component({
@@ -10,12 +10,12 @@ import { Router } from '@angular/router';
 })
 export class AbmProveedorComponent implements OnInit {
   
-  arrayHabilitados!: Proveedor[];
-  arrayDeshabilitados!: Proveedor[];
+  arrayEnabled!: Provider[];
+  arrayDisabled!: Provider[];
   selectedCode!: string;
-  verDeshabilitados: boolean = false;
+  seeDisabled: boolean = false;
 
-  constructor(private proveedorService: ServiceProveedorService, private router: Router) {}
+  constructor(private providerService: ServiceProveedorService, private router: Router) {}
 
   ngOnInit(): void {
     this.renderTables();
@@ -26,7 +26,7 @@ export class AbmProveedorComponent implements OnInit {
   }
 
   deleteProvider(){
-    if (this.proveedorService.deleteProvider(this.selectedCode)){
+    if (this.providerService.deleteProvider(this.selectedCode)){
       this.renderTables();
       alert("Elemento eliminado con éxito!");
     } else{
@@ -35,7 +35,7 @@ export class AbmProveedorComponent implements OnInit {
   }
 
   renderTables(){
-    this.arrayHabilitados = this.proveedorService.getEnabledProviders();
-    this.arrayDeshabilitados = this.proveedorService.getDisabledProviders();
+    this.arrayEnabled = this.providerService.getEnabledProviders();
+    this.arrayDisabled = this.providerService.getDisabledProviders();
   }
 }

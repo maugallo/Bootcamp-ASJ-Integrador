@@ -1,9 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Orden } from '../models/ordenes';
+import { Order } from '../models/orders';
 import { LocalStorageClass } from '../utils/localStorage';
 import { ServiceProveedorService } from './service-proveedor.service';
 import { ServiceProductoService } from './service-producto.service';
-import { Producto } from '../models/productos';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +13,7 @@ export class ServiceOrdenService {
 
   private localStorage: LocalStorageClass = new LocalStorageClass();
 
-  arrayOrdenes!: Orden[];
+  arrayOrdenes!: Order[];
 
    //CRUD Orders:
    getOrders(){
@@ -22,27 +21,27 @@ export class ServiceOrdenService {
   }
 
   getEnabledOrders(){
-    return this.localStorage.getStorage("ordenes").filter((orden: Orden) => orden.habilitado === true);
+    return this.localStorage.getStorage("ordenes").filter((orden: Order) => orden.enabled === true);
   }
 
   getDisabledOrders(){
-    return this.localStorage.getStorage("ordenes").filter((orden: Orden) => orden.habilitado === false);
+    return this.localStorage.getStorage("ordenes").filter((orden: Order) => orden.enabled === false);
   }
 
   getOrder(nroOrden: number){
-    return this.localStorage.getStorage("ordenes").find((orden: Orden) => orden.nroOrden === nroOrden);
+    return this.localStorage.getStorage("ordenes").find((orden: Order) => orden.orderNumber === nroOrden);
   }
 
-  addOrder(orden: Orden){
+  addOrder(orden: Order){
     this.arrayOrdenes = this.localStorage.getStorage("ordenes");
     this.arrayOrdenes.push(orden);
     this.localStorage.setStorage("ordenes", this.arrayOrdenes);
   }
 
-  updateOrder(orden: Orden){
+  updateOrder(orden: Order){
     this.arrayOrdenes = this.localStorage.getStorage("ordenes");
 
-    let index = this.arrayOrdenes.findIndex((ordenOriginal: Orden) => ordenOriginal.nroOrden === orden.nroOrden );
+    let index = this.arrayOrdenes.findIndex((ordenOriginal: Order) => ordenOriginal.orderNumber === orden.orderNumber );
     this.arrayOrdenes[index] = orden;
     this.localStorage.setStorage("ordenes", this.arrayOrdenes);
   }
@@ -50,8 +49,8 @@ export class ServiceOrdenService {
   deleteOrder(nroOrden: number){
     this.arrayOrdenes = this.localStorage.getStorage("ordenes");
     if (this.arrayOrdenes.length > 0){
-      let index = this.arrayOrdenes.findIndex((orden) => orden.nroOrden === nroOrden);
-      this.arrayOrdenes[index].habilitado = false;
+      let index = this.arrayOrdenes.findIndex((orden) => orden.orderNumber === nroOrden);
+      this.arrayOrdenes[index].enabled = false;
       this.localStorage.setStorage("ordenes", this.arrayOrdenes);
       return true;
     } else{
@@ -64,7 +63,7 @@ export class ServiceOrdenService {
   }
 
   getProductsForSelect(codigo: string){
-    return this.productoService.getEnabledProducts().filter((producto: any) => producto.proveedor.codigo === codigo);
+    return this.productoService.getEnabledProducts().filter((producto: any) => producto.provider.code === codigo);
   }
 
   //Métodos para generar el número de órden:
@@ -79,8 +78,8 @@ export class ServiceOrdenService {
     return codigo;
   }
 
-  getLastCode(array: Orden[]){
-    return this.getLastElement(array).nroOrden + 1;
+  getLastCode(array: Order[]){
+    return this.getLastElement(array).orderNumber + 1;
   }
 
   getLastElement(array: any){

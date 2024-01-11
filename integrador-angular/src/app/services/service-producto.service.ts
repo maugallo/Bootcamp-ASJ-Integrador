@@ -1,8 +1,7 @@
 import { Injectable, OnInit } from '@angular/core';
-import { Producto } from '../models/productos';
+import { Product } from '../models/product';
 import { LocalStorageClass } from '../utils/localStorage';
 import { ServiceProveedorService } from './service-proveedor.service';
-import { Proveedor } from '../models/proveedores';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +12,7 @@ export class ServiceProductoService {
   
   private localStorage: LocalStorageClass = new LocalStorageClass();
 
-  arrayProductos!: Producto[];
+  arrayProductos!: Product[];
 
   //CRUD Products:
   getProducts(){
@@ -21,27 +20,27 @@ export class ServiceProductoService {
   }
 
   getEnabledProducts(){
-    return this.getProducts().filter((producto: Producto) => producto.habilitado === true);
+    return this.getProducts().filter((producto: Product) => producto.enabled === true);
   }
 
   getDisabledProducts(){
-    return this.getProducts().filter((producto: Producto) => producto.habilitado === false);
+    return this.getProducts().filter((producto: Product) => producto.enabled === false);
   }
 
   getProduct(sku: string){
-    return this.localStorage.getStorage("productos").find((producto: Producto) => producto.sku === sku );
+    return this.localStorage.getStorage("productos").find((producto: Product) => producto.sku === sku );
   }
 
-  addProduct(producto: Producto){
+  addProduct(producto: Product){
     this.arrayProductos = this.localStorage.getStorage("productos");
     this.arrayProductos.push(producto);
     this.localStorage.setStorage("productos", this.arrayProductos);
   }
 
-  updateProduct(producto: Producto){
+  updateProduct(producto: Product){
     this.arrayProductos = this.localStorage.getStorage("productos");
 
-    let index = this.arrayProductos.findIndex((productoOriginal: Producto) => productoOriginal.sku === producto.sku );
+    let index = this.arrayProductos.findIndex((productoOriginal: Product) => productoOriginal.sku === producto.sku );
     this.arrayProductos[index] = producto;
     this.localStorage.setStorage("productos", this.arrayProductos);
   }
@@ -50,7 +49,7 @@ export class ServiceProductoService {
     this.arrayProductos = this.localStorage.getStorage("productos");
     if (this.arrayProductos.length > 0){
       let index = this.arrayProductos.findIndex((producto) => producto.sku === sku );
-      this.arrayProductos[index].habilitado = false;
+      this.arrayProductos[index].enabled = false;
       this.localStorage.setStorage("productos", this.arrayProductos);
       return true;
     } else{

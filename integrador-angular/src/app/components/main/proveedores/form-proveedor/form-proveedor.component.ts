@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ServiceProveedorService } from '../../../../services/service-proveedor.service';
-import { Proveedor } from '../../../../models/proveedores';
+import { Provider } from '../../../../models/provider';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
 
@@ -11,25 +11,26 @@ import { NgForm } from '@angular/forms';
 })
 export class FormProveedorComponent implements OnInit {
   //Objeto Proveedor que se enlazará mediante ngModel en el form:
-  proveedor: Proveedor = {
-    codigo: "",
-    razonSocial: "",
-    rubro: "",
-    sitioWeb: "",
-    nombre: "",
-    apellido: "",
-    telefono: "",
+  proveedor: Provider = {
+    code: "",
+    companyName: "",
+    sector: "",
+    logo: "",
+    website: "",
+    name: "",
+    sirname: "",
+    telephone: "",
     email: "",
-    rol: "",
+    role: "",
     cuit: "",
-    iva: "Responsable Inscripto", //Para inicializar marcado alguno de los radiobutton cuando carga el form.
-    calle: "",
-    num: undefined,
-    codPostal: undefined,
-    localidad: "",
-    provincia: "",
-    pais: "",
-    habilitado: true,
+    vat: "Responsable Inscripto", //Para inicializar marcado alguno de los radiobutton cuando carga el form.
+    street: "",
+    num: "",
+    zipCode: "",
+    locality: "",
+    province: "",
+    country: "",
+    enabled: true,
   }
 
   //Select de países, provincias y localidades que se renderizarán en el form.
@@ -59,7 +60,7 @@ export class FormProveedorComponent implements OnInit {
         this.buttonName = "Editar";
       } else{
         this.router.navigate(['providers/form-provider']);
-      }
+    }
   }
 
   getParameter(){
@@ -74,13 +75,13 @@ export class FormProveedorComponent implements OnInit {
 
   renderStatesSelect(){
     this.proveedorService.getStates().subscribe((data) => {
-      this.selectStates = data.filter((state: any) => (state.country_name === this.proveedor.pais));
+      this.selectStates = data.filter((state: any) => (state.country_name === this.proveedor.country));
     });
   }
 
   renderCitiesSelect(){
     this.proveedorService.getCities().subscribe((data) =>{
-      this.selectCities = data.filter((city: any) => (city.state_name === this.proveedor.provincia && city.country_name === this.proveedor.pais));
+      this.selectCities = data.filter((city: any) => (city.state_name === this.proveedor.province && city.country_name === this.proveedor.country));
     });
   }
 
@@ -88,12 +89,12 @@ export class FormProveedorComponent implements OnInit {
   onSubmit(form: NgForm) {
     if (form.valid){
       if (this.buttonName === "Agregar"){
-        if (this.isCodeRepeated(this.proveedor.codigo)){
+        if (this.isCodeRepeated(this.proveedor.code)){
           alert("El código del proveedor ya existe");
         }
 
         else{
-          this.proveedor.codigo = this.proveedor.codigo.toUpperCase();
+          this.proveedor.code = this.proveedor.code.toUpperCase();
           this.proveedorService.addProvider(this.proveedor);
           alert("Proveedor creado!");
           this.router.navigate(['providers/']);
@@ -108,7 +109,7 @@ export class FormProveedorComponent implements OnInit {
   }
   
   isCodeRepeated(codigo: string){
-    let index = this.proveedorService.getProviders().findIndex((proveedor: Proveedor) => (proveedor.codigo === codigo));
+    let index = this.proveedorService.getProviders().findIndex((proveedor: Provider) => (proveedor.code === codigo));
     if (index != -1){
       return true;
     } else{
@@ -132,11 +133,11 @@ export class FormProveedorComponent implements OnInit {
   //Métodos auxiliares:
   clearStateSelect(){
     this.selectStates = []; //Limpio el select de provincias.
-    this.proveedor.provincia = "";
+    this.proveedor.province = "";
   }
 
   clearCitySelect(){
     this.selectCities = []; //Limpio el select de localidades.
-    this.proveedor.localidad = "";
+    this.proveedor.locality = "";
   }
 }

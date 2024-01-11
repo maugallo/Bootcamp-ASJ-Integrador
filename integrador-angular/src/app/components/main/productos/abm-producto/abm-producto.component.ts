@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { ServiceProductoService } from '../../../../services/service-producto.service';
-import { Producto } from '../../../../models/productos';
+import { Product } from '../../../../models/product';
 
 @Component({
   selector: 'app-abm-producto',
@@ -9,8 +9,8 @@ import { Producto } from '../../../../models/productos';
 })
 export class AbmProductoComponent {
 
-  arrayHabilitados!: Producto[];
-  arrayDeshabilitados!: Producto[];
+  arrayHabilitados!: Product[];
+  arrayDeshabilitados!: Product[];
   selectedSku!: string;
   verDeshabilitados: boolean = false;
 
@@ -34,7 +34,7 @@ export class AbmProductoComponent {
   }
 
   renderTables(){
-    this.arrayHabilitados = this.productoService.getEnabledProducts().sort((a:Producto, b:Producto) => (a.nombre > b.nombre ? 1 : -1));
-    this.arrayDeshabilitados = this.productoService.getDisabledProducts().sort((a:Producto, b:Producto) => (a.nombre > b.nombre ? 1 : -1));
+    this.arrayHabilitados = this.productoService.getEnabledProducts().sort((a:Product, b:Product) => (a.title > b.title ? 1 : -1));
+    this.arrayDeshabilitados = this.productoService.getDisabledProducts().sort((a:Product, b:Product) => (a.title > b.title ? 1 : -1));
   }
 }
