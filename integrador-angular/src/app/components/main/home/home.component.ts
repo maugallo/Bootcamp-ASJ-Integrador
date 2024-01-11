@@ -8,15 +8,15 @@ import { ServiceHomeService } from '../../../services/service-home.service';
 })
 export class HomeComponent implements OnInit {
 
-  cantProveedores!: number;
-  cantProductos!: number;
-  cantOrdenes!: number;
+  providersQuantity!: number;
+  productsQuantity!: number;
+  ordersQuantity!: number;
 
   constructor(private homeService: ServiceHomeService){ }
 
   ngOnInit(): void {
-      this.cantProveedores = this.homeService.getProvidersCount();
-      this.cantProductos = this.homeService.getProductsCount();
-      this.cantOrdenes = this.homeService.getOrdersCount();
+      this.providersQuantity = this.homeService.getProvidersCount();
+      this.productsQuantity = this.homeService.getProductsCount();
+      this.ordersQuantity = this.homeService.getOrdersCount();
   }
 }

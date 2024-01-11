@@ -8,17 +8,17 @@ import { ServiceOrdenService } from './service-orden.service';
 })
 export class ServiceHomeService {
 
-  constructor(private proveedorService: ServiceProveedorService, private productoService: ServiceProductoService, private ordenService: ServiceOrdenService) { }
+  constructor(private providerService: ServiceProveedorService, private productService: ServiceProductoService, private orderService: ServiceOrdenService) { }
 
   getProvidersCount(){
-    return this.proveedorService.getEnabledProviders().length;
+    return this.providerService.getEnabledProviders().length;
   }
 
   getProductsCount(){
-    return this.productoService.getEnabledProducts().length;
+    return this.productService.getEnabledProducts().length;
   }
 
   getOrdersCount(){
-    return this.ordenService.getEnabledOrders().length;
+    return this.orderService.getEnabledOrders().length;
   }
 }

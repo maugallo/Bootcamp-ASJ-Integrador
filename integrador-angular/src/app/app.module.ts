@@ -14,11 +14,11 @@ import { AbmProveedorComponent } from './components/main/proveedores/abm-proveed
 import { FormProveedorComponent } from './components/main/proveedores/form-proveedor/form-proveedor.component';
 import { AbmProductoComponent } from './components/main/productos/abm-producto/abm-producto.component';
 import { FormProductoComponent } from './components/main/productos/form-producto/form-producto.component';
-import { AbmOrdenComponent } from './components/main/ordenes/abm-orden/abm-orden.component';
-import { FormOrdenComponent } from './components/main/ordenes/form-orden/form-orden.component';
+import { OrderCrudComponent } from './components/main/ordenes/order-crud/order-crud.component';
+import { OrderFormComponent } from './components/main/ordenes/order-form/order-form.component';
 import { DetailProveedorComponent } from './components/main/proveedores/detail-proveedor/detail-proveedor.component';
 import { DetailProductoComponent } from './components/main/productos/detail-producto/detail-producto.component';
-import { DetailOrdenComponent } from './components/main/ordenes/detail-orden/detail-orden.component';
+import { OrderDetailComponent } from './components/main/ordenes/order-detail/order-detail.component';
 
 @NgModule({
   declarations: [
@@ -31,11 +31,11 @@ import { DetailOrdenComponent } from './components/main/ordenes/detail-orden/det
     FormProveedorComponent,
     AbmProductoComponent,
     FormProductoComponent,
-    AbmOrdenComponent,
-    FormOrdenComponent,
+    OrderCrudComponent,
+    OrderFormComponent,
     DetailProveedorComponent,
     DetailProductoComponent,
-    DetailOrdenComponent
+    OrderDetailComponent
   ],
   imports: [
     BrowserModule,

@@ -9,23 +9,23 @@
                 <p><a class=" fs-6 font-blue" [routerLink]="['/orders']">VOLVER</a></p>
             </section>
             <div class="row">
-                <!-- Form de Items -->
+                <!-- Form de Detalles -->
                 <div class="col card rounded-0 p-3 card-border-blue me-2">
                     <div class="subtitle mb-4">
-                        <h2 class="fs-5 font-blue">Agregar Item</h2>
+                        <h2 class="fs-5 font-blue">Agregar Detalle</h2>
                     </div>
-                    <form #listItemForm="ngForm" (ngSubmit)="addItem()">
+                    <form #orderDetailForm="ngForm" (ngSubmit)="addDetail()">
                         <div class="row">
                             <div class="col">
                                 <div class="w-100">
                                     <label for="proveedor" class="form-label">Proveedor</label>
-                                    <select [disabled]="orden.orderDetails.length > 0" (change)="selectProvider()" #proveedor="ngModel" id="selectProveedor"
-                                        [(ngModel)]="codProveedorSeleccionado" class="form-select " name="proveedor" required>
-                                        <option *ngFor="let proveedor of selectProveedores" value="{{proveedor.code}}">
-                                            {{proveedor.companyName}}</option>
+                                    <select [disabled]="order.orderDetails.length > 0" (change)="selectProvider()" #provider="ngModel" id="selectProveedor"
+                                        [(ngModel)]="codeSelectedProvider" class="form-select " name="proveedor" required>
+                                        <option *ngFor="let provider of providerSelect" value="{{provider.code}}">
+                                            {{provider.companyName}}</option>
                                     </select>
                                     <!-- Mensaje de error -->
-                                    <div *ngIf="proveedor.touched && proveedor.errors?.['required']"
+                                    <div *ngIf="provider.touched && provider.errors?.['required']"
                                         class="text-danger ">
                                         <p><small>Este campo no puede estar vacío</small></p>
                                     </div>
@@ -36,26 +36,26 @@
                             <div class="col d-flex justify-content-between ">
                                 <div class="w-75 me-2">
                                     <label for="productos" class="form-label">Producto</label>
-                                    <select id="selectProductos" #producto="ngModel" [(ngModel)]="skuProductoSeleccionado"
+                                    <select id="selectProductos" #product="ngModel" [(ngModel)]="skuSelectedProduct"
                                         class="form-select " name="productos" required>
-                                        <option *ngFor="let producto of selectProductos" value="{{producto.sku}}">
-                                            {{producto.title}}</option>
+                                        <option *ngFor="let product of productSelect" value="{{product.sku}}">
+                                            {{product.title}}</option>
                                     </select>
                                     <!-- Mensaje de error -->
-                                    <div *ngIf="producto.touched && producto.errors?.['required']" class="text-danger ">
+                                    <div *ngIf="product.touched && product.errors?.['required']" class="text-danger ">
                                         <p><small>Este campo no puede estar vacío</small></p>
                                     </div>
                                 </div>
                                 <div class="w-25">
                                     <label for="cantidad" class="form-label">Cantidad</label>
-                                    <input type="number" #cantidad="ngModel" id="txtCantidad"
-                                        [(ngModel)]="cantidadProductoSeleccionado" name="cantidad" class="form-control"
+                                    <input type="number" #quantity="ngModel" id="txtCantidad"
+                                        [(ngModel)]="selectedProductQuantity" name="cantidad" class="form-control"
                                         placeholder="1" min="1" max="9999" required>
                                     <!-- Mensaje de error -->
-                                    <div *ngIf="cantidad.touched && cantidad.errors?.['min']" class="text-danger ">
+                                    <div *ngIf="quantity.touched && quantity.errors?.['min']" class="text-danger ">
                                         <p><small>El valor del campo debe ser mayor a 0</small></p>
                                     </div>
-                                    <div *ngIf="cantidad.touched && cantidad.errors?.['max']" class="text-danger ">
+                                    <div *ngIf="quantity.touched && quantity.errors?.['max']" class="text-danger ">
                                         <p><small>El valor del campo debe ser menor a 9.999</small></p>
                                     </div>
                                 </div>
@@ -63,7 +63,7 @@
                         </div>
                         <div class="row mt-4">
                             <div class="col text-end">
-                                <button class="btn btn-add rounded-0" [disabled]="listItemForm.invalid" type="submit">Agregar Item</button>
+                                <button class="btn btn-add rounded-0" [disabled]="orderDetailForm.invalid" type="submit">Agregar Detalle</button>
                             </div>
                         </div>
                     </form>
@@ -77,7 +77,7 @@
                         <div class="row">
                             <div class="col">
                                 <label class="form-label" for="fechaEmision">Fecha de emisión</label>
-                                <input id="txtFechaEmision" #fechaEmision="ngModel" [(ngModel)]="orden.issueDate" class="form-control"
+                                <input id="txtFechaEmision" #fechaEmision="ngModel" [(ngModel)]="order.issueDate" class="form-control"
                                     name="fechaEmision" type="date" required>
                                 <!-- Mensaje de error -->
                                 <div *ngIf="fechaEmision.touched && fechaEmision.errors?.['required']" class="text-danger ">
@@ -86,7 +86,7 @@
                             </div>
                             <div class="col">
                                 <label for="fechaEntrega" class="form-label">Fecha de entrega</label>
-                                <input id="txtFechaEntrega" #fechaEntrega="ngModel" [(ngModel)]="orden.deliveryDate" class="form-control"
+                                <input id="txtFechaEntrega" #fechaEntrega="ngModel" [(ngModel)]="order.deliveryDate" class="form-control"
                                     name="fechaEntrega" type="date" required>
                                 <!-- Mensaje de error -->
                                 <div *ngIf="fechaEntrega.touched && fechaEntrega.errors?.['required']" class="text-danger ">
@@ -97,7 +97,7 @@
                         <div class="row mt-4">
                             <div class="col">
                                 <label for="direccion" class="form-label">Información de recepción</label>
-                                <textarea id="txtDireccion" #recepcion="ngModel" [(ngModel)]="orden.receptionInfo" name="direccion"
+                                <textarea id="txtDireccion" #recepcion="ngModel" [(ngModel)]="order.receptionInfo" name="direccion"
                                     class="form-control" placeholder="Ingrese la información de recepción" required maxlength="300"></textarea>
                                 <!-- Mensaje de error -->
                                 <div *ngIf="recepcion.touched && recepcion.errors?.['required']" class="text-danger ">
@@ -109,8 +109,8 @@
                             <div class="col">
                                 <div class="card rounded-0 p-2 card-border-blue">
                                     <div class="scrollable">
-                                    <!-- Tabla de items agregados -->
-                                    <table *ngIf="orden.orderDetails.length > 0" class="table m-0">
+                                    <!-- Tabla de detalles agregados -->
+                                    <table *ngIf="order.orderDetails.length > 0" class="table m-0">
                                         <thead>
                                           <tr class="text-center">
                                             <th class="fw-medium font-blue">Producto</th>
@@ -120,21 +120,21 @@
                                           </tr>
                                         </thead>
                                         <tbody>
-                                          <tr *ngFor="let item of orden.orderDetails" class="text-center">
-                                            <td  class="fw-medium font-blue">{{item.product.title}}</td>
-                                            <td  class="fw-medium font-blue">x{{item.quantity}}</td>
-                                            <td  class="fw-medium font-blue">{{(item.product.price * item.quantity!) | currency}}</td>
-                                            <td><a class="text-decoration-none font-blue" (click)="removeItem(item.product.sku)"><i class="bi bi-x-circle remove"></i></a></td>
+                                          <tr *ngFor="let detail of order.orderDetails" class="text-center">
+                                            <td  class="fw-medium font-blue">{{detail.product.title}}</td>
+                                            <td  class="fw-medium font-blue">x{{detail.quantity}}</td>
+                                            <td  class="fw-medium font-blue">{{(detail.product.price * detail.quantity) | currency}}</td>
+                                            <td><a class="text-decoration-none font-blue" (click)="removeDetail(detail.product.sku)"><i class="bi bi-x-circle remove"></i></a></td>
                                           </tr>
                                           <tr class="text-center ">
                                             <td></td>
                                             <td class="fw-medium font-blue">Total</td>
-                                            <td class="fw-medium font-blue">{{orden.total | currency}}</td>
+                                            <td class="fw-medium font-blue">{{order.total | currency}}</td>
                                           </tr>
                                         </tbody>
                                       </table>
                                     </div>
-                                    <p *ngIf="orden.orderDetails.length === 0" class="text-secondary ">Todavía no hay items agregados</p>
+                                    <p *ngIf="order.orderDetails.length === 0" class="text-secondary ">Todavía no hay details agregados</p>
                                 </div>
                             </div>
                         </div>

@@ -9,13 +9,13 @@ import { OrderDetail } from '../../../../models/orderDetails';
 import { ServiceProductoService } from '../../../../services/service-producto.service';
 
 @Component({
-  selector: 'app-form-orden',
-  templateUrl: './form-orden.component.html',
-  styleUrl: './form-orden.component.css'
+  selector: 'app-order-form',
+  templateUrl: './order-form.component.html',
+  styleUrl: './order-form.component.css'
 })
-export class FormOrdenComponent {
-  //Objeto Orden que se enlazará mediante ngModel en el form:
-  orden: Order = {
+export class OrderFormComponent {
+  //Objeto Order que se enlazará mediante ngModel en el form:
+  order: Order = {
     orderNumber: 0,
     issueDate: new Date('0000-00-00'),
     deliveryDate: new Date('0000-00-00'),
@@ -26,38 +26,38 @@ export class FormOrdenComponent {
     enabled: true,
   }
 
-  item: OrderDetail = {
+  detail: OrderDetail = {
     product: {} as Product,
     quantity: 0,
   }
 
   //Select de proveedores que se renderizará en el form.
-  selectProveedores!: Provider[];
-  codProveedorSeleccionado!: string;
+  providerSelect!: Provider[];
+  codeSelectedProvider!: string;
 
   //Select de productos que se rendizará en el form.
-  selectProductos!: Product[];
-  skuProductoSeleccionado: string = "";
-  cantidadProductoSeleccionado!: number;
+  productSelect!: Product[];
+  skuSelectedProduct!: string;
+  selectedProductQuantity!: number;
 
   //Variables para manejar el título y nombre del botón:
   title: string = "AGREGAR ORDEN DE COMPRA";
   buttonName: string = "Agregar";
 
   //Variable para determinar si se editará o creará una órden de compra:
-  nroOrdenParam!: number;
+  param!: number;
 
-  constructor(private ordenService: ServiceOrdenService, private productoService: ServiceProductoService, private router: Router, private activatedRoute: ActivatedRoute) { }
+  constructor(private orderService: ServiceOrdenService, private productService: ServiceProductoService, private router: Router, private activatedRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
 
     this.renderProvidersSelect();
 
-    this.nroOrdenParam = Number(this.getParameter());
-    let ordenByParam = this.ordenService.getOrder(this.nroOrdenParam);
-    if (ordenByParam){
-      this.orden = ordenByParam;
-      this.codProveedorSeleccionado = this.orden.provider!.code; //Preseleccionar en el select, el proveedor de la orden.
+    this.param = Number(this.getParameter());
+    let orderByParam = this.orderService.getOrder(this.param);
+    if (orderByParam){
+      this.order = orderByParam;
+      this.codeSelectedProvider = this.order.provider.code; //Preseleccionar en el select, el proveedor de la orden.
       this.renderProductsSelect();
       this.title = "EDITAR ORDEN DE COMPRA";
       this.buttonName = "Editar";
@@ -71,17 +71,17 @@ export class FormOrdenComponent {
   }
 
   renderProvidersSelect(){
-    this.selectProveedores = this.ordenService.getProvidersForSelect();
+    this.providerSelect = this.orderService.getProvidersForSelect();
   }
 
   renderProductsSelect(){
-    this.selectProductos = this.ordenService.getProductsForSelect(this.codProveedorSeleccionado);
+    this.productSelect = this.orderService.getProductsForSelect(this.codeSelectedProvider);
   }
 
   //Métodos de formulario para agregar órdenes de compra:
   onSubmit(form: NgForm){
     if (form.valid){
-      if (this.isItemListValid() === false){
+      if (this.areOrderDetailsValid() === false){
         alert("La orden no cuenta con productos agregados");
       }
 
@@ -95,15 +95,15 @@ export class FormOrdenComponent {
 
       else{
         if (this.buttonName === "Agregar"){
-          this.orden.orderNumber = this.ordenService.generateCode();
-          this.orden.provider = this.selectProveedores.find((proveedor) => proveedor.code === this.codProveedorSeleccionado)!;
+          this.order.orderNumber = this.orderService.generateCode();
+          this.order.provider = this.providerSelect.find((proveedor) => proveedor.code === this.codeSelectedProvider)!;
 
-          this.ordenService.addOrder(this.orden);
+          this.orderService.addOrder(this.order);
           alert("Orden creada!");
         }
         
         else if (this.buttonName === "Editar"){
-          this.ordenService.updateOrder(this.orden);
+          this.orderService.updateOrder(this.order);
           alert("Orden modificada!");
         }
 
@@ -112,8 +112,8 @@ export class FormOrdenComponent {
     }
   }
 
-  isItemListValid(){
-    if (this.orden.orderDetails.length === 0){
+  areOrderDetailsValid(){
+    if (this.order.orderDetails.length === 0){
       return false;
     } else{
       return true;
@@ -121,7 +121,7 @@ export class FormOrdenComponent {
   }
 
   areDatesCorrect(){
-    if (this.orden.issueDate! >= this.orden.deliveryDate!){
+    if (this.order.issueDate >= this.order.deliveryDate){
       return false;
     } else{
       return true;
@@ -129,7 +129,7 @@ export class FormOrdenComponent {
   }
 
   isDatePresent(){
-    let fechaEmision = new Date(this.orden.issueDate!); //Transformamos en formato Date crudo así podemos comparar con la fecha actual.
+    let fechaEmision = new Date(this.order.issueDate); //Transformamos en formato Date crudo así podemos comparar con la fecha actual.
     fechaEmision.setDate(fechaEmision.getDate() + 1); //Le seteo 1 día más para que funcione.
     fechaEmision.setHours(0, 0, 0, 0);
     let fechaHoy = new Date();
@@ -142,19 +142,19 @@ export class FormOrdenComponent {
     }
   }
 
-  //Métodos de formulario para agregar items a la orden de compra:
-  addItem(){
+  //Métodos de formulario para agregar detalles a la orden de compra:
+  addDetail(){
     if (this.isProductRepeated() === false){
-      this.item = {product: this.productoService.getProduct(this.skuProductoSeleccionado), quantity: this.cantidadProductoSeleccionado};
-      this.orden.orderDetails.push(this.item);
+      this.detail = {product: this.productService.getProduct(this.skuSelectedProduct), quantity: this.selectedProductQuantity};
+      this.order.orderDetails.push(this.detail);
     }
     this.calculateTotal();
   }
 
   isProductRepeated(){
-    for(let item of this.orden.orderDetails){
-      if (item.product?.sku === this.skuProductoSeleccionado){
-        item.quantity! += this.cantidadProductoSeleccionado!;
+    for(let detail of this.order.orderDetails){
+      if (detail.product.sku === this.skuSelectedProduct){
+        detail.quantity += this.selectedProductQuantity;
         return true;
       }
     }
@@ -166,18 +166,18 @@ export class FormOrdenComponent {
   }
 
   calculateTotal(){
-    this.orden.total = 0;
-    this.orden.orderDetails.forEach((item) => {
-      this.orden.total! += this.calculateSubtotal(item);
+    this.order.total = 0;
+    this.order.orderDetails.forEach((detail) => {
+      this.order.total += this.calculateSubtotal(detail);
     })
   }
 
-  calculateSubtotal(item: OrderDetail){
-    return (item.product?.price! * item.quantity!);
+  calculateSubtotal(detail: OrderDetail){
+    return (detail.product.price * detail.quantity);
   }
 
-  removeItem(sku: string){
-    this.orden.orderDetails = this.orden.orderDetails.filter((item) => item.product?.sku != sku);
+  removeDetail(sku: string){
+    this.order.orderDetails = this.order.orderDetails.filter((detail) => detail.product.sku != sku);
     this.calculateTotal();
   }
 }
