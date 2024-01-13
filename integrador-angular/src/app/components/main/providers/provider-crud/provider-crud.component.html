@@ -48,7 +48,7 @@
                         </tr>
                     </thead>
                     <tbody id="table-body">
-                        <tr *ngFor="let provider of (seeDisabled && arrayDisabled.length > 0 ? arrayDisabled : arrayEnabled)">
+                        <tr [ngClass]="seeDisabled && arrayDisabled.length > 0 ? 'table-secondary' : ''" *ngFor="let provider of (seeDisabled && arrayDisabled.length > 0 ? arrayDisabled : arrayEnabled)">
                             <td>{{provider.code}}</td>
                             <td>{{provider.companyName}}</td>
                             <td>
@@ -63,13 +63,13 @@
                                 </div>
                             </td>
                             <td>{{provider.name}} {{provider.sirname}}</td>
-                            <td>
-                                <a class="fs-5 me-2 text-decoration-none option" data-bs-toggle="modal"
-                                    data-bs-target="#exampleModal" (click)="openModal(provider.code)">🗑️</a>
-                                <a class="fs-5 me-2 text-decoration-none option"
-                                    [routerLink]="['form-provider', provider.code]">✏️</a>
-                                <a class="fs-5 text-decoration-none option"
-                                    [routerLink]="['/providers', provider.code]">👁️</a>
+                            <td *ngIf="seeDisabled === false">
+                                <a class="fs-5 me-2 text-decoration-none option" data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="openModal(provider.code)">🗑️</a>
+                                <a class="fs-5 me-2 text-decoration-none option" [routerLink]="['form-provider', provider.code]">✏️</a>
+                                <a class="fs-5 text-decoration-none option" [routerLink]="['/providers', provider.code]">👁️</a>
+                            </td>
+                            <td *ngIf="seeDisabled && arrayDisabled.length > 0">
+                                Eliminado
                             </td>
                         </tr>
                     </tbody>

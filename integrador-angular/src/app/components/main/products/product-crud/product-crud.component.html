@@ -47,7 +47,7 @@
                         </tr>
                     </thead>
                     <tbody id="table-body">
-                        <tr *ngFor="let product of (seeDisabled && arrayDisabled.length > 0 ? arrayDisabled : arrayEnabled)">
+                        <tr [ngClass]="seeDisabled && arrayDisabled.length > 0 ? 'table-secondary' : ''" *ngFor="let product of (seeDisabled && arrayDisabled.length > 0 ? arrayDisabled : arrayEnabled)">
                             <td class="card-img" style="width: 20rem;">
                                 <img class="img-fluid product-img" src="{{product.image}}" alt="{{product.title}}">
                             </td>
@@ -55,10 +55,13 @@
                             <td>{{product.category}}</td>
                             <td>{{product.provider.companyName}}</td>
                             <td>{{product.price | currency }}</td>                            
-                            <td>
+                            <td *ngIf="seeDisabled === false">
                                 <a class="fs-5 me-2 text-decoration-none option" data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="openModal(product.sku)">🗑️</a>
                                 <a class="fs-5 me-2 text-decoration-none option" [routerLink]="['form-product', product.sku]">✏️</a>
                                 <a class="fs-5 text-decoration-none option" [routerLink]="['/products', product.sku]">👁️</a>
+                            </td>
+                            <td *ngIf="seeDisabled && arrayDisabled.length > 0">
+                                Eliminado
                             </td>
                         </tr>
                     </tbody>
