@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Order } from '../../../../models/orders';
-import { ServiceOrdenService } from '../../../../services/service-orden.service';
+import { OrderService } from '../../../../services/order.service';
 
 @Component({
   selector: 'app-order-crud',
@@ -12,11 +12,11 @@ export class OrderCrudComponent {
   arrayEnabled!: Order[];
   arrayDisabled!: Order[];
 
-  seeDesabled: boolean = false;
+  seeDisabled: boolean = false;
 
   selectedOrderNumber!: number;
 
-  constructor(private orderService: ServiceOrdenService) {}
+  constructor(private orderService: OrderService) {}
 
   ngOnInit(): void {
     this.renderTables();

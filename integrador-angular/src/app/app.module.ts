@@ -12,13 +12,13 @@ import { FooterComponent } from './components/footer/footer.component';
 import { HomeComponent } from './components/main/home/home.component';
 import { AbmProveedorComponent } from './components/main/proveedores/abm-proveedor/abm-proveedor.component';
 import { FormProveedorComponent } from './components/main/proveedores/form-proveedor/form-proveedor.component';
-import { AbmProductoComponent } from './components/main/productos/abm-producto/abm-producto.component';
-import { FormProductoComponent } from './components/main/productos/form-producto/form-producto.component';
-import { OrderCrudComponent } from './components/main/ordenes/order-crud/order-crud.component';
-import { OrderFormComponent } from './components/main/ordenes/order-form/order-form.component';
+import { ProductCrudComponent } from './components/main/products/product-crud/product-crud.component';
+import { ProductFormComponent } from './components/main/products/product-form/product-form.component';
+import { OrderCrudComponent } from './components/main/orders/order-crud/order-crud.component';
+import { OrderFormComponent } from './components/main/orders/order-form/order-form.component';
 import { DetailProveedorComponent } from './components/main/proveedores/detail-proveedor/detail-proveedor.component';
-import { DetailProductoComponent } from './components/main/productos/detail-producto/detail-producto.component';
-import { OrderDetailComponent } from './components/main/ordenes/order-detail/order-detail.component';
+import { ProductDetailComponent } from './components/main/products/product-detail/product-detail.component';
+import { OrderDetailComponent } from './components/main/orders/order-detail/order-detail.component';
 
 @NgModule({
   declarations: [
@@ -29,12 +29,12 @@ import { OrderDetailComponent } from './components/main/ordenes/order-detail/ord
     HomeComponent,
     AbmProveedorComponent,
     FormProveedorComponent,
-    AbmProductoComponent,
-    FormProductoComponent,
+    ProductCrudComponent,
+    ProductFormComponent,
     OrderCrudComponent,
     OrderFormComponent,
     DetailProveedorComponent,
-    DetailProductoComponent,
+    ProductDetailComponent,
     OrderDetailComponent
   ],
   imports: [

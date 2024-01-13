@@ -26,7 +26,7 @@
             <!-- Botón agregar -->
             <div class="text-center text-sm-end  mt-5">
                 <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
-                    <input type="checkbox" [(ngModel)]="seeDesabled" class="btn-check" id="btncheck1"
+                    <input type="checkbox" [(ngModel)]="seeDisabled" class="btn-check" id="btncheck1"
                         autocomplete="off">
                     <label class="btn btn-outline-primary checkbox-custom rounded-0" for="btncheck1">Ver órdenes canceladas</label>
                 </div>
@@ -34,7 +34,7 @@
             </div>
             <!-- Tabla -->
             <section class="mt-2">
-                <table *ngIf="arrayEnabled.length > 0 || (seeDesabled === true && arrayDisabled.length > 0)" class="table table-hover table-bordered border-secondary-subtle">
+                <table *ngIf="arrayEnabled.length > 0 || (seeDisabled === true && arrayDisabled.length > 0)" class="table table-hover table-bordered border-secondary-subtle">
                     <thead>
                         <tr>
                             <th>N° de órden</th>
@@ -48,7 +48,7 @@
                     </thead>
                     <tbody id="table-body">
                         <!-- Elementos activos -->
-                        <ng-container *ngIf="seeDesabled === false">
+                        <ng-container *ngIf="seeDisabled === false">
                             <tr *ngFor="let order of arrayEnabled">
                                 <td>{{order.orderNumber}}</td>
                                 <td>{{order.issueDate | date: 'dd/MM/yyyy'}}</td>
@@ -69,7 +69,7 @@
                             </tr>
                         </ng-container>
                         <!-- Elementos deshabilitados -->
-                        <ng-container *ngIf="seeDesabled === true && arrayDisabled.length > 0">
+                        <ng-container *ngIf="seeDisabled === true && arrayDisabled.length > 0">
                             <tr class="table-secondary" *ngFor="let order of arrayDisabled">
                                 <td>{{order.orderNumber}}</td>
                                 <td>{{order.issueDate | date: 'dd/MM/yyyy'}}</td>
@@ -87,7 +87,7 @@
                         </ng-container>
                     </tbody>
                 </table>
-                <div *ngIf="arrayEnabled.length === 0 && (arrayDisabled.length === 0 || seeDesabled === false)" class="alert rounded-0 alert-custom">
+                <div *ngIf="arrayEnabled.length === 0 && (arrayDisabled.length === 0 || seeDisabled === false)" class="alert rounded-0 alert-custom">
                     <span class="fs-4 font-blue">Todavía no hay elementos, puedes agregar uno <a [routerLink]="['/orders/form-order']" class="alert-link ">presionando aquí</a></span>
                 </div>
             </section>

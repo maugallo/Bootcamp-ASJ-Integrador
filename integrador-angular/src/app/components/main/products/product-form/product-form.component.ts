@@ -6,13 +6,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
 
 @Component({
-  selector: 'app-form-producto',
-  templateUrl: './form-producto.component.html',
-  styleUrl: './form-producto.component.css'
+  selector: 'app-product-form',
+  templateUrl: './product-form.component.html',
+  styleUrl: './product-form.component.css'
 })
-export class FormProductoComponent implements OnInit {
+export class ProductFormComponent implements OnInit {
   //Objeto Producto que se enlazará mediante ngModel en el form:
-  producto: Product = {
+  product: Product = {
     sku: "",
     image: "",
     title: "",
@@ -24,27 +24,27 @@ export class FormProductoComponent implements OnInit {
   }
   
   //Select de proveedores que se renderizará en el form.
-  selectProveedores: Provider[] = [];
-  codProveedorSeleccionado: string = "";
+  providerSelect: Provider[] = [];
+  codeSelectedProvider: string = "";
 
   //Variables para manejar el título y nombre del botón:
-  title: string = "AGREGAR PRODUCTO";
+  formTitle: string = "AGREGAR PRODUCTO";
   buttonName: string = "Agregar";
 
   //Variable para determinar si se editará o creará un proveedor en el form [diabled]="skuParam"
-  skuParam!: string; //Si es una cadena de string vacía o null, el elemento enlazado estará habilitado. Si es una cadena con algún valor, el elemento enlazado estará deshabilitado.
+  param!: string; //Si es una cadena de string vacía o null, el elemento enlazado estará habilitado. Si es una cadena con algún valor, el elemento enlazado estará deshabilitado.
   
-  constructor(private productoService: ServiceProductoService, private router: Router, private activatedRoute: ActivatedRoute){}
+  constructor(private productService: ServiceProductoService, private router: Router, private activatedRoute: ActivatedRoute){}
 
   ngOnInit(): void {
     this.renderProvidersSelect();
 
-    this.skuParam = this.getParameter();
-    let productByParam = this.productoService.getProduct(this.skuParam);
+    this.param = this.getParameter();
+    let productByParam = this.productService.getProduct(this.param);
     if (productByParam){
-      this.producto = productByParam;
-      this.codProveedorSeleccionado = this.producto.provider!.code; //Preseleccionar en el select, el proveedor del producto.
-      this.title = "EDITAR PRODUCTO";
+      this.product = productByParam;
+      this.codeSelectedProvider = this.product.provider.code; //Preseleccionar en el select, el proveedor del producto.
+      this.formTitle = "EDITAR PRODUCTO";
       this.buttonName = "Editar";
     } else{
       this.router.navigate(['products/form-product']);
@@ -56,27 +56,28 @@ export class FormProductoComponent implements OnInit {
   }
 
   renderProvidersSelect(){
-    this.selectProveedores = this.productoService.getProvidersForSelect();
+    this.providerSelect = this.productService.getProvidersForSelect();
   }
 
   //Métodos de formulario para agregar productos:
   onSubmit(form: NgForm){
     if (form.valid){
       if (this.buttonName === "Agregar"){
-        if (this.isSkuRepeated(this.producto.sku)){
+        if (this.isSkuRepeated(this.product.sku)){
           alert("El SKU del producto ya existe");
         }
 
         else{
-          this.producto.provider = this.selectProveedores.find((proveedor) => proveedor.code === this.codProveedorSeleccionado)!; //Obtenemos el objeto de proveedor seleccionado.
-          this.productoService.addProduct(this.producto);
+          this.product.provider = this.providerSelect.find((provider) => provider.code === this.codeSelectedProvider)!; //Obtenemos el objeto de proveedor seleccionado.
+          this.productService.addProduct(this.product);
           alert("Producto creado!");
           this.router.navigate(['/products']);
         }
       }
       
       else if (this.buttonName === "Editar"){
-        this.productoService.updateProduct(this.producto);
+        this.product.provider = this.providerSelect.find((provider) => provider.code === this.codeSelectedProvider)!; //Obtenemos el objeto de proveedor seleccionado.
+        this.productService.updateProduct(this.product);
         alert("Producto modificado!");
         this.router.navigate(['/products']);
       }
@@ -84,7 +85,7 @@ export class FormProductoComponent implements OnInit {
   }
 
   isSkuRepeated(sku: string){
-    let index = this.productoService.getProducts().findIndex((producto: Product) => producto.sku === sku);
+    let index = this.productService.getProducts().findIndex((product: Product) => product.sku === sku);
     if (index != -1){
       return true;
     } else{

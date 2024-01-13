@@ -5,15 +5,15 @@
         <div class="row">
             <section class="col card card-border-blue rounded-0 p-0 me-2">
                 <div class="card-img">
-                    <img class="img-fluid" style="max-height: 45rem; min-height: 45rem; width: 100%; object-fit: cover;" src="{{producto.image}}" alt="{{producto.title}}">
+                    <img class="img-fluid" style="max-height: 45rem; min-height: 45rem; width: 100%; object-fit: cover;" src="{{product.image}}" alt="{{product.title}}">
                 </div>
             </section>
             <div class="col card card-border-blue rounded-0">
                 <section class="font-blue subtitle my-3">
-                    <h3 class="fs-1 fw-semibold text-center ">{{producto.title}}</h3>
+                    <h3 class="fs-1 fw-semibold text-center ">{{product.title}}</h3>
                 </section>
                 <section>
-                    <p class="fs-1 text-center"><span class="font-blue fw-semibold">{{producto.price | currency}}</span></p>
+                    <p class="fs-1 text-center"><span class="font-blue fw-semibold">{{product.price | currency}}</span></p>
                 </section>
                 <section class="row mb-3">
                     <section class="col text-center ">
@@ -21,7 +21,7 @@
                             <p class="fs-2 font-blue fw-semibold">Proveedor:</p>
                         </div>
                         <div>
-                            <span class="fs-2">{{producto.provider.companyName}}</span>
+                            <span class="fs-2">{{product.provider.companyName}}</span>
                         </div>
                     </section>
                     <section class="col text-center">
@@ -29,15 +29,15 @@
                             <p class="fs-2 font-blue fw-semibold">Categoría:</p>
                         </div>
                         <div>
-                            <span class="fs-2">{{producto.category}}</span>
+                            <span class="fs-2">{{product.category}}</span>
                         </div>
                     </section>
                 </section>
                 <section class="card rounded-0 p-2" style="height: 20rem;">
-                    <p class="fs-5"><span class="font-blue fw-semibold"></span>{{producto.description}}</p>
+                    <p class="fs-5"><span class="font-blue fw-semibold"></span>{{product.description}}</p>
                 </section>
                 <section class="ps-1">
-                    <p class="text-secondary">SKU: {{producto.sku}}</p>
+                    <p class="text-secondary">SKU: {{product.sku}}</p>
                 </section>
             </div>
         </div>

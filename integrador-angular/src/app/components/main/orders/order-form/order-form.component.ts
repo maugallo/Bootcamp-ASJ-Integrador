@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { ServiceOrdenService } from '../../../../services/service-orden.service';
+import { OrderService } from '../../../../services/order.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { Order } from '../../../../models/orders';
 import { NgForm } from '@angular/forms';
@@ -41,13 +41,13 @@ export class OrderFormComponent {
   selectedProductQuantity!: number;
 
   //Variables para manejar el título y nombre del botón:
-  title: string = "AGREGAR ORDEN DE COMPRA";
+  formTitle: string = "AGREGAR ORDEN DE COMPRA";
   buttonName: string = "Agregar";
 
   //Variable para determinar si se editará o creará una órden de compra:
   param!: number;
 
-  constructor(private orderService: ServiceOrdenService, private productService: ServiceProductoService, private router: Router, private activatedRoute: ActivatedRoute) { }
+  constructor(private orderService: OrderService, private productService: ServiceProductoService, private router: Router, private activatedRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
 
@@ -59,7 +59,7 @@ export class OrderFormComponent {
       this.order = orderByParam;
       this.codeSelectedProvider = this.order.provider.code; //Preseleccionar en el select, el proveedor de la orden.
       this.renderProductsSelect();
-      this.title = "EDITAR ORDEN DE COMPRA";
+      this.formTitle = "EDITAR ORDEN DE COMPRA";
       this.buttonName = "Editar";
     } else{
       this.router.navigate(['orders/form-order']);

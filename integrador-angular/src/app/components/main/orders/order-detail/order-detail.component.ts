@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Order } from '../../../../models/orders';
-import { ServiceOrdenService } from '../../../../services/service-orden.service';
+import { OrderService } from '../../../../services/order.service';
 import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
@@ -14,7 +14,7 @@ export class OrderDetailComponent implements OnInit {
 
   param!: number;
 
-  constructor(private orderService: ServiceOrdenService, private router: Router, private activatedRoute: ActivatedRoute) { }
+  constructor(private orderService: OrderService, private router: Router, private activatedRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
       this.param = Number(this.activatedRoute.snapshot.params['id']);
