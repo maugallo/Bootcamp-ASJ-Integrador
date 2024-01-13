@@ -1,12 +1,12 @@
 import { Component } from '@angular/core';
 import { OrderService } from '../../../../services/order.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Order } from '../../../../models/orders';
+import { Order } from '../../../../models/order';
 import { NgForm } from '@angular/forms';
 import { Provider } from '../../../../models/provider';
 import { Product } from '../../../../models/product';
-import { OrderDetail } from '../../../../models/orderDetails';
-import { ServiceProductoService } from '../../../../services/service-producto.service';
+import { OrderDetail } from '../../../../models/orderDetail';
+import { ProductService } from '../../../../services/product.service';
 
 @Component({
   selector: 'app-order-form',
@@ -47,18 +47,18 @@ export class OrderFormComponent {
   //Variable para determinar si se editará o creará una órden de compra:
   param!: number;
 
-  constructor(private orderService: OrderService, private productService: ServiceProductoService, private router: Router, private activatedRoute: ActivatedRoute) { }
+  constructor(private orderService: OrderService, private productService: ProductService, private router: Router, private activatedRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
 
-    this.renderProvidersSelect();
+    this.renderProviderSelect();
 
     this.param = Number(this.getParameter());
     let orderByParam = this.orderService.getOrder(this.param);
     if (orderByParam){
       this.order = orderByParam;
       this.codeSelectedProvider = this.order.provider.code; //Preseleccionar en el select, el proveedor de la orden.
-      this.renderProductsSelect();
+      this.renderProductSelect();
       this.formTitle = "EDITAR ORDEN DE COMPRA";
       this.buttonName = "Editar";
     } else{
@@ -70,11 +70,11 @@ export class OrderFormComponent {
     return this.activatedRoute.snapshot.params['id'];
   }
 
-  renderProvidersSelect(){
+  renderProviderSelect(){
     this.providerSelect = this.orderService.getProvidersForSelect();
   }
 
-  renderProductsSelect(){
+  renderProductSelect(){
     this.productSelect = this.orderService.getProductsForSelect(this.codeSelectedProvider);
   }
 
@@ -162,7 +162,7 @@ export class OrderFormComponent {
   }
 
   selectProvider(){ //Método del evento (change) del select de proveedores.
-    this.renderProductsSelect();
+    this.renderProductSelect();
   }
 
   calculateTotal(){

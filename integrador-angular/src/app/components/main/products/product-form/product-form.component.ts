@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ServiceProductoService } from '../../../../services/service-producto.service';
+import { ProductService } from '../../../../services/product.service';
 import { Product } from '../../../../models/product';
 import { Provider } from '../../../../models/provider';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -34,10 +34,10 @@ export class ProductFormComponent implements OnInit {
   //Variable para determinar si se editará o creará un proveedor en el form [diabled]="skuParam"
   param!: string; //Si es una cadena de string vacía o null, el elemento enlazado estará habilitado. Si es una cadena con algún valor, el elemento enlazado estará deshabilitado.
   
-  constructor(private productService: ServiceProductoService, private router: Router, private activatedRoute: ActivatedRoute){}
+  constructor(private productService: ProductService, private router: Router, private activatedRoute: ActivatedRoute){}
 
   ngOnInit(): void {
-    this.renderProvidersSelect();
+    this.renderProviderSelect();
 
     this.param = this.getParameter();
     let productByParam = this.productService.getProduct(this.param);
@@ -55,7 +55,7 @@ export class ProductFormComponent implements OnInit {
     return this.activatedRoute.snapshot.params['id'];
   }
 
-  renderProvidersSelect(){
+  renderProviderSelect(){
     this.providerSelect = this.productService.getProvidersForSelect();
   }
 

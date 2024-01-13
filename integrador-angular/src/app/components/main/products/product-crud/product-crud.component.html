@@ -47,36 +47,20 @@
                         </tr>
                     </thead>
                     <tbody id="table-body">
-                        <!-- Elementos activos -->
-                        <ng-container *ngIf="seeDisabled === false">
-                            <tr *ngFor="let product of arrayEnabled">
-                                <td class="card-img" style="width: 20rem;">
-                                    <img class="img-fluid product-img" src="{{product.image}}" alt="{{product.title}}">
-                                </td>
-                                <td>{{product.title}}</td>
-                                <td>{{product.category}}</td>
-                                <td>{{product.provider.companyName}}</td>
-                                <td>{{product.price | currency }}</td>                            
-                                <td>
-                                    <a class="fs-5 me-2 text-decoration-none option" data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="openModal(product.sku)">🗑️</a>
-                                    <a class="fs-5 me-2 text-decoration-none option" [routerLink]="['form-product', product.sku]">✏️</a>
-                                    <a class="fs-5 text-decoration-none option" [routerLink]="['/products', product.sku]">👁️</a>
-                                </td>
-                            </tr>
-                        </ng-container>
-                        <!-- Elementos deshabilitados -->
-                        <ng-container *ngIf="seeDisabled === true && arrayDisabled.length > 0">
-                            <tr class="table-secondary " *ngFor="let product of arrayDisabled">
-                                <td class="card-img" style="width: 20rem;">
-                                    <img class="img-fluid" style="max-height: 15rem; width: 100%; object-fit: cover;" src="{{product.image}}" alt="{{product.title}}">
-                                </td>
-                                <td>{{product.title}}</td>
-                                <td>{{product.category}}</td>
-                                <td>{{product.provider.companyName}}</td>
-                                <td>${{product.price}}</td>
-                                <td>Eliminado</td>
-                            </tr>
-                        </ng-container>
+                        <tr *ngFor="let product of (seeDisabled && arrayDisabled.length > 0 ? arrayDisabled : arrayEnabled)">
+                            <td class="card-img" style="width: 20rem;">
+                                <img class="img-fluid product-img" src="{{product.image}}" alt="{{product.title}}">
+                            </td>
+                            <td>{{product.title}}</td>
+                            <td>{{product.category}}</td>
+                            <td>{{product.provider.companyName}}</td>
+                            <td>{{product.price | currency }}</td>                            
+                            <td>
+                                <a class="fs-5 me-2 text-decoration-none option" data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="openModal(product.sku)">🗑️</a>
+                                <a class="fs-5 me-2 text-decoration-none option" [routerLink]="['form-product', product.sku]">✏️</a>
+                                <a class="fs-5 text-decoration-none option" [routerLink]="['/products', product.sku]">👁️</a>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
                 <div *ngIf="arrayEnabled.length === 0 && (arrayDisabled.length === 0 || seeDisabled === false)" class="alert rounded-0 alert-custom">

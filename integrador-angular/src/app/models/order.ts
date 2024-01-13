@@ -1,4 +1,4 @@
-import { OrderDetail } from "./orderDetails";
+import { OrderDetail } from "./orderDetail";
 import { Provider } from "./provider";
 
 export interface Order{

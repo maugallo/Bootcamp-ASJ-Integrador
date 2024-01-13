@@ -48,53 +48,30 @@
                         </tr>
                     </thead>
                     <tbody id="table-body">
-                        <!-- Elementos activos -->
-                        <ng-container *ngIf="seeDisabled === false">
-                            <tr *ngFor="let proveedor of arrayEnabled">
-                                <td>{{proveedor.code}}</td>
-                                <td>{{proveedor.companyName}}</td>
-                                <td>
-                                    <div>
-                                        {{proveedor.website}}
-                                    </div>
-                                    <div>
-                                        {{proveedor.email}}
-                                    </div>
-                                    <div>
-                                        {{proveedor.telephone}}
-                                    </div>
-                                </td>
-                                <td>{{proveedor.name}} {{proveedor.sirname}}</td>
-                                <td>
-                                    <a class="fs-5 me-2 text-decoration-none option" data-bs-toggle="modal"
-                                        data-bs-target="#exampleModal" (click)="openModal(proveedor.code)">🗑️</a>
-                                    <a class="fs-5 me-2 text-decoration-none option"
-                                        [routerLink]="['form-provider', proveedor.code]">✏️</a>
-                                    <a class="fs-5 text-decoration-none option"
-                                        [routerLink]="['/providers', proveedor.code]">👁️</a>
-                                </td>
-                            </tr>
-                        </ng-container>
-                        <!-- Elementos deshabilitados -->
-                        <ng-container *ngIf="seeDisabled === true && arrayDisabled.length > 0">
-                            <tr class="table-secondary " *ngFor="let proveedor of arrayDisabled">
-                                <td>{{proveedor.code}}</td>
-                                <td>{{proveedor.companyName}}</td>
-                                <td>
-                                    <div>
-                                        {{proveedor.website}}
-                                    </div>
-                                    <div>
-                                        {{proveedor.email}}
-                                    </div>
-                                    <div>
-                                        {{proveedor.telephone}}
-                                    </div>
-                                </td>
-                                <td>{{proveedor.name}} {{proveedor.sirname}}</td>
-                                <td>Eliminado</td>
-                            </tr>
-                        </ng-container>
+                        <tr *ngFor="let provider of (seeDisabled && arrayDisabled.length > 0 ? arrayDisabled : arrayEnabled)">
+                            <td>{{provider.code}}</td>
+                            <td>{{provider.companyName}}</td>
+                            <td>
+                                <div>
+                                    {{provider.website}}
+                                </div>
+                                <div>
+                                    {{provider.email}}
+                                </div>
+                                <div>
+                                    {{provider.telephone}}
+                                </div>
+                            </td>
+                            <td>{{provider.name}} {{provider.sirname}}</td>
+                            <td>
+                                <a class="fs-5 me-2 text-decoration-none option" data-bs-toggle="modal"
+                                    data-bs-target="#exampleModal" (click)="openModal(provider.code)">🗑️</a>
+                                <a class="fs-5 me-2 text-decoration-none option"
+                                    [routerLink]="['form-provider', provider.code]">✏️</a>
+                                <a class="fs-5 text-decoration-none option"
+                                    [routerLink]="['/providers', provider.code]">👁️</a>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
                 <div *ngIf="arrayEnabled.length === 0 && (arrayDisabled.length === 0 || seeDisabled === false)" class="alert alert-primary  rounded-0 alert-custom">

@@ -1,14 +1,14 @@
 import { Injectable } from '@angular/core';
-import { ServiceProveedorService } from './service-proveedor.service';
-import { ServiceProductoService } from './service-producto.service';
+import { ProviderService } from './provider.service';
+import { ProductService } from './product.service';
 import { OrderService } from './order.service';
 
 @Injectable({
   providedIn: 'root'
 })
-export class ServiceHomeService {
+export class HomeService {
 
-  constructor(private providerService: ServiceProveedorService, private productService: ServiceProductoService, private orderService: OrderService) { }
+  constructor(private providerService: ProviderService, private productService: ProductService, private orderService: OrderService) { }
 
   getProvidersCount(){
     return this.providerService.getEnabledProviders().length;

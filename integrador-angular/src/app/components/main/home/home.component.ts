@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ServiceHomeService } from '../../../services/service-home.service';
+import { HomeService } from '../../../services/home.service';
 
 @Component({
   selector: 'app-home',
@@ -12,7 +12,7 @@ export class HomeComponent implements OnInit {
   productsQuantity!: number;
   ordersQuantity!: number;
 
-  constructor(private homeService: ServiceHomeService){ }
+  constructor(private homeService: HomeService){ }
 
   ngOnInit(): void {
       this.providersQuantity = this.homeService.getProvidersCount();

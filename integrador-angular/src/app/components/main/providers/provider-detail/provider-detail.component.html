@@ -1,7 +1,7 @@
 <div class="row">
     <div class="col-1"></div>
     <div class="col-10">
-        <h2 class="text-center display-4 fw-semibold font-blue my-4">{{proveedor.companyName}}</h2>
+        <h2 class="text-center display-4 fw-semibold font-blue my-4">{{provider.companyName}}</h2>
         <p><a class=" fs-6 font-blue" [routerLink]="['/providers']">VOLVER</a></p>
         <div class="row">
             <section class="col card card-border-blue rounded-0 text-start me-3">
@@ -9,25 +9,25 @@
                     <h3 class="fs-1 fw-semibold text-center ">Datos principales</h3>
                 </section>
                 <section>
-                    <p class="fs-2"><span class="font-blue fw-semibold">Código:</span> {{proveedor.code}}</p>
+                    <p class="fs-2"><span class="font-blue fw-semibold">Código:</span> {{provider.code}}</p>
                 </section>
                 <section>
-                    <p class="fs-2"><span class="font-blue fw-semibold">Rubro:</span> {{proveedor.sector}}</p>
+                    <p class="fs-2"><span class="font-blue fw-semibold">Rubro:</span> {{provider.sector}}</p>
                 </section>
                 <section>
-                    <p class="fs-2"><span class="font-blue fw-semibold">Direción:</span> {{proveedor.street}} {{proveedor.num}} C.P {{proveedor.zipCode}}</p>
+                    <p class="fs-2"><span class="font-blue fw-semibold">Direción:</span> {{provider.street}} {{provider.num}} C.P {{provider.zipCode}}</p>
                 </section>
                 <section>
-                    <p class="fs-2"><span class="font-blue fw-semibold">País:</span> {{proveedor.country}}</p>
+                    <p class="fs-2"><span class="font-blue fw-semibold">País:</span> {{provider.country}}</p>
                 </section>
                 <section>
-                    <p class="fs-2"><span class="font-blue fw-semibold">Provincia:</span> {{proveedor.province}}</p>
+                    <p class="fs-2"><span class="font-blue fw-semibold">Provincia:</span> {{provider.province}}</p>
                 </section>
                 <section>
-                    <p class="fs-2"><span class="font-blue fw-semibold">Localidad:</span> {{proveedor.locality}}</p>
+                    <p class="fs-2"><span class="font-blue fw-semibold">Localidad:</span> {{provider.locality}}</p>
                 </section>
                 <section class="">
-                    <p class="fs-2"><span class="font-blue fw-semibold">Sitio web: </span><a class="text-decoration-none font-blue link" target="_blank" href="{{proveedor.website}}">{{proveedor.website}}</a></p>
+                    <p class="fs-2"><span class="font-blue fw-semibold">Sitio web: </span><a class="text-decoration-none font-blue link" target="_blank" href="{{provider.website}}">{{provider.website}}</a></p>
                 </section>
             </section>
             <section class="col">
@@ -37,19 +37,19 @@
                             <h3 class="fs-1 fw-semibold text-center ">Datos de contacto</h3>
                         </section>
                         <section>
-                            <p class="fs-2"><span class="font-blue fw-semibold">Nombre:</span> {{proveedor.name}}</p>
+                            <p class="fs-2"><span class="font-blue fw-semibold">Nombre:</span> {{provider.name}}</p>
                         </section>
                         <section>
-                            <p class="fs-2"><span class="font-blue fw-semibold">Apellido:</span> {{proveedor.sirname}}</p>
+                            <p class="fs-2"><span class="font-blue fw-semibold">Apellido:</span> {{provider.sirname}}</p>
                         </section>
                         <section>
-                            <p class="fs-2"><span class="font-blue fw-semibold">Teléfono:</span> {{proveedor.telephone}}</p>
+                            <p class="fs-2"><span class="font-blue fw-semibold">Teléfono:</span> {{provider.telephone}}</p>
                         </section>
                         <section>
-                            <p class="fs-2"><span class="font-blue fw-semibold">Email: </span> <a class="text-decoration-none font-blue" href="mailto:{{proveedor.email}}">{{proveedor.email}}</a> </p>
+                            <p class="fs-2"><span class="font-blue fw-semibold">Email: </span> <a class="text-decoration-none font-blue" href="mailto:{{provider.email}}">{{provider.email}}</a> </p>
                         </section>
                         <section>
-                            <p class="fs-2"><span class="font-blue fw-semibold">Rol:</span> {{proveedor.role}}</p>
+                            <p class="fs-2"><span class="font-blue fw-semibold">Rol:</span> {{provider.role}}</p>
                         </section>
                     </div>
                 </div>
@@ -59,10 +59,10 @@
                             <h3 class="fs-1 fw-semibold text-center ">Datos fiscales</h3>
                         </section>
                         <section>
-                            <p class="fs-2"><span class="font-blue fw-semibold">CUIT:</span> {{proveedor.cuit}}</p>
+                            <p class="fs-2"><span class="font-blue fw-semibold">CUIT:</span> {{provider.cuit}}</p>
                         </section>
                         <section>
-                            <p class="fs-2"><span class="font-blue fw-semibold">Condición IVA:</span> {{proveedor.vat}}</p>
+                            <p class="fs-2"><span class="font-blue fw-semibold">Condición IVA:</span> {{provider.vat}}</p>
                         </section>
                     </section>
                 </div>

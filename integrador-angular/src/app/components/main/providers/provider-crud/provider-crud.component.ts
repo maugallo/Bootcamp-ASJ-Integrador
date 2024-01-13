@@ -1,28 +1,30 @@
 import { Component, OnInit } from '@angular/core';
-import { ServiceProveedorService } from '../../../../services/service-proveedor.service';
+import { ProviderService } from '../../../../services/provider.service';
 import { Provider } from '../../../../models/provider';
 import { Router } from '@angular/router';
 
 @Component({
-  selector: 'app-abm-proveedor',
-  templateUrl: './abm-proveedor.component.html',
-  styleUrl: './abm-proveedor.component.css'
+  selector: 'app-provider-crud',
+  templateUrl: './provider-crud.component.html',
+  styleUrl: './provider-crud.component.css'
 })
-export class AbmProveedorComponent implements OnInit {
+export class ProviderCrudComponent implements OnInit {
   
   arrayEnabled!: Provider[];
   arrayDisabled!: Provider[];
+
   selectedCode!: string;
+
   seeDisabled: boolean = false;
 
-  constructor(private providerService: ServiceProveedorService, private router: Router) {}
+  constructor(private providerService: ProviderService) {}
 
   ngOnInit(): void {
     this.renderTables();
   }
 
-  openModal(codigo: string){
-    this.selectedCode = codigo;
+  openModal(code: string){
+    this.selectedCode = code;
   }
 
   deleteProvider(){

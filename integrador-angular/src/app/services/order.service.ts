@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
-import { Order } from '../models/orders';
+import { Order } from '../models/order';
 import { LocalStorageClass } from '../utils/localStorage';
-import { ServiceProveedorService } from './service-proveedor.service';
-import { ServiceProductoService } from './service-producto.service';
+import { ProviderService } from './provider.service';
+import { ProductService } from './product.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class OrderService {
 
-  constructor(private providerService: ServiceProveedorService, private productService: ServiceProductoService) { }
+  constructor(private providerService: ProviderService, private productService: ProductService) { }
 
   private localStorage: LocalStorageClass = new LocalStorageClass();
 

@@ -47,44 +47,24 @@
                         </tr>
                     </thead>
                     <tbody id="table-body">
-                        <!-- Elementos activos -->
-                        <ng-container *ngIf="seeDisabled === false">
-                            <tr *ngFor="let order of arrayEnabled">
-                                <td>{{order.orderNumber}}</td>
-                                <td>{{order.issueDate | date: 'dd/MM/yyyy'}}</td>
-                                <td>{{order.deliveryDate | date: 'dd/MM/yyyy'}}</td>
-                                <td>{{order.receptionInfo}}</td>
-                                <td>{{order.provider.companyName}}</td>
-                                <td class="text-start ">
-                                    <ng-container *ngFor="let detail of order.orderDetails">
-                                        <div class="mb-2">{{detail.product.title}} x({{detail.quantity}}) {{detail.product.price | currency}}</div>
-                                    </ng-container>
-                                    Total {{order.total | currency}}
-                                </td>
-                                <td class="">
-                                    <a class="fs-5 me-2 text-decoration-none option" data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="openModal(order.orderNumber)">❌</a>
-                                    <a class="fs-5 me-2 text-decoration-none option" [routerLink]="['form-order', order.orderNumber]">✏️</a>
-                                    <a class="fs-5 text-decoration-none option" [routerLink]="['/orders', order.orderNumber]">👁️</a>
-                                </td>
-                            </tr>
-                        </ng-container>
-                        <!-- Elementos deshabilitados -->
-                        <ng-container *ngIf="seeDisabled === true && arrayDisabled.length > 0">
-                            <tr class="table-secondary" *ngFor="let order of arrayDisabled">
-                                <td>{{order.orderNumber}}</td>
-                                <td>{{order.issueDate | date: 'dd/MM/yyyy'}}</td>
-                                <td>{{order.deliveryDate | date: 'dd/MM/yyyy'}}</td>
-                                <td>{{order.receptionInfo}}</td>
-                                <td>{{order.provider.companyName}}</td>
-                                <td class="text-start ">
-                                    <ng-container *ngFor="let detail of order.orderDetails">
-                                        <div class="mb-2">{{detail.product.title}} x({{detail.quantity}}) {{detail.product.price | currency}}</div>
-                                    </ng-container>
-                                    Total {{order.total | currency}}
-                                </td>
-                                <td>Cancelada</td>
-                            </tr>
-                        </ng-container>
+                        <tr *ngFor="let order of (seeDisabled && arrayDisabled.length > 0 ? arrayDisabled : arrayEnabled)">
+                            <td>{{order.orderNumber}}</td>
+                            <td>{{order.issueDate | date: 'dd/MM/yyyy'}}</td>
+                            <td>{{order.deliveryDate | date: 'dd/MM/yyyy'}}</td>
+                            <td>{{order.receptionInfo}}</td>
+                            <td>{{order.provider.companyName}}</td>
+                            <td class="text-start ">
+                                <ng-container *ngFor="let detail of order.orderDetails">
+                                    <div class="mb-2">{{detail.product.title}} x({{detail.quantity}}) {{detail.product.price | currency}}</div>
+                                </ng-container>
+                                Total {{order.total | currency}}
+                            </td>
+                            <td class="">
+                                <a class="fs-5 me-2 text-decoration-none option" data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="openModal(order.orderNumber)">❌</a>
+                                <a class="fs-5 me-2 text-decoration-none option" [routerLink]="['form-order', order.orderNumber]">✏️</a>
+                                <a class="fs-5 text-decoration-none option" [routerLink]="['/orders', order.orderNumber]">👁️</a>
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
                 <div *ngIf="arrayEnabled.length === 0 && (arrayDisabled.length === 0 || seeDisabled === false)" class="alert rounded-0 alert-custom">
