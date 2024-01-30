@@ -18,12 +18,12 @@ export class ProviderDetailComponent implements OnInit {
 
   ngOnInit(): void {
       this.param = this.activatedRoute.snapshot.params['id'];
-      let providerByParam = this.providerService.getProvider(this.param);
 
-      if (providerByParam){
-        this.provider = providerByParam;
-      } else{
-        this.router.navigate(['providers/form-provider']);
-      }
+      this.providerService.getProviderByCode(this.param).subscribe((data) => {
+        this.provider = data;
+        if (this.provider == null){
+          this.router.navigate(['providers/form-provider']);
+        }
+      });
   }
 }

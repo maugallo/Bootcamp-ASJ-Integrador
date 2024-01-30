@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ProviderService } from '../../../../services/provider.service';
 import { Provider } from '../../../../models/provider';
-import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-provider-crud',
@@ -13,7 +12,7 @@ export class ProviderCrudComponent implements OnInit {
   arrayEnabled!: Provider[];
   arrayDisabled!: Provider[];
 
-  selectedCode!: string;
+  selectedId!: number;
 
   seeDisabled: boolean = false;
 
@@ -23,21 +22,38 @@ export class ProviderCrudComponent implements OnInit {
     this.renderTables();
   }
 
-  openModal(code: string){
-    this.selectedCode = code;
+  openModal(id: number){
+    this.selectedId = id;
   }
 
   deleteProvider(){
-    if (this.providerService.deleteProvider(this.selectedCode)){
-      this.renderTables();
-      alert("Elemento eliminado con éxito!");
-    } else{
-      alert("Ocurrió un error al eliminar el elemento");
-    }
+    this.providerService.deleteProvider(this.selectedId).subscribe({
+      next: (data) => {
+        alert(data);
+        this.renderTables();
+      },
+      error: (error) => {
+        alert("Error deleting the provider: " + error);
+        console.error("Error ocurred", error);
+      }
+    })
   }
 
   renderTables(){
-    this.arrayEnabled = this.providerService.getEnabledProviders();
-    this.arrayDisabled = this.providerService.getDisabledProviders();
+    this.providerService.getEnabledProviders().subscribe((data) => {
+      if (data != null){
+        this.arrayEnabled = data;
+      } else {
+        this.arrayEnabled = [];
+      }
+    });
+
+    this.providerService.getDisabledProviders().subscribe((data) => {
+      if (data != null){
+        this.arrayDisabled = data;
+      } else {
+        this.arrayDisabled = [];
+      }
+    });
   }
 }

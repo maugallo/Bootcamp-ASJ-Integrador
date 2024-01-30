@@ -56,7 +56,9 @@ export class ProductFormComponent implements OnInit {
   }
 
   renderProviderSelect(){
-    this.providerSelect = this.productService.getProvidersForSelect();
+    this.productService.getProvidersForSelect().subscribe((data) => {
+      this.providerSelect = data;
+    });
   }
 
   //Métodos de formulario para agregar productos:

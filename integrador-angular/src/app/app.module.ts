@@ -19,6 +19,7 @@ import { OrderFormComponent } from './components/main/orders/order-form/order-fo
 import { ProviderDetailComponent } from './components/main/providers/provider-detail/provider-detail.component';
 import { ProductDetailComponent } from './components/main/products/product-detail/product-detail.component';
 import { OrderDetailComponent } from './components/main/orders/order-detail/order-detail.component';
+import { VatConditionPipe } from './pipes/vat-condition.pipe';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { OrderDetailComponent } from './components/main/orders/order-detail/orde
     OrderFormComponent,
     ProviderDetailComponent,
     ProductDetailComponent,
-    OrderDetailComponent
+    OrderDetailComponent,
+    VatConditionPipe
   ],
   imports: [
     BrowserModule,

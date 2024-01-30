@@ -98,7 +98,7 @@
                             <div class="col">
                                 <label for="direccion" class="form-label">Información de recepción</label>
                                 <textarea id="txtDireccion" #recepcion="ngModel" [(ngModel)]="order.receptionInfo" name="direccion"
-                                    class="form-control" placeholder="Ingrese la información de recepción" required maxlength="300"></textarea>
+                                    class="form-control" placeholder="Ingrese la información de recepción" required maxlength="500"></textarea>
                                 <!-- Mensaje de error -->
                                 <div *ngIf="recepcion.touched && recepcion.errors?.['required']" class="text-danger ">
                                     <p><small>Este campo no puede estar vacío</small></p>

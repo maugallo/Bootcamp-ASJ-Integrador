@@ -1,93 +1,76 @@
 import { Injectable } from '@angular/core';
 import { Provider } from '../models/provider';
-import { LocalStorageClass } from '../utils/localStorage';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { Product } from '../models/product';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { Observable, catchError, throwError, map, filter } from 'rxjs';
+import { Address } from '../models/address';
+import { Contact } from '../models/contact';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ProviderService {
+
+  constructor(private http: HttpClient) { }
+
+  private URL_API_PROVIDERS: string = "http://localhost:8080/providers";
+  private URL_API_ADDRESS: string = "http://localhost:8080/addresses";
+  private URL_API_CONTACT: string = "http://localhost:8080/contacts"
   
-  constructor(private http: HttpClient){ }
-
-  private URL_API_COUNTRIES: string = "assets/data/countries.json";
-  private URL_API_STATES: string = "assets/data/states.json";
-  private URL_API_CITIES: string = "assets/data/cities.json";
-
-  private localStorage: LocalStorageClass = new LocalStorageClass();
-
-  arrayProveedores!: Provider[];
+  private URL_API_COUNTRIES: string = "http://localhost:8080/countries";
+  private URL_API_PROVINCES: string = "http://localhost:8080/provinces";
+  private URL_API_LOCALITIES: string = "http://localhost:8080/localities";
 
   //CRUD Providers:
-  getProviders(){
-    return this.localStorage.getStorage("proveedores");
+  getEnabledProviders(): Observable<Provider[]> {
+    return this.http.get<Provider[]>(this.URL_API_PROVIDERS + "/enabled");
   }
 
-  getEnabledProviders(){
-    return this.localStorage.getStorage("proveedores").filter((proveedor: Provider) => proveedor.enabled === true);
+  getDisabledProviders(): Observable<Provider[]> {
+    return this.http.get<Provider[]>(this.URL_API_PROVIDERS + "/disabled");
+  }
+  
+  getProviderByCode(code: string): Observable<Provider> {
+    return this.http.get<Provider>(this.URL_API_PROVIDERS + "/get/" + code);
   }
 
-  getDisabledProviders(){
-    return this.localStorage.getStorage("proveedores").filter((proveedor: Provider) => proveedor.enabled === false);
+  addProvider(provider: Provider): Observable<String> {
+    return this.http.post(this.URL_API_PROVIDERS, provider, {responseType: 'text'});
   }
 
-  getProvider(codigo: string){
-    return this.localStorage.getStorage("proveedores").find((proveedor: Provider) => proveedor.code === codigo );
+  updateProvider(provider: Provider): Observable<String> {
+    return this.http.put(this.URL_API_PROVIDERS + "/" + provider.id, provider, { responseType: 'text'});
   }
 
-  addProvider(proveedor: Provider){
-    this.arrayProveedores = this.localStorage.getStorage("proveedores");
-    this.arrayProveedores.push(proveedor);
-    this.localStorage.setStorage("proveedores", this.arrayProveedores);
+  deleteProvider(id: number): Observable<String> {
+    return this.http.delete(this.URL_API_PROVIDERS + "/" + id, {responseType: 'text'});
   }
 
-  updateProvider(proveedor: Provider){
-    this.arrayProveedores = this.localStorage.getStorage("proveedores");
-    
-    let index = this.arrayProveedores.findIndex((proveedorOriginal) => proveedorOriginal.code === proveedor.code );
-    this.arrayProveedores[index] = proveedor;
-    this.localStorage.setStorage("proveedores", this.arrayProveedores);
+  addAddress(address: Address): Observable<Address> {
+    return this.http.post<Address>(this.URL_API_ADDRESS, address).pipe(
+      catchError((error: HttpErrorResponse) => {
+        console.error("Ocurrió un error al crear la dirección.", error);
+        return throwError(() => error);
+      })
+    );
   }
 
-  deleteProvider(codigo: string){
-    this.arrayProveedores = this.localStorage.getStorage("proveedores");
-    if (this.arrayProveedores.length > 0){
-      let index = this.arrayProveedores.findIndex((proveedor) => proveedor.code === codigo );
-      //Eliminación lógica del proveedor:
-      this.arrayProveedores[index].enabled = false;
-      this.localStorage.setStorage("proveedores", this.arrayProveedores);
-      //Eliminación lógica de sus productos:
-      this.deleteProductsFromProvider(codigo);
-      return true;
-    } else{
-      return false;
-    }
+  addContact(contact: Contact): Observable<String> {
+    return this.http.post(this.URL_API_CONTACT, contact, {responseType: 'text'}); //Telling that the response will not be JSON, but string.
   }
 
-  deleteProductsFromProvider(codigo: string){
-    let arrayProductos: Product[] = this.localStorage.getStorage("productos");
-    arrayProductos = arrayProductos.map((producto: Product) => { 
-      if (producto.provider.code === codigo){
-        producto.enabled = false;
-      }
-      return producto;
-      });
-    
-    this.localStorage.setStorage("productos", arrayProductos);
-  }
+  //FALTA MÉTODO PARA BORRAR LOS PRODUCTOS RELACIONADOS CON EL PROVEEDOR QUE SE ELIMINA.
 
   //Form methods:
-  getCountries(): Observable<any>{
+  getCountries(): Observable<any> {
     return this.http.get(this.URL_API_COUNTRIES);
   }
 
-  getStates(): Observable<any>{
-    return this.http.get(this.URL_API_STATES);
+  getProvinces(countryId: number): Observable<any> {
+    return this.http.get(this.URL_API_PROVINCES + "/country/" + countryId);
   }
 
-  getCities(): Observable<any>{
-    return this.http.get(this.URL_API_CITIES);
+  getLocalities(provinceId: number): Observable<any> {
+    return this.http.get(this.URL_API_LOCALITIES + "/province/" + provinceId);
   }
+  
 }

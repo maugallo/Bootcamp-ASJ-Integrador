@@ -63,6 +63,6 @@ export class ProductService {
   }
 
   getProvider(code: string){
-    return this.providerService.getProvider(code);
+    return this.providerService.getProviderByCode(code);
   }
 }

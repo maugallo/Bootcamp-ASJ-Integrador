@@ -71,7 +71,9 @@ export class OrderFormComponent {
   }
 
   renderProviderSelect(){
-    this.providerSelect = this.orderService.getProvidersForSelect();
+    this.orderService.getProvidersForSelect().subscribe((data) => {
+      this.providerSelect = data;
+    });
   }
 
   renderProductSelect(){

@@ -4,7 +4,8 @@
         <div class="col-12 col-lg-8">
             <section>
                 <div class="my-5">
-                    <h2 class="text-center mb-2 display-5 fw-semibold font-blue">{{formTitle}} <i class="bi bi-person-fill-add"></i></h2>
+                    <h2 class="text-center mb-2 display-5 fw-semibold font-blue">{{formTitle}} <i
+                            class="bi bi-person-fill-add"></i></h2>
                 </div>
                 <p><a class=" fs-6 font-blue" [routerLink]="['/providers']">VOLVER</a></p>
             </section>
@@ -20,8 +21,9 @@
                         <div class="col d-flex justify-content-between mx-2">
                             <div class="me-2">
                                 <label for="code" class="form-label">Código</label>
-                                <input class="form-control" #code="ngModel" [(ngModel)]="provider.code"
-                                    name="code" type="text" placeholder="AB12" required minlength="4" maxlength="10" [disabled]="param">
+                                <input class="form-control" #code="ngModel" [(ngModel)]="provider.code" name="code"
+                                    type="text" placeholder="AB12" required minlength="4" maxlength="10"
+                                    [disabled]="param">
                                 <!-- Mensaje de error -->
                                 <div *ngIf="code.touched && code.errors?.['required']" class="text-danger ">
                                     <p><small>Este campo no puede estar vacío</small></p>
@@ -34,7 +36,7 @@
                                 <label class="form-label" for="companyName">Razón Social</label>
                                 <input id="companyName" #companyName="ngModel" class="form-control"
                                     [(ngModel)]="provider.companyName" name="companyName" type="text"
-                                    placeholder="Ingrese razón social" required maxlength="60"
+                                    placeholder="Ingrese razón social" required maxlength="100"
                                     pattern="^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ ]+$">
                                 <!-- Mensaje de error -->
                                 <div *ngIf="companyName.touched && companyName.errors?.['required']"
@@ -47,18 +49,14 @@
                             </div>
                             <div class="me-2">
                                 <label for="sector" class="form-label">Rubro</label>
-                                <input id="sector" #sector="ngModel" type="text" [(ngModel)]="provider.sector"
-                                    name="sector" class="form-control" placeholder="Ingrese el rubro" required
-                                    minlength="5" maxlength="60" pattern="^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ ]+$">
+                                <select type="select" #sectorVar="ngModel" id="sector" name="sector" class="form-select"
+                                    [(ngModel)]="provider.sector" required>
+                                    <option *ngFor="let sector of sectorSelect" [ngValue]="sector">
+                                        {{sector.name}}</option>
+                                </select>
                                 <!-- Mensaje de error -->
-                                <div *ngIf="sector.touched && sector.errors?.['required']" class="text-danger ">
+                                <div *ngIf="sectorVar.touched && sectorVar.errors?.['required']" class="text-danger ">
                                     <p><small>Este campo no puede estar vacío</small></p>
-                                </div>
-                                <div *ngIf="sector.touched && sector.errors?.['minlength']" class="text-danger">
-                                    <p><small>No pueden haber menos de 5 caracteres</small></p>
-                                </div>
-                                <div *ngIf="sector.touched && sector.errors?.['pattern']" class="text-danger">
-                                    <p><small>No pueden haber caracteres especiales</small></p>
                                 </div>
                             </div>
                         </div>
@@ -77,9 +75,9 @@
                             <div class="col d-flex justify-content-center">
                                 <div class="me-2 w-75">
                                     <label for="street" class="form-label">Calle</label>
-                                    <input type="text" #street="ngModel" name="street" [(ngModel)]="provider.street"
+                                    <input type="text" #street="ngModel" name="street" [(ngModel)]="address.street"
                                         class="form-control" placeholder="Ingrese la calle" required minlength="5"
-                                        pattern="^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ ]+$">
+                                        maxlength="100" pattern="^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ ]+$">
                                     <!-- Mensaje de error -->
                                     <div *ngIf="street.touched && street.errors?.['required']" class="text-danger ">
                                         <p><small>Este campo no puede estar vacío</small></p>
@@ -93,8 +91,8 @@
                                 </div>
                                 <div class="me-2">
                                     <label for="streetNum" class="form-label">Número</label>
-                                    <input  type="text" #num="ngModel" name="streetNum" [(ngModel)]="provider.num"
-                                        class="form-control" placeholder="0123" required maxlength="5"
+                                    <input type="text" #num="ngModel" name="streetNum" [(ngModel)]="address.num"
+                                        class="form-control" placeholder="0123" required maxlength="6"
                                         pattern="^[0-9]+$">
                                     <!-- Mensaje de error -->
                                     <div *ngIf="num.touched && num.errors?.['required']" class="text-danger ">
@@ -106,21 +104,16 @@
                                 </div>
                                 <div>
                                     <label for="zipCode" class="form-label">Código Postal</label>
-                                    <input type="text" #zipCode="ngModel" name="zipCode"
-                                        [(ngModel)]="provider.zipCode" class="form-control" placeholder="C.P"
-                                        required minlength="4" maxlength="6" pattern="^[0-9]+$">
+                                    <input type="text" #zipCode="ngModel" name="zipCode" [(ngModel)]="address.zipCode"
+                                        class="form-control" placeholder="C.P" required minlength="1" maxlength="6"
+                                        pattern="^[A-Za-z0-9]+$">
                                     <!-- Mensaje de error -->
-                                    <div *ngIf="zipCode.touched && zipCode.errors?.['required']"
-                                        class="text-danger ">
+                                    <div *ngIf="zipCode.touched && zipCode.errors?.['required']" class="text-danger ">
                                         <p><small>Este campo no puede estar vacío</small></p>
                                     </div>
-                                    <div *ngIf="zipCode.touched && zipCode.errors?.['minlength']"
-                                        class="text-danger ">
-                                        <p><small>La longitud no debe ser menor a 4 caracteres</small></p>
-                                    </div>
-                                    <div *ngIf="zipCode.touched && zipCode.errors?.['pattern']"
-                                        class="text-danger ">
-                                        <p><small>Este campo solo acepta números</small></p>
+                                    <!-- Mensaje de error -->
+                                    <div *ngIf="zipCode.touched && zipCode.errors?.['pattern']" class="text-danger ">
+                                        <p><small>Este campo solo acepta números y letras</small></p>
                                     </div>
                                 </div>
                             </div>
@@ -129,25 +122,27 @@
                             <div class="col d-flex">
                                 <div class="w-50 me-2">
                                     <label for="country" class="form-label">Pais</label>
-                                    <select type="select" #country="ngModel" name="country" class="form-select"
-                                        (change)="chooseCountry()" [(ngModel)]="provider.country" required>
-                                        <option *ngFor="let country of countrySelect" value="{{country.name}}">
+                                    <select type="select" #countryVar="ngModel" name="country" class="form-select"
+                                        (change)="chooseCountry()" [(ngModel)]="country"
+                                        required>
+                                        <option *ngFor="let country of countrySelect" [ngValue]="country">
                                             {{country.name}}</option>
                                     </select>
                                     <!-- Mensaje de error -->
-                                    <div *ngIf="country.touched && country.errors?.['required']" class="text-danger ">
+                                    <div *ngIf="countryVar.touched && countryVar.errors?.['required']"
+                                        class="text-danger ">
                                         <p><small>Este campo no puede estar vacío</small></p>
                                     </div>
                                 </div>
                                 <div class="w-50 me-2">
                                     <label for="province" class="form-label">Provincia</label>
-                                    <select type="text" #province="ngModel" name="province" class="form-select"
-                                        (change)="chooseState()" [(ngModel)]="provider.province" required>
-                                        <option *ngFor="let state of stateSelect" value="{{state.name}}">{{state.name}}</option>
-                                        <option *ngIf="stateSelect.length === 0" value="Sin Provincia">--------</option>
+                                    <select type="select" #provinceVar="ngModel" name="province" class="form-select"
+                                        (change)="chooseProvince()" [(ngModel)]="province" required>
+                                        <option *ngFor="let province of provinceSelect" [ngValue]="province">
+                                            {{province.name}}</option>
                                     </select>
                                     <!-- Mensaje de error -->
-                                    <div *ngIf="province.touched && province.errors?.['required']"
+                                    <div *ngIf="provinceVar.touched && provinceVar.errors?.['required']"
                                         class="text-danger ">
                                         <p><small>Este campo no puede estar vacío</small></p>
                                     </div>
@@ -155,12 +150,13 @@
 
                                 <div class="w-50">
                                     <label for="locality" class="form-label">Localidad</label>
-                                    <select type="text" #locality="ngModel" name="locality" class="form-select" [(ngModel)]="provider.locality" required>
-                                        <option *ngFor="let locality of localitySelect" value="{{locality.name}}">{{locality.name}}</option>
-                                        <option *ngIf="localitySelect.length === 0" value="Sin Localidad">--------</option>
+                                    <select type="select" #localityVar="ngModel" name="locality" class="form-select"
+                                        [(ngModel)]="address.locality" required>
+                                        <option *ngFor="let locality of localitySelect" [ngValue]="locality">
+                                            {{locality.name}}</option>
                                     </select>
                                     <!-- Mensaje de error -->
-                                    <div *ngIf="locality.touched && locality.errors?.['required']"
+                                    <div *ngIf="localityVar.touched && localityVar.errors?.['required']"
                                         class="text-danger ">
                                         <p><small>Este campo no puede estar vacío</small></p>
                                     </div>
@@ -191,23 +187,12 @@
                             </div>
                             <div class="w-75 text-center">
                                 <label for="vatCondition" class="form-label">Condición IVA</label>
-                                <div class="d-flex justify-content-evenly">
-                                    <label for="responsable" class="form-check-label">
-                                        <span class="me-2">Resp. Inscripto</span>
-                                        <input class="form-check-input" [(ngModel)]="provider.vat" id="responsable"
-                                            type="radio" name="vatCondition" value="Responsable Inscripto">
-                                    </label>
-                                    <label for="monotributista" class="form-check-label">
-                                        <span class="me-2">Monotributista</span>
-                                        <input class="form-check-input" [(ngModel)]="provider.vat" id="monotributista"
-                                            type="radio" name="vatCondition" value="Monotributista">
-                                    </label>
-                                    <label for="exento" class="form-check-label">
-                                        <span class="me-2">Exento</span>
-                                        <input class="form-check-input" [(ngModel)]="provider.vat" id="exento"
-                                            type="radio" name="vatCondition" value="Exento">
-                                    </label>
-                                </div>
+                                <select type="select" #vat="ngModel" name="vat" class="form-select"
+                                    [(ngModel)]="provider.vatCondition" required>
+                                    <option *ngFor="let condition of vatConditionSelect" [ngValue]="condition">
+                                        {{condition | vatCondition}}
+                                    </option>
+                                </select>
                             </div>
                         </div>
                     </div>
@@ -221,41 +206,45 @@
                         <div class="row">
                             <div class="col d-flex justify-content-center mx-2">
                                 <div class="me-2 w-50 ">
-                                    <label class="form-label" for="name">Nombre</label>
-                                    <input class="form-control" #name="ngModel" [(ngModel)]="provider.name"
-                                        name="name" type="text" placeholder="Ingrese el nombre" required
-                                        maxlength="50" pattern="^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$">
+                                    <label class="form-label" for="firstname">Nombre</label>
+                                    <input class="form-control" #firstname="ngModel" [(ngModel)]="provider.firstName"
+                                        name="firstname" type="text" placeholder="Ingrese el nombre" required
+                                        maxlength="40" pattern="^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$">
                                     <!-- Mensaje de error -->
-                                    <div *ngIf="name.touched && name.errors?.['required']" class="text-danger ">
+                                    <div *ngIf="firstname.touched && firstname.errors?.['required']"
+                                        class="text-danger ">
                                         <p><small>Este campo no puede estar vacío</small></p>
                                     </div>
-                                    <div *ngIf="name.touched && name.errors?.['pattern']" class="text-danger ">
+                                    <div *ngIf="firstname.touched && firstname.errors?.['pattern']"
+                                        class="text-danger ">
                                         <p><small>Este campo solo acepta letras</small></p>
                                     </div>
                                 </div>
                                 <div class="me-2 w-50">
-                                    <label for="sirname" class="form-label">Apellido</label>
-                                    <input type="text" #sirname="ngModel" [(ngModel)]="provider.sirname"
-                                        name="sirname" class="form-control" placeholder="Ingrese el apellido" required
-                                        maxlength="50" pattern="^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$">
+                                    <label for="lastname" class="form-label">Apellido</label>
+                                    <input type="text" #lastname="ngModel" [(ngModel)]="provider.lastName"
+                                        name="lastname" class="form-control" placeholder="Ingrese el apellido" required
+                                        maxlength="40" pattern="^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$">
                                     <!-- Mensaje de error -->
-                                    <div *ngIf="sirname.touched && sirname.errors?.['required']" class="text-danger ">
+                                    <div *ngIf="lastname.touched && lastname.errors?.['required']" class="text-danger ">
                                         <p><small>Este campo no puede estar vacío</small></p>
                                     </div>
-                                    <div *ngIf="sirname.touched && sirname.errors?.['pattern']" class="text-danger ">
+                                    <div *ngIf="lastname.touched && lastname.errors?.['pattern']" class="text-danger ">
                                         <p><small>Este campo solo acepta letras</small></p>
                                     </div>
                                 </div>
                                 <div class="w-50">
                                     <label for="telephone" class="form-label">Teléfono</label>
-                                    <input id="telephone" #telephone="ngModel" [(ngModel)]="provider.telephone"
+                                    <input id="telephone" #telephone="ngModel" [(ngModel)]="contact.telephone"
                                         type="text" name="telephone" class="form-control" placeholder="1234567890"
                                         required pattern="^[0-9]+$" minlength="7" maxlength="12">
                                     <!-- Mensaje de error -->
-                                    <div *ngIf="telephone.touched && telephone.errors?.['required']" class="text-danger ">
+                                    <div *ngIf="telephone.touched && telephone.errors?.['required']"
+                                        class="text-danger ">
                                         <p><small>Este campo no puede estar vacío</small></p>
                                     </div>
-                                    <div *ngIf="telephone.touched && telephone.errors?.['pattern']" class="text-danger ">
+                                    <div *ngIf="telephone.touched && telephone.errors?.['pattern']"
+                                        class="text-danger ">
                                         <p><small>Este campo solo acepta números</small></p>
                                     </div>
                                     <div *ngIf="telephone.touched && telephone.errors?.['minlength']"
@@ -269,7 +258,7 @@
                             <div class="col d-flex justify-content-around  mx-2">
                                 <div class="me-2 w-50">
                                     <label for="email" class="form-label">Email</label>
-                                    <input id="txtEmail" #email="ngModel" type="email" [(ngModel)]="provider.email"
+                                    <input id="txtEmail" #email="ngModel" type="email" [(ngModel)]="contact.email"
                                         name="email" class="form-control" placeholder="example@gmail.com" required email
                                         pattern=".*(\.com)$">
                                     <!-- Mensaje de error -->
@@ -285,7 +274,7 @@
                                 <div class="w-auto">
                                     <label for="role" class="form-label">Rol</label>
                                     <input type="text" #role="ngModel" [(ngModel)]="provider.role" name="role"
-                                        class="form-control" placeholder="Ingrese el rol" required maxlength="50"
+                                        class="form-control" placeholder="Ingrese el rol" required maxlength="100"
                                         pattern="^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ ]+$">
                                     <!-- Mensaje de error -->
                                     <div *ngIf="role.touched && role.errors?.['required']" class="text-danger ">
@@ -300,7 +289,8 @@
                     </div>
                     <!-- Botón -->
                     <div class="text-end mt-4">
-                        <button class="btn btn-add rounded-0 " [disabled]="providersForm.invalid" type="submit">{{buttonName}}</button>
+                        <button class="btn btn-add rounded-0 " [disabled]="providersForm.invalid"
+                            type="submit">{{buttonName}}</button>
                     </div>
                 </form>
             </section>

@@ -26,14 +26,15 @@
                             <div class="me-2">
                                 <label for="sku" class="form-label">SKU</label>
                                 <input id="sku" [(ngModel)]="product.sku" type="text" name="sku"
-                                    class="form-control" #sku="ngModel" placeholder="SAF03WJ2OE" min="0" minlength="1"
-                                    required required minlength="4" maxlength="10" pattern="^[A-Za-z0-9]+$" [disabled]="param">
+                                    class="form-control" #sku="ngModel" placeholder="#SAF-03W"
+                                    required minlength="2" maxlength="10" [disabled]="param">
                                 <!-- Mensaje de error -->
                                 <div *ngIf="sku.touched && sku.errors?.['required']" class="text-danger ">
                                     <p><small>Este campo no puede estar vacío</small></p>
                                 </div>
-                                <div *ngIf="sku.touched && sku.errors?.['pattern']" class="text-danger ">
-                                    <p><small>Este campo solo aceptas letras y números</small></p>
+                                <!-- Mensaje de error -->
+                                <div *ngIf="sku.touched && sku.errors?.['minlength']" class="text-danger ">
+                                    <p><small>Este campo no puede tener menos de 2 caracteres</small></p>
                                 </div>
                             </div>
                             <div class="me">
@@ -59,7 +60,7 @@
                             <div class="me-2 w-100">
                                 <label class="form-label" for="image">Imagen</label>
                                 <input id="image" name="image" type="text" #image="ngModel" class="form-control"
-                                    [(ngModel)]="product.image" placeholder="Ingrese la URL" required pattern="^https?:\/\/[\w\-\.]+(\.[a-zA-Z]{2,3})?(:\d+)?(\/[^\s]*)?$">
+                                    [(ngModel)]="product.image" placeholder="Ingrese la URL" maxlength="500" required pattern="^https?:\/\/[\w\-\.]+(\.[a-zA-Z]{2,3})?(:\d+)?(\/[^\s]*)?$">
                                 <!-- Mensaje de error -->
                                 <div *ngIf="image.touched && image.errors?.['required']" class="text-danger ">
                                     <p><small>Este campo no puede estar vacío</small></p>
@@ -77,7 +78,7 @@
                                 <label class="form-label" for="description">Descripción</label>
                                 <textarea #description="ngModel" [(ngModel)]="product.description" class="form-control"
                                     name="description" cols="30" rows="5" placeholder="Ingrese la descripción" required
-                                    maxlength="200">
+                                    maxlength="1000">
                                 </textarea>
                                 <!-- Mensaje de error -->
                                 <div *ngIf="description.touched && description.errors?.['required']"
