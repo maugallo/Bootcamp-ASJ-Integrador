@@ -27,3 +27,15 @@ body{
     background-color: #001652;
     color:#FBFEF9;
 }
+
+.custom-tooltip .tooltip-inner {
+    max-width: 100rem;
+    background-color: #FBFEF9;
+    color: #011d69;
+    font-weight: bold;
+    white-space: nowrap;
+}
+
+.custom-tooltip.bs-tooltip-bottom .tooltip-arrow::before {
+    border-bottom-color: #FBFEF9;
+}

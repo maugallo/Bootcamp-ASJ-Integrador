@@ -22,8 +22,7 @@
                             <div class="me-2">
                                 <label for="code" class="form-label">Código</label>
                                 <input class="form-control" #code="ngModel" [(ngModel)]="provider.code" name="code"
-                                    type="text" placeholder="AB12" required minlength="4" maxlength="10"
-                                    [disabled]="param">
+                                    type="text" placeholder="AB12" required minlength="4" maxlength="10" (blur)="validateRepeatedCode()">
                                 <!-- Mensaje de error -->
                                 <div *ngIf="code.touched && code.errors?.['required']" class="text-danger ">
                                     <p><small>Este campo no puede estar vacío</small></p>
@@ -31,13 +30,21 @@
                                 <div *ngIf="code.touched && code.errors?.['minlength']" class="text-danger">
                                     <p><small>No pueden haber menos de 4 caracteres</small></p>
                                 </div>
+                                <div *ngIf="code.touched && code.errors?.['codeRepeated']"
+                                    class="text-danger ">
+                                    <p><small>El código ingresado ya existe</small></p>
+                                </div>
+                                <div *ngIf="code.touched && code.errors?.['httpError']"
+                                    class="text-danger ">
+                                    <p><small>No es posible validar el código ahora, inténtalo más tarde</small></p>
+                                </div>
                             </div>
                             <div class="me-2">
                                 <label class="form-label" for="companyName">Razón Social</label>
                                 <input id="companyName" #companyName="ngModel" class="form-control"
                                     [(ngModel)]="provider.companyName" name="companyName" type="text"
                                     placeholder="Ingrese razón social" required maxlength="100"
-                                    pattern="^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ ]+$">
+                                    pattern="^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ ]+$" (blur)="validateRepeatedCompanyName()">
                                 <!-- Mensaje de error -->
                                 <div *ngIf="companyName.touched && companyName.errors?.['required']"
                                     class="text-danger ">
@@ -45,6 +52,14 @@
                                 </div>
                                 <div *ngIf="companyName.touched && companyName.errors?.['pattern']" class="text-danger">
                                     <p><small>No pueden haber caracteres especiales</small></p>
+                                </div>
+                                <div *ngIf="companyName.touched && companyName.errors?.['companyNameRepeated']"
+                                        class="text-danger ">
+                                        <p><small>La razón social ingresada ya existe</small></p>
+                                </div>
+                                <div *ngIf="companyName.touched && companyName.errors?.['httpError']"
+                                    class="text-danger ">
+                                    <p><small>No es posible validar la razón social ahora, inténtalo más tarde</small></p>
                                 </div>
                             </div>
                             <div class="me-2">
@@ -62,11 +77,16 @@
                         </div>
                     </div>
                     <div class="row mt-5">
-                        <div class="col">
-                            <div class="w-100">
+                        <div class="col d-flex justify-content-between mx-2">
+                            <div class="w-50 me-2">
                                 <label for="website" class="form-label">Sitio Web</label>
                                 <input type="text" name="website" [(ngModel)]="provider.website" class="form-control"
                                     placeholder="https://example.com">
+                            </div>
+                            <div class="w-50">
+                                <label for="logo" class="form-label">Logo</label>
+                                <input type="text" name="logo" [(ngModel)]="provider.logo" class="form-control"
+                                    placeholder="Ingrese la url">
                             </div>
                         </div>
                     </div>
@@ -176,13 +196,21 @@
                                 <label for="cuit" class="form-label">CUIT</label>
                                 <input type="text" #cuit="ngModel" [(ngModel)]="provider.cuit" name="cuit"
                                     class="form-control" placeholder="XX-XXXXXXXX-X" required
-                                    pattern="^[0-9]{2}-[0-9]{8}-[0-9]$" [disabled]="param">
+                                    pattern="^[0-9]{2}-[0-9]{8}-[0-9]$" (blur)="validateRepeatedCuit()">
                                 <!-- Mensaje de error -->
                                 <div *ngIf="cuit.touched && cuit.errors?.['required']" class="text-danger ">
                                     <p><small>Este campo no puede estar vacío</small></p>
                                 </div>
                                 <div *ngIf="cuit.touched && cuit.errors?.['pattern']" class="text-danger ">
                                     <p><small>Este campo debe cumplir el formato numérico XX-XXXXXXXX-X</small></p>
+                                </div>
+                                <div *ngIf="cuit.touched && cuit.errors?.['cuitRepeated']"
+                                        class="text-danger ">
+                                        <p><small>El cuit ingresado ya existe</small></p>
+                                </div>
+                                <div *ngIf="cuit.touched && cuit.errors?.['httpError']"
+                                    class="text-danger ">
+                                    <p><small>No es posible validar el cuit ahora, inténtalo más tarde</small></p>
                                 </div>
                             </div>
                             <div class="w-75 text-center">
@@ -237,7 +265,7 @@
                                     <label for="telephone" class="form-label">Teléfono</label>
                                     <input id="telephone" #telephone="ngModel" [(ngModel)]="contact.telephone"
                                         type="text" name="telephone" class="form-control" placeholder="1234567890"
-                                        required pattern="^[0-9]+$" minlength="7" maxlength="12">
+                                        required pattern="^[0-9]+$" minlength="7" maxlength="12" (blur)="validateRepeatedTelephone()">
                                     <!-- Mensaje de error -->
                                     <div *ngIf="telephone.touched && telephone.errors?.['required']"
                                         class="text-danger ">
@@ -251,6 +279,14 @@
                                         class="text-danger ">
                                         <p><small>No pueden haber menos de 7 caracteres</small></p>
                                     </div>
+                                    <div *ngIf="telephone.touched && telephone.errors?.['telephoneRepeated']"
+                                        class="text-danger ">
+                                        <p><small>El teléfono ingresado ya existe</small></p>
+                                    </div>
+                                    <div *ngIf="telephone.touched && telephone.errors?.['httpError']"
+                                        class="text-danger ">
+                                        <p><small>No es posible validar el teléfono ahora, inténtalo más tarde</small></p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -260,15 +296,22 @@
                                     <label for="email" class="form-label">Email</label>
                                     <input id="txtEmail" #email="ngModel" type="email" [(ngModel)]="contact.email"
                                         name="email" class="form-control" placeholder="example@gmail.com" required email
-                                        pattern=".*(\.com)$">
+                                        pattern=".*(\.com)$" (blur)="validateRepeatedEmail()">
                                     <!-- Mensaje de error -->
                                     <div *ngIf="email.touched && email.errors?.['required']" class="text-danger ">
                                         <p><small>Este campo no puede estar vacío</small></p>
                                     </div>
                                     <div *ngIf="email.touched && (email.errors?.['email'] || email.errors?.['pattern']) "
                                         class="text-danger ">
-                                        <p><small>Este campo debe cumplir el formato nombre&commat;ejemplo.com</small>
-                                        </p>
+                                        <p><small>Este campo debe cumplir el formato nombre&commat;ejemplo.com</small></p>
+                                    </div>
+                                    <div *ngIf="email.touched && email.errors?.['emailRepeated']"
+                                        class="text-danger ">
+                                        <p><small>El email ingresado ya existe</small></p>
+                                    </div>
+                                    <div *ngIf="email.touched && email.errors?.['httpError']"
+                                        class="text-danger ">
+                                        <p><small>No es posible validar el email ahora, inténtalo más tarde</small></p>
                                     </div>
                                 </div>
                                 <div class="w-auto">

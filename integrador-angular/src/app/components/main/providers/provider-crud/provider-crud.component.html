@@ -41,30 +41,46 @@
                         class="table table-hover table-bordered border-secondary-subtle">
                         <thead>
                             <tr>
+                                <th>Logo</th>
                                 <th>Código</th>
                                 <th>Razón Social</th>
-                                <th>Contacto</th>
+                                <th>Ubicación</th>
                                 <th>Nombre y Apellido</th>
+                                <th>Contacto</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
                         <tbody id="table-body">
                             <ng-container *ngIf="seeDisabled === false">
                                 <tr *ngFor="let provider of arrayEnabled">
+                                    <td>
+                                        <img *ngIf="provider.logo" [src]="provider.logo" width="70" height="70" alt="Provider Logo" onerror="this.src = '/assets/images/default-logo.png'">
+                                        <img *ngIf="!provider.logo" [src]="'/assets/images/default-logo.png'" width="70" height="70" alt="Provider Logo">
+                                    </td>
                                     <td>{{provider.code}}</td>
                                     <td>{{provider.companyName}}</td>
                                     <td>
                                         <div>
-                                            {{provider.website}}
+                                            {{provider.address.locality.province.country.name}}
                                         </div>
                                         <div>
-                                            {{provider.contact.email}}
-                                        </div>
-                                        <div>
-                                            {{provider.contact.telephone}}
+                                            {{provider.address.locality.province.name}}
                                         </div>
                                     </td>
                                     <td>{{provider.firstName}} {{provider.lastName}}</td>
+                                    <td>
+                                        <div class="d-flex flex-column">
+                                            <button class="btn btn-sm btn-add rounded-0 mb-2 w-100" ngbTooltip="{{provider.website}}" placement="bottom" tooltipClass="custom-tooltip">
+                                                Sitio web
+                                            </button>
+                                            <button class="btn btn-sm btn-add rounded-0 mb-2 w-100" ngbTooltip="{{provider.contact.email}}" placement="bottom" tooltipClass="custom-tooltip">
+                                                Email
+                                            </button>
+                                            <button class="btn btn-sm btn-add rounded-0 w-100" ngbTooltip="{{provider.contact.telephone}}" placement="bottom" tooltipClass="custom-tooltip">
+                                                Teléfono
+                                            </button>
+                                        </div>
+                                    </td>
                                     <td>
                                         <a class="fs-5 me-2 text-decoration-none option" data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="openModal(provider.id!)">🗑️</a>
                                         <a class="fs-5 me-2 text-decoration-none option" [routerLink]="['form-provider', provider.code]">✏️</a>
@@ -74,20 +90,34 @@
                             </ng-container>
                             <ng-container *ngIf="seeDisabled && arrayDisabled.length > 0">
                                 <tr class="table-secondary" *ngFor="let provider of arrayDisabled">
+                                    <td>
+                                        <img *ngIf="provider.logo" [src]="provider.logo" width="70" height="70" alt="Provider Logo" onerror="this.src = '/assets/images/default-logo.png'">
+                                        <img *ngIf="!provider.logo" [src]="'/assets/images/default-logo.png'" width="70" height="70" alt="Provider Logo">
+                                    </td>
                                     <td>{{provider.code}}</td>
                                     <td>{{provider.companyName}}</td>
                                     <td>
                                         <div>
-                                            {{provider.website}}
+                                            {{provider.address.locality.province.country.name}}
                                         </div>
                                         <div>
-                                            {{provider.contact.email}}
-                                        </div>
-                                        <div>
-                                            {{provider.contact.telephone}}
+                                            {{provider.address.locality.province.name}}
                                         </div>
                                     </td>
                                     <td>{{provider.firstName}} {{provider.lastName}}</td>
+                                    <td>
+                                        <div class="d-flex flex-column">
+                                            <button class="btn btn-sm btn-add rounded-0 mb-2 w-100" ngbTooltip="{{provider.website}}" placement="bottom" tooltipClass="custom-tooltip">
+                                                Sitio web
+                                            </button>
+                                            <button class="btn btn-sm btn-add rounded-0 mb-2 w-100" ngbTooltip="{{provider.contact.email}}" placement="bottom" tooltipClass="custom-tooltip">
+                                                Email
+                                            </button>
+                                            <button class="btn btn-sm btn-add rounded-0 w-100" ngbTooltip="{{provider.contact.telephone}}" placement="bottom" tooltipClass="custom-tooltip">
+                                                Teléfono
+                                            </button>
+                                        </div>
+                                    </td>
                                     <td>Eliminado</td>
                                 </tr>
                             </ng-container>

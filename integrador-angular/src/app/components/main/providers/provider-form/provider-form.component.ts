@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ProviderService } from '../../../../services/provider.service';
 import { Provider } from '../../../../models/provider';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NgForm } from '@angular/forms';
+import { NgForm, NgModel } from '@angular/forms';
 import { Sector } from '../../../../models/sector';
 import { SectorService } from '../../../../services/sector.service';
 import { Address } from '../../../../models/address';
@@ -10,7 +10,6 @@ import { VatCondition } from '../../../../models/vatCondition';
 import { Country } from '../../../../models/country';
 import { Province } from '../../../../models/province';
 import { Contact } from '../../../../models/contact';
-import { Observable, map } from 'rxjs';
 
 @Component({
   selector: 'app-provider-form',
@@ -38,6 +37,25 @@ export class ProviderFormComponent implements OnInit {
     sector: null!,
     vatCondition: null!,
     contact: null!,
+    address: null!,
+    code: '',
+    companyName: '',
+    logo: '',
+    website: '',
+    firstName: '',
+    lastName: '',
+    role: '',
+    cuit: '',
+    isEnabled: true,
+  };
+
+  realProvider: Provider = {
+    sector: null!,
+    vatCondition: null!,
+    contact: {
+      telephone: '',
+      email: '',
+    },
     address: null!,
     code: '',
     companyName: '',
@@ -83,6 +101,13 @@ export class ProviderFormComponent implements OnInit {
   //Variable para determinar si se editará o creará un proveedor:
   param!: string;
 
+  //Validaciones del back:
+  @ViewChild('email') emailNgModel!: NgModel;
+  @ViewChild('telephone') telephoneNgModel!: NgModel;
+  @ViewChild('code') codeNgModel!: NgModel;
+  @ViewChild('cuit') cuitNgModel!: NgModel;
+  @ViewChild('companyName') companyNameNgModel!: NgModel;
+
   constructor(
     public providerService: ProviderService,
     public sectorService: SectorService,
@@ -98,7 +123,9 @@ export class ProviderFormComponent implements OnInit {
     if (this.param) {
       this.providerService.getProviderByCode(this.param).subscribe((data) => {
         if (data) {
-          this.provider = data;
+          this.realProvider = data;
+
+          this.provider = JSON.parse(JSON.stringify(this.realProvider));
 
           this.preRenderCountry();
           this.preRenderSector();
@@ -186,41 +213,122 @@ export class ProviderFormComponent implements OnInit {
     });
   }
 
+  validateRepeatedEmail(){
+    if (this.contact.email !== '' && this.contact.email !== this.realProvider.contact.email){
+      this.providerService.validateEmail(this.contact.email).subscribe({
+        next: (isRepeated) => {
+          if (isRepeated){ //If the email is repeated in the database, we set the new custom validation.
+            this.emailNgModel.control.setErrors({ ...this.emailNgModel.errors, emailRepeated: true}); //with { ...this.emailNgModel.errors, customValidation: true }, we are creating a new object that contains all existing validation errors from this.emailNgModel.errors and we are adding our new custom validation error to that object.
+          } else { //If the email is not repeated in the database, we delete the custom validation.
+            if (this.emailNgModel.errors?.['emailRepeated']) {
+              delete this.emailNgModel.errors['emailRepeated']; //Deleting the validation using the operator 'delete' (deletes the property of an object)
+              this.emailNgModel.control.setErrors(this.emailNgModel.errors);
+            }
+          }
+        },
+        error: () => {
+          this.emailNgModel.control.setErrors({ ...this.emailNgModel.errors, httpError: true});
+        }
+      })
+    }
+  }
+
+  validateRepeatedTelephone(){
+    if (this.contact.telephone !== '' && this.contact.telephone !== this.realProvider.contact.telephone){
+      this.providerService.validateTelephone(this.contact.telephone).subscribe({
+        next: (isRepeated) => {
+          if (isRepeated){
+            this.telephoneNgModel.control.setErrors({ ...this.telephoneNgModel.errors, telephoneRepeated: true});
+          } else {
+            if (this.telephoneNgModel.errors?.['telephoneRepeated']) {
+              delete this.telephoneNgModel.errors['telephoneRepeated'];
+              this.telephoneNgModel.control.setErrors(this.telephoneNgModel.errors);
+            }
+          }
+        },
+        error: () => {
+          this.telephoneNgModel.control.setErrors({ ...this.telephoneNgModel.errors, httpError: true});
+        }
+      })
+    }
+  }
+
+  validateRepeatedCode(){
+    if (this.provider.code !== '' && this.provider.code !== this.realProvider.code){
+      this.providerService.validateCode(this.provider.code).subscribe({
+        next: (isRepeated) => {
+          if (isRepeated){
+            this.codeNgModel.control.setErrors({ ...this.codeNgModel.errors, codeRepeated: true});
+          } else {
+            if (this.codeNgModel.errors?.['codeRepeated']) {
+              delete this.codeNgModel.errors['codeRepeated'];
+              this.codeNgModel.control.setErrors(this.codeNgModel.errors);
+            }
+          }
+        },
+        error: () => {
+          this.codeNgModel.control.setErrors({ ...this.codeNgModel.errors, httpError: true});
+        }
+      })
+    }
+  }
+
+  validateRepeatedCuit(){
+    if (this.provider.cuit !== '' && this.provider.cuit !== this.realProvider.cuit){
+      this.providerService.validateCuit(this.provider.cuit).subscribe({
+        next: (isRepeated) => {
+          if (isRepeated){
+            this.cuitNgModel.control.setErrors({ ...this.cuitNgModel.errors, cuitRepeated: true});
+          } else {
+            if (this.cuitNgModel.errors?.['cuitRepeated']) {
+              delete this.cuitNgModel.errors['cuitRepeated'];
+              this.cuitNgModel.control.setErrors(this.cuitNgModel.errors);
+            }
+          }
+        },
+        error: () => {
+          this.cuitNgModel.control.setErrors({ ...this.cuitNgModel.errors, httpError: true});
+        }
+      })
+    }
+  }
+
+  validateRepeatedCompanyName(){
+    if (this.provider.companyName !== '' && this.provider.companyName !== this.realProvider.companyName){
+      this.providerService.validateCompanyName(this.provider.companyName).subscribe({
+        next: (isRepeated) => {
+          if (isRepeated) {
+            this.companyNameNgModel.control.setErrors({ ...this.companyNameNgModel.errors, companyNameRepeated: true});
+          } else {
+            if (this.companyNameNgModel.errors?.['companyNameRepeated']) {
+              delete this.companyNameNgModel.errors['companyNameRepeated'];
+              this.companyNameNgModel.control.setErrors(this.companyNameNgModel.errors);
+            }
+          }
+        },
+        error: () => {
+          this.companyNameNgModel.control.setErrors({ ...this.companyNameNgModel.errors, httpError: true});
+        }
+      })
+    }
+  }
+
   //Métodos de formulario para agregar proveedores:
   onSubmit(form: NgForm) {
     if (form.valid) {
       this.provider.address = this.address;
       this.provider.contact = this.contact;
+      this.realProvider = this.provider;
       if (this.buttonName === 'Agregar') {
-        this.isCodeRepeated(this.provider.code).subscribe({ //Validate also CUIT.
-          next: (isRepeated) => {
-            if (isRepeated) {
-              alert('El código del proveedor ya existe'); //Usar SweetAlert2
-            } else {
-              this.addProvider();
-            }
-          }
-        })
+        this.addProvider();
       } else if (this.buttonName === 'Editar') {
         this.updateProvider();
       }
     }
   }
 
-  isCodeRepeated(code: string): Observable<Boolean> {
-    return this.providerService.getProviderByCode(code).pipe(
-      map(data => {
-        if (data) {
-          return true;
-        } else {
-          return false;
-        }
-      })
-    );
-  }
-
   addProvider() {
-    this.providerService.addProvider(this.provider).subscribe({
+    this.providerService.addProvider(this.realProvider).subscribe({
       //We pass one argument to subscribe: An Observer object. Which has the neccesary functions to handle the results that the Observable we are susbcribed to, like new data or an error.
       next: (data) => {
         //If the observable emmits new data, we use 'next'.
@@ -229,21 +337,19 @@ export class ProviderFormComponent implements OnInit {
       },
       error: (error) => {
         //If the observable emmits an error, we use 'error'.
-        alert('Error creating the provider: ' + error);
-        console.error('Error ocurred', error);
+        alert(error.error); //Usar SweetAlert2
       },
     });
   }
 
   updateProvider() {
-    this.providerService.updateProvider(this.provider).subscribe({
+    this.providerService.updateProvider(this.realProvider).subscribe({
       next: (data) => {
         alert(data);
         this.router.navigate(['providers/']);
       },
       error: (error) => {
-        alert('Error updating the provider: ' + error);
-        console.error('Error ocurred', error);
+        alert(error.error);
       },
     });
   }

@@ -45,6 +45,18 @@ export class ProviderService {
     return this.http.delete(this.URL_API_PROVIDERS + "/" + id, {responseType: 'text'});
   }
 
+  validateCode(code: string): Observable<Boolean> {
+    return this.http.get<Boolean>(this.URL_API_PROVIDERS + "/validate-code/" + code);
+  }
+
+  validateCuit(cuit: string): Observable<Boolean> {
+    return this.http.get<Boolean>(this.URL_API_PROVIDERS + "/validate-cuit/" + cuit);
+  }
+
+  validateCompanyName(companyName: string): Observable<Boolean> {
+    return this.http.get<Boolean>(this.URL_API_PROVIDERS + "/validate-companyName/" + companyName);
+  }
+
   addAddress(address: Address): Observable<Address> {
     return this.http.post<Address>(this.URL_API_ADDRESS, address).pipe(
       catchError((error: HttpErrorResponse) => {
@@ -56,6 +68,14 @@ export class ProviderService {
 
   addContact(contact: Contact): Observable<String> {
     return this.http.post(this.URL_API_CONTACT, contact, {responseType: 'text'}); //Telling that the response will not be JSON, but string.
+  }
+
+  validateEmail(email: string): Observable<Boolean> {
+    return this.http.get<Boolean>(this.URL_API_CONTACT + "/validate-email/" + email);
+  }
+
+  validateTelephone(telephone: string): Observable<Boolean> {
+    return this.http.get<Boolean>(this.URL_API_CONTACT + "/validate-telephone/" + telephone);
   }
 
   //FALTA MÉTODO PARA BORRAR LOS PRODUCTOS RELACIONADOS CON EL PROVEEDOR QUE SE ELIMINA.

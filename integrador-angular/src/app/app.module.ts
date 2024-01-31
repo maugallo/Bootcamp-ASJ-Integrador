@@ -44,7 +44,7 @@ import { VatConditionPipe } from './pipes/vat-condition.pipe';
     AppRoutingModule,
     NgbModule,
     FormsModule,
-    HttpClientModule
+    HttpClientModule,
   ],
   providers: [],
   bootstrap: [AppComponent]
