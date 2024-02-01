@@ -35,7 +35,7 @@ export class ProviderCrudComponent implements OnInit {
         this.renderTables();
       },
       error: (error) => {
-        alert("Error deleting or recovering the provider: " + error.error);
+        alert("Error eliminando o agregando el provider: " + error.error);
       }
     })
   }

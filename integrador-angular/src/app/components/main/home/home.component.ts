@@ -16,7 +16,5 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
       
-      this.productsQuantity = this.homeService.getProductsCount();
-      this.ordersQuantity = this.homeService.getOrdersCount();
   }
 }

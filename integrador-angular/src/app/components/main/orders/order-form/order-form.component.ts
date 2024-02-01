@@ -54,9 +54,8 @@ export class OrderFormComponent {
     this.renderProviderSelect();
 
     this.param = Number(this.getParameter());
-    let orderByParam = this.orderService.getOrder(this.param);
-    if (orderByParam){
-      this.order = orderByParam;
+    let orderByParam = this.orderService.getOrder();
+    if (true){
       this.codeSelectedProvider = this.order.provider.code; //Preseleccionar en el select, el proveedor de la orden.
       this.renderProductSelect();
       this.formTitle = "EDITAR ORDEN DE COMPRA";
@@ -71,13 +70,11 @@ export class OrderFormComponent {
   }
 
   renderProviderSelect(){
-    this.orderService.getProvidersForSelect().subscribe((data) => {
-      this.providerSelect = data;
-    });
+    
   }
 
   renderProductSelect(){
-    this.productSelect = this.orderService.getProductsForSelect(this.codeSelectedProvider);
+    
   }
 
   //Métodos de formulario para agregar órdenes de compra:
@@ -97,15 +94,13 @@ export class OrderFormComponent {
 
       else{
         if (this.buttonName === "Agregar"){
-          this.order.orderNumber = this.orderService.generateCode();
-          this.order.provider = this.providerSelect.find((proveedor) => proveedor.code === this.codeSelectedProvider)!;
-
-          this.orderService.addOrder(this.order);
+          
+          this.orderService.addOrder();
           alert("Orden creada!");
         }
         
         else if (this.buttonName === "Editar"){
-          this.orderService.updateOrder(this.order);
+          this.orderService.updateOrder();
           alert("Orden modificada!");
         }
 
@@ -147,8 +142,7 @@ export class OrderFormComponent {
   //Métodos de formulario para agregar detalles a la orden de compra:
   addDetail(){
     if (this.isProductRepeated() === false){
-      this.detail = {product: this.productService.getProduct(this.skuSelectedProduct), quantity: this.selectedProductQuantity};
-      this.order.orderDetails.push(this.detail);
+      
     }
     this.calculateTotal();
   }

@@ -15,10 +15,10 @@ export class HomeService {
   }
 
   getProductsCount(){
-    return this.productService.getEnabledProducts().length;
+    
   }
 
   getOrdersCount(){
-    return this.orderService.getEnabledOrders().length;
+    
   }
 }

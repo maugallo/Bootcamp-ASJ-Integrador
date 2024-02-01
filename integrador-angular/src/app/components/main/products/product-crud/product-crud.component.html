@@ -3,7 +3,7 @@
         <div class="col-auto col-lg-1"></div>
         <div class="col-12 col-lg-10">
             <!-- Modal de eliminación -->
-            <section class="modal fade rounded-0" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+            <section class="modal fade rounded-0" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel"
                 aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content rounded-0">
@@ -16,7 +16,28 @@
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary rounded-0" data-bs-dismiss="modal">Cerrar</button>
                             <button type="button" class="btn btn-add rounded-0" data-bs-dismiss="modal"
-                                (click)="deleteProduct()">Eliminar</button>
+                                (click)="deleteOrRecoverProduct()">Eliminar</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- Modal de recuperación -->
+            <section class="modal fade rounded-0" id="recoverModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content rounded-0">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-4 font-blue" id="exampleModalLabel">Agregar producto <i
+                                class="bi bi-person-fill-add"></i></h1>
+                        </div>
+                        <div class="modal-body">
+                            <p class="font-blue fs-5">¿Estás seguro que quieres volver a agregar este elemento?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary rounded-0"
+                                data-bs-dismiss="modal">Cerrar</button>
+                            <button type="button" class="btn btn-add rounded-0" data-bs-dismiss="modal"
+                                (click)="deleteOrRecoverProduct()">Agregar</button>
                         </div>
                     </div>
                 </div>
@@ -34,42 +55,69 @@
                 <a class="btn btn-add rounded-0 ms-2" [routerLink]="['form-product']">Agregar producto</a>
             </div>
             <!-- Tabla -->
-            <section class="mt-2">
-                <table *ngIf="arrayEnabled.length > 0 || (seeDisabled === true && arrayDisabled.length > 0)" class="table table-hover table-bordered border-secondary-subtle">
-                    <thead>
-                        <tr>
-                            <th>Imagen</th>
-                            <th>Nombre</th>
-                            <th>Categoría</th>
-                            <th>Proveedor</th>
-                            <th>Precio</th>
-                            <th>Acciones</th>
-                        </tr>
-                    </thead>
-                    <tbody id="table-body">
-                        <tr [ngClass]="seeDisabled && arrayDisabled.length > 0 ? 'table-secondary' : ''" *ngFor="let product of (seeDisabled && arrayDisabled.length > 0 ? arrayDisabled : arrayEnabled)">
-                            <td class="card-img" style="width: 20rem;">
-                                <img class="img-fluid product-img" src="{{product.image}}" alt="{{product.title}}">
-                            </td>
-                            <td>{{product.title}}</td>
-                            <td>{{product.category}}</td>
-                            <td>{{product.provider.companyName}}</td>
-                            <td>{{product.price | currency }}</td>                            
-                            <td *ngIf="seeDisabled === false">
-                                <a class="fs-5 me-2 text-decoration-none option" data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="openModal(product.sku)">🗑️</a>
-                                <a class="fs-5 me-2 text-decoration-none option" [routerLink]="['form-product', product.sku]">✏️</a>
-                                <a class="fs-5 text-decoration-none option" [routerLink]="['/products', product.sku]">👁️</a>
-                            </td>
-                            <td *ngIf="seeDisabled && arrayDisabled.length > 0">
-                                Eliminado
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div *ngIf="arrayEnabled.length === 0 && (arrayDisabled.length === 0 || seeDisabled === false)" class="alert rounded-0 alert-custom">
-                    <span class="fs-4 font-blue">Todavía no hay elementos, puedes agregar uno <a [routerLink]="['/products/form-product']" class="alert-link ">presionando aquí</a></span>
-                </div>
-            </section>
+            <ng-container *ngIf="arrayEnabled && arrayDisabled">
+                <section class="mt-2">
+                    <table *ngIf="arrayEnabled.length > 0 || (seeDisabled === true && arrayDisabled.length > 0)"
+                        class="table table-hover table-bordered border-secondary-subtle">
+                        <thead>
+                            <tr>
+                                <th>Imagen</th>
+                                <th>Nombre</th>
+                                <th>Categoría</th>
+                                <th>Precio</th>
+                                <th>Proveedor</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="table-body">
+                            <ng-container *ngIf="seeDisabled === false">
+                                <tr *ngFor="let product of arrayEnabled">
+                                    <td>
+                                        <img  *ngIf="product.image" [src]="product.image" width="70" height="70" alt="Provider Logo" onerror="this.src = '/assets/images/default-logo.png'">
+                                        <img  *ngIf="!product.image" [src]="'/assets/images/default-logo.png'" width="70" height="70" alt="Provider Logo">
+                                    </td>
+                                    <td class="d-flex flex-column ">
+                                        <span>{{product.title}}</span>
+                                        <span class="text-secondary ">SKU: {{product.sku}}</span>
+                                    </td>
+                                    <td>{{product.category.name}}</td>
+                                    <td>{{product.price}}</td>
+                                    <td>{{product.provider.companyName}}</td>
+                                    <td>
+                                        <a class="fs-5 me-2 text-decoration-none option" data-bs-toggle="modal" data-bs-target="#deleteModal" (click)="openModal(product.id!)">🗑️</a>
+                                        <a class="fs-5 me-2 text-decoration-none option" [routerLink]="['form-product', product.id]">✏️</a>
+                                        <a class="fs-5 text-decoration-none option" [routerLink]="['/products', product.id]">👁️</a>
+                                    </td>
+                                </tr>
+                            </ng-container>
+                            <ng-container *ngIf="seeDisabled && arrayDisabled.length > 0">
+                                <tr class="table-secondary" *ngFor="let product of arrayDisabled">
+                                    <td><!-- Imagen --></td>
+                                    <td class="d-flex flex-column ">
+                                        <div>
+                                            {{product.title}}
+                                        </div>
+                                        <div>
+                                            <span class="text-secondary ">SKU: {{product.sku}}</span>
+                                        </div>
+                                    </td>
+                                    <td>{{product.category.name}}</td>
+                                    <td>{{product.price}}</td>
+                                    <td>{{product.provider.companyName}}</td>
+                                    <td><a class="fs-5 text-decoration-none option" data-bs-toggle="modal" data-bs-target="#recoverModal" (click)="openModal(product.id!)">🔄​</a></td>
+                                </tr>
+                            </ng-container>
+                        </tbody>
+                    </table>
+                    <div *ngIf="(arrayEnabled.length === 0 && seeDisabled === false) || (arrayDisabled.length === 0 && seeDisabled && arrayEnabled.length === 0)" class="alert alert-primary  rounded-0 alert-custom">
+                        <span class="fs-4 font-blue">Todavía no hay elementos, puedes agregar uno <a [routerLink]="['/products/form-product']" class="alert-link ">presionando aquí</a></span>
+                    </div>
+                    <div *ngIf="(arrayDisabled.length === 0 && seeDisabled && arrayEnabled.length > 0)" class="alert alert-primary  rounded-0 alert-custom">
+                        <span class="fs-4 font-blue">Todavía no cuentas con productos eliminados</span>
+                    </div>
+                </section>
+            </ng-container>
+            
         </div>
         <div class="col-auto col-lg-1"></div>
     </div>

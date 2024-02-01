@@ -1,97 +1,184 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ProductService } from '../../../../services/product.service';
 import { Product } from '../../../../models/product';
 import { Provider } from '../../../../models/provider';
 import { ActivatedRoute, Router } from '@angular/router';
-import { NgForm } from '@angular/forms';
+import { NgForm, NgModel } from '@angular/forms';
+import { Category } from '../../../../models/category';
+import { CategoryService } from '../../../../services/category.service';
 
 @Component({
   selector: 'app-product-form',
   templateUrl: './product-form.component.html',
-  styleUrl: './product-form.component.css'
+  styleUrl: './product-form.component.css',
 })
 export class ProductFormComponent implements OnInit {
-  //Objeto Producto que se enlazará mediante ngModel en el form:
+  //Objetos que se enlazarán mediante ngModel en el form:
+  category!: Category;
+  provider!: Provider;
+
   product: Product = {
     category: null!,
     provider: null!,
-    sku: "",
-    image: "",
-    title: "",
+    sku: '',
+    image: '',
+    title: '',
     price: 0,
-    description: "",
+    description: '',
     isEnabled: true,
-  }
-  
+  };
+
+  realProduct: Product = {
+    category: null!,
+    provider: null!,
+    sku: '',
+    image: '',
+    title: '',
+    price: 0,
+    description: '',
+    isEnabled: true,
+  };
+
   //Select de proveedores que se renderizará en el form.
   providerSelect: Provider[] = [];
-  codeSelectedProvider: string = "";
+
+  //Select de categorías que se renderizará en el form.
+  categorySelect: Category[] = [];
 
   //Variables para manejar el título y nombre del botón:
-  formTitle: string = "AGREGAR PRODUCTO";
-  buttonName: string = "Agregar";
+  formTitle: string = 'AGREGAR PRODUCTO';
+  buttonName: string = 'Agregar';
 
-  //Variable para determinar si se editará o creará un proveedor en el form [diabled]="skuParam"
-  param!: string; //Si es una cadena de string vacía o null, el elemento enlazado estará habilitado. Si es una cadena con algún valor, el elemento enlazado estará deshabilitado.
-  
-  constructor(private productService: ProductService, private router: Router, private activatedRoute: ActivatedRoute){}
+  //Variable para determinar si se editará o creará un producto:
+  param!: number;
+
+  //Validaciones del back:
+  @ViewChild('sku') skuNgModel!: NgModel;
+
+  constructor(
+    private productService: ProductService,
+    private categoryService: CategoryService,
+    private router: Router,
+    private activatedRoute: ActivatedRoute
+  ) {}
 
   ngOnInit(): void {
     this.renderProviderSelect();
+    this.renderCategorySelect();
 
     this.param = this.getParameter();
-    let productByParam = this.productService.getProduct(this.param);
-    if (productByParam){
-      this.product = productByParam;
-      this.codeSelectedProvider = this.product.provider.code; //Preseleccionar en el select, el proveedor del producto.
-      this.formTitle = "EDITAR PRODUCTO";
-      this.buttonName = "Editar";
-    } else{
+    if (this.param) {
+      this.productService.getProductById(this.param).subscribe({
+        next: (data) => {
+          if (data){
+            this.realProduct = data;
+
+            this.product = JSON.parse(JSON.stringify(this.realProduct));
+
+            this.preRenderProvider();
+            this.preRenderCategory();
+            this.formTitle = 'EDITAR PRODUCTO';
+            this.buttonName = 'Editar';
+          } else {
+            this.router.navigate(['products/form-product']);
+          }
+        }
+      })
+    } else {
       this.router.navigate(['products/form-product']);
     }
   }
 
-  getParameter(){
-    return this.activatedRoute.snapshot.params['id'];
+  getParameter() {
+    return Number(this.activatedRoute.snapshot.params['id']); 
   }
 
-  renderProviderSelect(){
-    this.productService.getProvidersForSelect().subscribe((data) => {
-      this.providerSelect = data;
-    });
+  renderProviderSelect() {
+    this.productService.getProvidersForSelect().subscribe({
+      next: (data) => {
+        this.providerSelect = data;
+      }
+    })
+  }
+
+  renderCategorySelect(){
+    this.categoryService.getEnabledCategories().subscribe({
+      next: (data) => {
+        this.categorySelect = data;
+      }
+    })
+  }
+
+  preRenderProvider(){
+    this.provider = this.providerSelect.find(
+      (provider) =>
+        provider.id === this.product.provider.id
+    )!;
+  }
+
+  preRenderCategory(){
+    this.category = this.categorySelect.find(
+      (category) =>
+        category.id === this.product.category.id
+    )!;
+  }
+
+  validateSku(){
+    if (this.product.sku !== '' && this.product.sku !== this.realProduct.sku){
+      this.productService.validateSku(this.product.sku).subscribe({
+        next: (isRepeated) => {
+          if (isRepeated){
+            this.skuNgModel.control.setErrors({ ...this.skuNgModel.errors, skuRepeated: true});
+          } else {
+            if (this.skuNgModel.errors?.['skuRepeated']){
+              delete this.skuNgModel.errors['skuRepeated'];
+              this.skuNgModel.control.setErrors(this.skuNgModel.errors);
+            }
+          }
+        },
+        error: () => {
+          this.skuNgModel.control.setErrors({ ...this.skuNgModel.errors, httpError: true});
+        }
+      })
+    }
   }
 
   //Métodos de formulario para agregar productos:
-  onSubmit(form: NgForm){
-    if (form.valid){
-      if (this.buttonName === "Agregar"){
-        if (this.isSkuRepeated(this.product.sku)){
-          alert("El SKU del producto ya existe");
-        }
+  onSubmit(form: NgForm) {
+    if (form.valid) {
+      this.realProduct = this.product;
+      this.realProduct.provider = this.provider;
+      this.realProduct.category = this.category;
 
-        else{
-          this.product.provider = this.providerSelect.find((provider) => provider.code === this.codeSelectedProvider)!; //Obtenemos el objeto de proveedor seleccionado.
-          this.productService.addProduct(this.product);
-          alert("Producto creado!");
-          this.router.navigate(['/products']);
-        }
-      }
-      
-      else if (this.buttonName === "Editar"){
-        this.product.provider = this.providerSelect.find((provider) => provider.code === this.codeSelectedProvider)!; //Obtenemos el objeto de proveedor seleccionado.
-        this.productService.updateProduct(this.product);
-        alert("Producto modificado!");
-        this.router.navigate(['/products']);
+      if (this.buttonName === 'Agregar'){
+        this.addProduct();
+      } else if (this.buttonName === 'Editar') {
+        this.updateProduct();
       }
     }
   }
 
-  isSkuRepeated(sku: string){
-    let index = this.productService.getProducts().findIndex((product: Product) => product.sku === sku);
-    if (index != -1){
-      return true;
-    } else{
-      return false;
-    }
+  addProduct(){
+    this.productService.addProduct(this.realProduct).subscribe({
+      next: (data) => {
+        alert(data);
+        this.router.navigate(['products/']);
+      },
+      error: (error) => {
+        alert(error.error);
+      }
+    })
+  }
+
+  updateProduct(){
+    this.productService.updateProduct(this.realProduct).subscribe({
+      next: (data) => {
+        alert(data);
+        this.router.navigate(['products/']);
+      },
+      error: (error) => {
+        alert(error.error);
+      }
+    })
   }
 }

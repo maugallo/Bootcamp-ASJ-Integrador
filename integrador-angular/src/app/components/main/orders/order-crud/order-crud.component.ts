@@ -27,16 +27,10 @@ export class OrderCrudComponent {
   }
 
   deleteOrder(){
-    if (this.orderService.deleteOrder(this.selectedOrderNumber)){
-      this.renderTables();
-      alert("Elemento eliminado con éxito!");
-    } else{
-      alert("Ocurrió un error al eliminar el elemento");
-    }
+    
   }
 
   renderTables(){
-    this.arrayEnabled = this.orderService.getEnabledOrders();
-    this.arrayDisabled = this.orderService.getDisabledOrders();
+    
   }
 }

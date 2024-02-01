@@ -1,6 +1,7 @@
-import { Injectable } from '@angular/core';
+import { Injectable, Provider } from '@angular/core';
 import { Product } from '../models/product';
-import { LocalStorageClass } from '../utils/localStorage';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 import { ProviderService } from './provider.service';
 
 @Injectable({
@@ -8,61 +9,45 @@ import { ProviderService } from './provider.service';
 })
 export class ProductService {
 
-  constructor(private providerService: ProviderService) { }
-  
-  private localStorage: LocalStorageClass = new LocalStorageClass();
+  constructor(private http: HttpClient, private providerService: ProviderService) { }
 
-  productArray!: Product[];
+  private URL_API_PRODUCTS: string = "http://localhost:8080/products";
 
-  //CRUD Products:
-  getProducts(){
-    return this.localStorage.getStorage("productos");
+  //GET METHODS:
+  getEnabledProducts(): Observable<Product[]> {
+    return this.http.get<Product[]>(this.URL_API_PRODUCTS + "/enabled");
   }
 
-  getEnabledProducts(){
-    return this.getProducts().filter((product: Product) => product.enabled === true);
+  getDisabledProducts(): Observable<Product[]> {
+    return this.http.get<Product[]>(this.URL_API_PRODUCTS + "/disabled");
   }
 
-  getDisabledProducts(){
-    return this.getProducts().filter((product: Product) => product.enabled === false);
+  getProductById(id: number): Observable<Product> {
+    return this.http.get<Product>(this.URL_API_PRODUCTS + "/get/" + id);
   }
 
-  getProduct(sku: string){
-    return this.localStorage.getStorage("productos").find((product: Product) => product.sku === sku );
-  }
-
-  addProduct(product: Product){
-    this.productArray = this.localStorage.getStorage("productos");
-    this.productArray.push(product);
-    this.localStorage.setStorage("productos", this.productArray);
-  }
-
-  updateProduct(product: Product){
-    this.productArray = this.localStorage.getStorage("productos");
-
-    let index = this.productArray.findIndex((originalProduct: Product) => originalProduct.sku === product.sku );
-    this.productArray[index] = product;
-    this.localStorage.setStorage("productos", this.productArray);
-  }
-
-  deleteProduct(sku: string){
-    this.productArray = this.localStorage.getStorage("productos");
-    if (this.productArray.length > 0){
-      let index = this.productArray.findIndex((product) => product.sku === sku );
-      this.productArray[index].enabled = false;
-      this.localStorage.setStorage("productos", this.productArray);
-      return true;
-    } else{
-      return false;
-    }
-  }
-
-  //Form methods:
-  getProvidersForSelect(){
+  getProvidersForSelect() {
     return this.providerService.getEnabledProviders();
   }
 
-  getProvider(code: string){
-    return this.providerService.getProviderByCode(code);
+  //CREATE METHOD:
+  addProduct(product: Product): Observable<string> {
+    return this.http.post(this.URL_API_PRODUCTS, product, { responseType: 'text' });
   }
+
+  //UPDATE METHOD:
+  updateProduct(product: Product): Observable<string> {
+    return this.http.put(this.URL_API_PRODUCTS + "/" + product.id, product, { responseType: 'text' })
+  }
+
+  //DELETE & RECOVER METHOD:
+  deleteOrRecoverProduct(id: number): Observable<string> {
+    return this.http.delete(this.URL_API_PRODUCTS + "/toggle-isEnabled/" + id, { responseType: 'text' });
+  }
+
+  //VALIDATION METHOD:
+  validateSku(sku: string): Observable<Boolean>{
+    return this.http.get<Boolean>(this.URL_API_PRODUCTS + "/validate-sku/" + sku);
+  }
+
 }

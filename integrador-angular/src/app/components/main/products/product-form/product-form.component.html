@@ -27,14 +27,21 @@
                                 <label for="sku" class="form-label">SKU</label>
                                 <input id="sku" [(ngModel)]="product.sku" type="text" name="sku"
                                     class="form-control" #sku="ngModel" placeholder="#SAF-03W"
-                                    required minlength="2" maxlength="10" [disabled]="param">
-                                <!-- Mensaje de error -->
+                                    required minlength="2" maxlength="10" (blur)="validateSku()">
+                                <!-- Mensajes de error -->
                                 <div *ngIf="sku.touched && sku.errors?.['required']" class="text-danger ">
                                     <p><small>Este campo no puede estar vacío</small></p>
                                 </div>
-                                <!-- Mensaje de error -->
                                 <div *ngIf="sku.touched && sku.errors?.['minlength']" class="text-danger ">
                                     <p><small>Este campo no puede tener menos de 2 caracteres</small></p>
+                                </div>
+                                <div *ngIf="sku.touched && sku.errors?.['skuRepeated']"
+                                    class="text-danger ">
+                                    <p><small>El sku ingresado ya existe</small></p>
+                                </div>
+                                <div *ngIf="sku.touched && sku.errors?.['httpError']"
+                                    class="text-danger ">
+                                    <p><small>No es posible validar el sku ahora, inténtalo más tarde</small></p>
                                 </div>
                             </div>
                             <div class="me">
@@ -42,7 +49,7 @@
                                 <input id="price" #price="ngModel" [(ngModel)]="product.price" type="number"
                                     name="price" class="form-control" placeholder="$0" required min="1" max="9999999" minlength="1"
                                     maxlength="9" [ngModel]="product.price === 0 ? '' : product.price">
-                                <!-- Mensaje de error -->
+                                <!-- Mensajes de error -->
                                 <div *ngIf="price.touched && price.errors?.['required']" class="text-danger ">
                                     <p><small>Este campo no puede estar vacío</small></p>
                                 </div>
@@ -61,11 +68,10 @@
                                 <label class="form-label" for="image">Imagen</label>
                                 <input id="image" name="image" type="text" #image="ngModel" class="form-control"
                                     [(ngModel)]="product.image" placeholder="Ingrese la URL" maxlength="500" required pattern="^https?:\/\/[\w\-\.]+(\.[a-zA-Z]{2,3})?(:\d+)?(\/[^\s]*)?$">
-                                <!-- Mensaje de error -->
+                                <!-- Mensajes de error -->
                                 <div *ngIf="image.touched && image.errors?.['required']" class="text-danger ">
                                     <p><small>Este campo no puede estar vacío</small></p>
                                 </div>
-                                <!-- Mensaje de error -->
                                 <div *ngIf="image.touched && image.errors?.['pattern']" class="text-danger ">
                                     <p><small>Este campo debe ser una url</small></p>
                                 </div>
@@ -80,7 +86,7 @@
                                     name="description" cols="30" rows="5" placeholder="Ingrese la descripción" required
                                     maxlength="1000">
                                 </textarea>
-                                <!-- Mensaje de error -->
+                                <!-- Mensajes de error -->
                                 <div *ngIf="description.touched && description.errors?.['required']"
                                     class="text-danger ">
                                     <p><small>Este campo no puede estar vacío</small></p>
@@ -92,30 +98,26 @@
                         <div class="col d-flex justify-content-around  mx-2">
                             <div class="me-2 w-50">
                                 <label for="provider" class="form-label">Proveedor</label>
-                                <select id="provider" #provider="ngModel" [(ngModel)]="codeSelectedProvider" class="form-select "
+                                <select id="provider" #providerVar="ngModel" [(ngModel)]="provider" class="form-select "
                                     name="provider" required>
-                                    <option *ngFor="let provider of providerSelect" value="{{provider.code}}">
+                                    <option *ngFor="let provider of providerSelect" [ngValue]="provider">
                                         {{provider.companyName}}</option>
                                 </select>
-                                <!-- Mensaje de error -->
-                                <div *ngIf="provider.touched && provider.errors?.['required']"
+                                <!-- Mensajes de error -->
+                                <div *ngIf="providerVar.touched && providerVar.errors?.['required']"
                                     class="text-danger ">
                                     <p><small>Este campo no puede estar vacío</small></p>
                                 </div>
                             </div>
                             <div class="w-50">
                                 <label for="category" class="form-label">Categoría</label>
-                                <select id="category" #category="ngModel" [(ngModel)]="product.category" class="form-select "
+                                <select id="category" #categoryVar="ngModel" [(ngModel)]="category" class="form-select "
                                     name="category" required>
-                                    <option value="Alimentos">Alimentos</option>
-                                    <option value="Deportes">Deportes</option>
-                                    <option value="Electrodomesticos">Electrodomésticos</option>
-                                    <option value="Higiene">Higiene</option>
-                                    <option value="Ropa">Ropa</option>
-                                    <option value="Tecnologia">Tecnología</option>
+                                    <option *ngFor="let category of categorySelect" [ngValue]="category">
+                                    {{category.name}}</option>
                                 </select>
                                 <!-- Mensaje de error -->
-                                <div *ngIf="category.touched && category.errors?.['required']"
+                                <div *ngIf="categoryVar.touched && categoryVar.errors?.['required']"
                                     class="text-danger ">
                                     <p><small>Este campo no puede estar vacío</small></p>
                                 </div>

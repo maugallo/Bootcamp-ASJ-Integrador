@@ -18,11 +18,7 @@ export class OrderDetailComponent implements OnInit {
 
   ngOnInit(): void {
       this.param = Number(this.activatedRoute.snapshot.params['id']);
-      let orderByParam = this.orderService.getOrder(this.param);
-      if (orderByParam){
-        this.order = orderByParam;
-      } else{
-        this.router.navigate(['orders/form-order']);
-      }
+      let orderByParam = this.orderService.getOrder();
+      
+        this.router.navigate(['orders/form-order']);}
   }
-}

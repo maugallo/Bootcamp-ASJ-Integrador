@@ -19,10 +19,13 @@ export class ProviderDetailComponent implements OnInit {
   ngOnInit(): void {
       this.param = this.activatedRoute.snapshot.params['id'];
 
-      this.providerService.getProviderByCode(this.param).subscribe((data) => {
-        this.provider = data;
-        if (this.provider == null){
-          this.router.navigate(['providers/form-provider']);
+      this.providerService.getProviderByCode(this.param).subscribe({
+        next: (data) => {
+          this.provider = data;
+        },
+        error: (error) => {
+          alert(error.error)
+          this.router.navigate(['products/form-provider']);
         }
       });
   }

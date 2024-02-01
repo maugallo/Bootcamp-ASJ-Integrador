@@ -12,7 +12,7 @@ export class ProductCrudComponent {
   arrayEnabled!: Product[];
   arrayDisabled!: Product[];
 
-  selectedSku!: string;
+  selectedId!: number;
 
   seeDisabled: boolean = false;
 
@@ -22,21 +22,33 @@ export class ProductCrudComponent {
     this.renderTables();
   }
 
-  openModal(sku: string){
-    this.selectedSku = sku;
+  openModal(id: number){
+    this.selectedId = id;
   }
 
-  deleteProduct(){
-    if (this.productService.deleteProduct(this.selectedSku)){
-      this.renderTables();
-      alert("Elemento eliminado con éxito!");
-    } else{
-      alert("Ocurrió un error al eliminar el elemento");
-    }
+  deleteOrRecoverProduct(){
+    this.productService.deleteOrRecoverProduct(this.selectedId).subscribe({
+      next: (data) => {
+        alert(data);
+        this.renderTables();
+      },
+      error: (error) => {
+        alert("Error eliminando o agregando el producto: " + error.error);
+      }
+    })
   }
 
-  renderTables(){ //Sort the products from A to Z.
-    this.arrayEnabled = this.productService.getEnabledProducts().sort((productA:Product, productB:Product) => (productA.title > productB.title ? 1 : -1));
-    this.arrayDisabled = this.productService.getDisabledProducts().sort((productA:Product, productB:Product) => (productA.title > productB.title ? 1 : -1));
+  renderTables(){
+    this.productService.getEnabledProducts().subscribe({
+      next: (data) => {
+        this.arrayEnabled = data;
+      }
+    })
+
+    this.productService.getDisabledProducts().subscribe({
+      next: (data) => {
+        this.arrayDisabled = data;
+      }
+    })
   }
 }

@@ -127,7 +127,7 @@ export class ProviderFormComponent implements OnInit {
         if (data) {
           this.realProvider = data;
 
-          this.provider = JSON.parse(JSON.stringify(this.realProvider));
+          this.provider = JSON.parse(JSON.stringify(this.realProvider)); //Deep copy of the object.
 
           this.preRenderCountry();
           this.preRenderSector();
