@@ -10,6 +10,7 @@ import { VatCondition } from '../../../../models/vatCondition';
 import { Country } from '../../../../models/country';
 import { Province } from '../../../../models/province';
 import { Contact } from '../../../../models/contact';
+import { ContactService } from '../../../../services/contact.service';
 
 @Component({
   selector: 'app-provider-form',
@@ -110,6 +111,7 @@ export class ProviderFormComponent implements OnInit {
 
   constructor(
     public providerService: ProviderService,
+    public contactService: ContactService,
     public sectorService: SectorService,
     private router: Router,
     private activatedRoute: ActivatedRoute
@@ -215,7 +217,7 @@ export class ProviderFormComponent implements OnInit {
 
   validateRepeatedEmail(){
     if (this.contact.email !== '' && this.contact.email !== this.realProvider.contact.email){
-      this.providerService.validateEmail(this.contact.email).subscribe({
+      this.contactService.validateEmail(this.contact.email).subscribe({
         next: (isRepeated) => {
           if (isRepeated){ //If the email is repeated in the database, we set the new custom validation.
             this.emailNgModel.control.setErrors({ ...this.emailNgModel.errors, emailRepeated: true}); //with { ...this.emailNgModel.errors, customValidation: true }, we are creating a new object that contains all existing validation errors from this.emailNgModel.errors and we are adding our new custom validation error to that object.
@@ -235,7 +237,7 @@ export class ProviderFormComponent implements OnInit {
 
   validateRepeatedTelephone(){
     if (this.contact.telephone !== '' && this.contact.telephone !== this.realProvider.contact.telephone){
-      this.providerService.validateTelephone(this.contact.telephone).subscribe({
+      this.contactService.validateTelephone(this.contact.telephone).subscribe({
         next: (isRepeated) => {
           if (isRepeated){
             this.telephoneNgModel.control.setErrors({ ...this.telephoneNgModel.errors, telephoneRepeated: true});

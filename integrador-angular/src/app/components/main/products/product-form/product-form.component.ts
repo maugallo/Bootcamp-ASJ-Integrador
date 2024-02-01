@@ -13,14 +13,14 @@ import { NgForm } from '@angular/forms';
 export class ProductFormComponent implements OnInit {
   //Objeto Producto que se enlazará mediante ngModel en el form:
   product: Product = {
+    category: null!,
+    provider: null!,
     sku: "",
     image: "",
     title: "",
     price: 0,
     description: "",
-    category: "", //Preselecciono el primer elemento en el select.
-    provider: {} as Provider,
-    enabled: true,
+    isEnabled: true,
   }
   
   //Select de proveedores que se renderizará en el form.

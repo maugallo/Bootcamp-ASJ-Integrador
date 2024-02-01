@@ -2,7 +2,6 @@ import { Address } from "./address";
 import { Contact } from "./contact";
 import { Product } from "./product";
 import { Sector } from "./sector";
-import { VatCondition } from "./vatCondition";
 
 export interface Provider{
     id?: number; //Optional attribute

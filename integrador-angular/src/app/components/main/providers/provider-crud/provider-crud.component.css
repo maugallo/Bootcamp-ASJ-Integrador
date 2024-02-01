@@ -31,3 +31,8 @@ se le aplicará el estilo que se ve. En este caso, se le aplicará el estilo al 
     border-color: #011d69;
     color: #FBFEF9;
 }
+
+input {
+    border-color: #001652;
+    border-radius: 0;
+}

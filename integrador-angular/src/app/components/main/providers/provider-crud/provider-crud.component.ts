@@ -16,6 +16,8 @@ export class ProviderCrudComponent implements OnInit {
 
   seeDisabled: boolean = false;
 
+  filterValue: string = "";
+
   constructor(private providerService: ProviderService) {}
 
   ngOnInit(): void {
@@ -26,34 +28,52 @@ export class ProviderCrudComponent implements OnInit {
     this.selectedId = id;
   }
 
-  deleteProvider(){
-    this.providerService.deleteProvider(this.selectedId).subscribe({
+  deleteOrRecoverProvider(){
+    this.providerService.deleteOrRecoverProvider(this.selectedId).subscribe({
       next: (data) => {
         alert(data);
         this.renderTables();
       },
       error: (error) => {
-        alert("Error deleting the provider: " + error);
-        console.error("Error ocurred", error);
+        alert("Error deleting or recovering the provider: " + error.error);
       }
     })
   }
 
   renderTables(){
     this.providerService.getEnabledProviders().subscribe((data) => {
-      if (data != null){
-        this.arrayEnabled = data;
-      } else {
-        this.arrayEnabled = [];
-      }
+      this.arrayEnabled = data;
     });
 
     this.providerService.getDisabledProviders().subscribe((data) => {
-      if (data != null){
-        this.arrayDisabled = data;
-      } else {
-        this.arrayDisabled = [];
-      }
+      this.arrayDisabled = data;
     });
+  }
+
+  clearFilter(){
+    if (this.filterValue != ''){
+      this.filterValue = '';
+      this.renderTables();
+    }
+  }
+
+  filterProviders(){
+    if (this.filterValue === ''){
+      this.renderTables();
+    } else {
+      if (this.seeDisabled){
+        this.providerService.filterDisabledProviders(this.filterValue).subscribe({
+          next: (data) => {
+            this.arrayDisabled = data;
+          }
+        })
+      } else {
+        this.providerService.filterEnabledProviders(this.filterValue).subscribe({
+          next: (data) => {
+            this.arrayEnabled = data;
+          }
+        })
+      }
+    }
   }
 }

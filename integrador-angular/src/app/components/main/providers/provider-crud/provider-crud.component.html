@@ -3,7 +3,7 @@
         <div class="col-auto col-lg-1"></div>
         <div class="col-12 col-lg-10">
             <!-- Modal de eliminación -->
-            <section class="modal fade rounded-0" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+            <section class="modal fade rounded-0" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel"
                 aria-hidden="true">
                 <div class="modal-dialog">
                     <div class="modal-content rounded-0">
@@ -11,13 +11,34 @@
                             <h1 class="modal-title fs-4 font-blue" id="exampleModalLabel">Eliminar proveedor <i class="bi bi-person-fill-x"></i></h1>
                         </div>
                         <div class="modal-body">
-                            <p class="font-blue fs-5">¿Está seguro que quiere eliminar este elemento?</p>
+                            <p class="font-blue fs-5">¿Estás seguro que quieres eliminar este elemento?</p>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary rounded-0"
                                 data-bs-dismiss="modal">Cerrar</button>
                             <button type="button" class="btn btn-add rounded-0" data-bs-dismiss="modal"
-                                (click)="deleteProvider()">Eliminar</button>
+                                (click)="deleteOrRecoverProvider()">Eliminar</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- Modal de re-alta -->
+            <section class="modal fade rounded-0" id="recoverModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content rounded-0">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-4 font-blue" id="exampleModalLabel">Agregar proveedor <i
+                                class="bi bi-person-fill-add"></i></h1>
+                        </div>
+                        <div class="modal-body">
+                            <p class="font-blue fs-5">¿Estás seguro que quieres volver a agregar este elemento?</p>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary rounded-0"
+                                data-bs-dismiss="modal">Cerrar</button>
+                            <button type="button" class="btn btn-add rounded-0" data-bs-dismiss="modal"
+                                (click)="deleteOrRecoverProvider()">Agregar</button>
                         </div>
                     </div>
                 </div>
@@ -26,13 +47,23 @@
                 <h2 class="display-5 fw-semibold font-blue">GESTIÓN DE PROVEEDORES <i class="bi bi-person-fill"></i></h2>
             </section>
             <!-- Botón agregar -->
-            <div class="text-center text-sm-end  mt-5">
-                <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
-                    <input type="checkbox" [(ngModel)]="seeDisabled" class="btn-check" id="btncheck1"
-                        autocomplete="off">
-                    <label class="btn btn-outline-primary checkbox-custom rounded-0" for="btncheck1">Ver eliminados</label>
+            <div class="d-flex justify-content-between mt-5">
+                <div class="d-flex justify-content-start w-50">
+                    <div class="w-50 me-2">
+                        <input [(ngModel)]="filterValue" type="text" class="form-control" placeholder="Ingrese razón social o código">
+                    </div>
+                    <div>
+                        <button (click)="filterProviders()" class="btn btn-add rounded-0"><i class="bi bi-sliders"></i></button>
+                    </div>
                 </div>
-                <a class="btn btn-add rounded-0 ms-2" [routerLink]="['/providers/form-provider']">Agregar proveedor</a>
+                <div class="text-end">
+                    <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
+                        <input type="checkbox" [(ngModel)]="seeDisabled" class="btn-check" id="btncheck1"
+                            autocomplete="off">
+                        <label class="btn btn-outline-primary checkbox-custom rounded-0" for="btncheck1" (click)="clearFilter()">Ver eliminados</label>
+                    </div>
+                    <a class="btn btn-add rounded-0 ms-2" [routerLink]="['/providers/form-provider']">Agregar proveedor</a>
+                </div>
             </div>
             <!-- Tabla -->
             <ng-container *ngIf="arrayEnabled && arrayDisabled">
@@ -54,8 +85,8 @@
                             <ng-container *ngIf="seeDisabled === false">
                                 <tr *ngFor="let provider of arrayEnabled">
                                     <td>
-                                        <img *ngIf="provider.logo" [src]="provider.logo" width="70" height="70" alt="Provider Logo" onerror="this.src = '/assets/images/default-logo.png'">
-                                        <img *ngIf="!provider.logo" [src]="'/assets/images/default-logo.png'" width="70" height="70" alt="Provider Logo">
+                                        <img class="mt-3" *ngIf="provider.logo" [src]="provider.logo" width="70" height="70" alt="Provider Logo" onerror="this.src = '/assets/images/default-logo.png'">
+                                        <img class="mt-3" *ngIf="!provider.logo" [src]="'/assets/images/default-logo.png'" width="70" height="70" alt="Provider Logo">
                                     </td>
                                     <td>{{provider.code}}</td>
                                     <td>{{provider.companyName}}</td>
@@ -82,7 +113,7 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <a class="fs-5 me-2 text-decoration-none option" data-bs-toggle="modal" data-bs-target="#exampleModal" (click)="openModal(provider.id!)">🗑️</a>
+                                        <a class="fs-5 me-2 text-decoration-none option" data-bs-toggle="modal" data-bs-target="#deleteModal" (click)="openModal(provider.id!)">🗑️</a>
                                         <a class="fs-5 me-2 text-decoration-none option" [routerLink]="['form-provider', provider.code]">✏️</a>
                                         <a class="fs-5 text-decoration-none option" [routerLink]="['/providers', provider.code]">👁️</a>
                                     </td>
@@ -91,8 +122,8 @@
                             <ng-container *ngIf="seeDisabled && arrayDisabled.length > 0">
                                 <tr class="table-secondary" *ngFor="let provider of arrayDisabled">
                                     <td>
-                                        <img *ngIf="provider.logo" [src]="provider.logo" width="70" height="70" alt="Provider Logo" onerror="this.src = '/assets/images/default-logo.png'">
-                                        <img *ngIf="!provider.logo" [src]="'/assets/images/default-logo.png'" width="70" height="70" alt="Provider Logo">
+                                        <img class="mt-3" *ngIf="provider.logo" [src]="provider.logo" width="70" height="70" alt="Provider Logo" onerror="this.src = '/assets/images/default-logo.png'">
+                                        <img class="mt-3" *ngIf="!provider.logo" [src]="'/assets/images/default-logo.png'" width="70" height="70" alt="Provider Logo">
                                     </td>
                                     <td>{{provider.code}}</td>
                                     <td>{{provider.companyName}}</td>
@@ -118,7 +149,7 @@
                                             </button>
                                         </div>
                                     </td>
-                                    <td>Eliminado</td>
+                                    <td><a class="fs-5 text-decoration-none option" data-bs-toggle="modal" data-bs-target="#recoverModal" (click)="openModal(provider.id!)">🔄​</a></td>
                                 </tr>
                             </ng-container>
                         </tbody>
