@@ -19,6 +19,10 @@ public class CategoryService {
 		return categoryRepository.findAll();
 	}
 	
+	public List<Category> getEnabledCategories(){
+		return categoryRepository.findByIsEnabledTrue();
+	}
+	
 	public Optional<Category> getCategoryById(Integer id){
 		return categoryRepository.findById(id);
 	}

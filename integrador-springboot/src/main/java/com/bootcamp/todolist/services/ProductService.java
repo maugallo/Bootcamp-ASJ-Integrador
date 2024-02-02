@@ -6,8 +6,10 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.bootcamp.todolist.exceptions.ObjectNotFoundException;
 import com.bootcamp.todolist.models.Product;
 import com.bootcamp.todolist.repositories.ProductRepository;
+import com.bootcamp.todolist.specification.ProductSpecification;
 
 @Service
 public class ProductService {
@@ -15,50 +17,48 @@ public class ProductService {
 	@Autowired
 	ProductRepository productRepository;
 	
-	public List<Product> getProducts(){
-		return productRepository.findAll();
+	//GET METHODS:
+	public List<Product> getProducts(ProductSpecification productSpecification){
+		return productRepository.findAll(productSpecification);
 	}
 	
-	public Optional<Product> getProductById(Integer id){
-		return productRepository.findById(id);
+	public Product getProductById(Integer id){
+		Optional<Product> product = productRepository.findById(id);
+		if (product.isPresent()) {
+			return product.get();
+		} else {
+			throw new ObjectNotFoundException("No se pudo encontrar el producto solicitado con id " + id);
+		}
 	}
 	
+	//CREATE METHOD:
 	public String createProduct(Product product) {
-		try {
-			productRepository.save(product);
-			return "Product created correctly";
-		} catch (Exception e) {
-			e.printStackTrace();
-			return "Error creating the product";
-		}
+		productRepository.save(product);
+		return "Producto creado correctamente";
 	}
 	
+	//UPDATE METHOD:
 	public String updateProduct(Integer id, Product updatedProduct) {
-		try {
-			productRepository.save(updatedProduct);
-			return "Product updated correctly";
-		} catch (Exception e) {
-			e.printStackTrace();
-			return "Error updating the product";
+		productRepository.save(updatedProduct);
+		return "Producto actualizado correctamente";
+	}
+	
+	//DELETE & RECOVER METHOD:
+	public String toggleIsEnabled(Integer id) {
+		Optional<Product> optProduct = productRepository.findById(id);
+		if (optProduct.isPresent()) {
+			Product product = optProduct.get();
+			product.setIsEnabled(!product.getIsEnabled());
+			productRepository.save(product);
+			return product.getIsEnabled() ? "Producto agregado correctamente" : "Producto eliminado correctamente";
+		} else {
+			throw new ObjectNotFoundException("No se pudo encontrar el producto solicitado con id: " + id);
 		}
 	}
 	
-	public String logicalDeleteProduct(Integer id) {
-		try {
-			Optional<Product> optionalProduct = productRepository.findById(id);
-			
-			if (optionalProduct.isPresent()) {
-				Product product = optionalProduct.get();
-				product.setIsEnabled(false);
-				productRepository.save(product);
-				return "Product deleted correctly";
-			} else {
-				return "Product doesn't exist";
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			return "Error deleting the product";
-		}
+	//VALIDATION METHODS:
+	public Boolean existsBySku(String sku) {
+		return productRepository.existsBySku(sku);
 	}
 	
 }

@@ -6,7 +6,6 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.bootcamp.todolist.models.Country;
 import com.bootcamp.todolist.models.Province;
 import com.bootcamp.todolist.repositories.ProvinceRepository;
 

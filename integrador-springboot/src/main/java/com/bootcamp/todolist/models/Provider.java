@@ -34,10 +34,6 @@ public class Provider {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
-	@JsonManagedReference
-	@OneToMany(mappedBy = "provider") //'provider' refers to the attribute @ManyToOne Provider in the Product model. This notation has a Lazy FetchType for default.
-	private List<Product> products;
-	
 	@ManyToOne
 	@JoinColumn(name = "sector_id")
 	private Sector sector;
@@ -104,20 +100,19 @@ public class Provider {
 	private Boolean isEnabled;
 	
 	@CreationTimestamp
-	private Timestamp created_at;
+	private Timestamp createdAt;
 	
 	@UpdateTimestamp
-	private Timestamp updated_at;
+	private Timestamp updatedAt;
 
 	public Provider() {}
 
-	public Provider(Integer id, List<Product> products, Sector sector, VatCondition vatCondition, Contact contact,
+	public Provider(Integer id, Sector sector, VatCondition vatCondition, Contact contact,
 			Address address, @NotNull String code, @NotNull String companyName, String logo, String website,
 			@NotNull String firstName, @NotNull String lastName, @NotNull String role, @NotNull String cuit,
-			Boolean isEnabled, Timestamp created_at, Timestamp updated_at) {
+			Boolean isEnabled, Timestamp createdAt, Timestamp updatedAt) {
 		super();
 		this.id = id;
-		this.products = products;
 		this.sector = sector;
 		this.vatCondition = vatCondition;
 		this.contact = contact;
@@ -131,8 +126,8 @@ public class Provider {
 		this.role = role;
 		this.cuit = cuit;
 		this.isEnabled = isEnabled;
-		this.created_at = created_at;
-		this.updated_at = updated_at;
+		this.createdAt = createdAt;
+		this.updatedAt = updatedAt;
 	}
 
 	public Integer getId() {
@@ -243,20 +238,20 @@ public class Provider {
 		this.isEnabled = isEnabled;
 	}
 
-	public Timestamp getCreated_at() {
-		return created_at;
+	public Timestamp getCreatedAt() {
+		return createdAt;
 	}
 
-	public void setCreated_at(Timestamp created_at) {
-		this.created_at = created_at;
+	public void setCreatedAt(Timestamp createdAt) {
+		this.createdAt = createdAt;
 	}
 
-	public Timestamp getUpdated_at() {
-		return updated_at;
+	public Timestamp getUpdatedAt() {
+		return updatedAt;
 	}
 
-	public void setUpdated_at(Timestamp updated_at) {
-		this.updated_at = updated_at;
+	public void setUpdatedAt(Timestamp updatedAt) {
+		this.updatedAt = updatedAt;
 	}
 	
 }

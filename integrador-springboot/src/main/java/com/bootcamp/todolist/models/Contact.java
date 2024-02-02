@@ -46,20 +46,20 @@ public class Contact {
 	private String email;
 	
 	@CreationTimestamp
-	private Timestamp created_at;
+	private Timestamp createdAt;
 	
 	@UpdateTimestamp
-	private Timestamp updated_at;
+	private Timestamp updatedAt;
 
 	public Contact() {}
 
-	public Contact(Integer id, String telephone, String email, Timestamp created_at,
-			Timestamp updated_at) {
+	public Contact(Integer id, String telephone, String email, Timestamp createdAt,
+			Timestamp updatedAt) {
 		this.id = id;
 		this.telephone = telephone;
 		this.email = email;
-		this.created_at = created_at;
-		this.updated_at = updated_at;
+		this.createdAt = createdAt;
+		this.updatedAt = updatedAt;
 	}
 
 	public Integer getId() {
@@ -82,20 +82,20 @@ public class Contact {
 		this.email = email;
 	}
 
-	public Timestamp getCreated_at() {
-		return created_at;
+	public Timestamp getCreatedAt() {
+		return createdAt;
 	}
 
-	public void setCreated_at(Timestamp created_at) {
-		this.created_at = created_at;
+	public void setCreatedAt(Timestamp createdAt) {
+		this.createdAt = createdAt;
 	}
 
-	public Timestamp getUpdated_at() {
-		return updated_at;
+	public Timestamp getUpdatedAt() {
+		return updatedAt;
 	}
 
-	public void setUpdated_at(Timestamp updated_at) {
-		this.updated_at = updated_at;
+	public void setUpdatedAt(Timestamp updatedAt) {
+		this.updatedAt = updatedAt;
 	}
 	
 }

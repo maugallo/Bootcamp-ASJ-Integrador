@@ -31,13 +31,12 @@ public class Product {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
-	@ManyToOne(fetch = FetchType.EAGER) //EAGER tells JPA to instantly make the join to the whole Provider object, and not have only the Provider id inside the Provider object.
-	@JoinColumn(name = "category_id", nullable = false, referencedColumnName = "id")
+	@ManyToOne(fetch = FetchType.EAGER) //EAGER tells JPA to instantly make the join to the whole Category object, and not have only the Category id inside the Provider object.
+	@JoinColumn(name = "category_id")
 	private Category category;
 	
-	@JsonBackReference
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "provider_id", nullable = false, referencedColumnName = "id")
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "provider_id")
 	private Provider provider;
 	
 	@NotNull
@@ -75,15 +74,15 @@ public class Product {
 	private Boolean isEnabled;
 	
 	@CreationTimestamp
-	private Timestamp created_at;
+	private Timestamp createdAt;
 	
 	@UpdateTimestamp
-	private Timestamp updated_at;
+	private Timestamp updatedAt;
 
 	public Product() {}
 
 	public Product(Integer id, Category category, Provider provider, String sku, String image, String title,
-			Double price, String description, Boolean isEnabled, Timestamp created_at, Timestamp updated_at) {
+			Double price, String description, Boolean isEnabled, Timestamp createdAt, Timestamp updatedAt) {
 		this.id = id;
 		this.category = category;
 		this.provider = provider;
@@ -93,8 +92,8 @@ public class Product {
 		this.price = price;
 		this.description = description;
 		this.isEnabled = isEnabled;
-		this.created_at = created_at;
-		this.updated_at = updated_at;
+		this.createdAt = createdAt;
+		this.updatedAt = updatedAt;
 	}
 
 	public Integer getId() {
@@ -165,20 +164,20 @@ public class Product {
 		this.isEnabled = isEnabled;
 	}
 
-	public Timestamp getCreated_at() {
-		return created_at;
+	public Timestamp getCreatedAt() {
+		return createdAt;
 	}
 
-	public void setCreated_at(Timestamp created_at) {
-		this.created_at = created_at;
+	public void setCreatedAt(Timestamp createdAt) {
+		this.createdAt = createdAt;
 	}
 
-	public Timestamp getUpdated_at() {
-		return updated_at;
+	public Timestamp getUpdatedAt() {
+		return updatedAt;
 	}
 
-	public void setUpdated_at(Timestamp updated_at) {
-		this.updated_at = updated_at;
+	public void setUpdatedAt(Timestamp updatedAt) {
+		this.updatedAt = updatedAt;
 	}
 	
 }

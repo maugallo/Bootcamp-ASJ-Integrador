@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bootcamp.todolist.ErrorHandler;
 import com.bootcamp.todolist.models.Locality;
-import com.bootcamp.todolist.models.Province;
 import com.bootcamp.todolist.services.LocalityService;
 
 import jakarta.validation.Valid;

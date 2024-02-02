@@ -34,6 +34,11 @@ public class CategoryController {
 		return new ResponseEntity<List<Category>>(categoryService.getCategories(), HttpStatus.OK);
 	}
 	
+	@GetMapping("/enabled")
+	public ResponseEntity<List<Category>> getEnabledCategories() {
+		return new ResponseEntity<List<Category>>(categoryService.getEnabledCategories(), HttpStatus.OK);
+	}
+	
 	@GetMapping("/{id}")
 	public ResponseEntity<Optional<Category>> getCategoryById(@PathVariable Integer id){
 		return new ResponseEntity<Optional<Category>>(categoryService.getCategoryById(id), HttpStatus.OK);

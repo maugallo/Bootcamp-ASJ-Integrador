@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,11 +27,6 @@ public class ContactController {
 
 	@Autowired
 	ContactService contactService;
-	
-	@GetMapping()
-	public ResponseEntity<List<Contact>> getContacts() {
-		return new ResponseEntity<List<Contact>>(contactService.getContacts(), HttpStatus.OK);
-	}
 	
 	@GetMapping("/{id}")
 	public ResponseEntity<Optional<Contact>> getContactById(@PathVariable Integer id){
@@ -71,11 +65,6 @@ public class ContactController {
 		} else {
 			return new ResponseEntity<>(contactService.updateContact(id, contact), HttpStatus.OK);
 		}
-	}
-	
-	@DeleteMapping("/{id}")
-	public ResponseEntity<String> deleteContact(@PathVariable Integer id){
-		return new ResponseEntity<>(contactService.deleteContact(id), HttpStatus.OK);
 	}
 	
 }

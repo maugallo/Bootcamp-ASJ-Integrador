@@ -65,16 +65,16 @@ public class PurchaseOrder {
 	private Boolean isEnabled;
 	
 	@CreationTimestamp
-	private Timestamp created_at;
+	private Timestamp createdAt;
 	
 	@UpdateTimestamp
-	private Timestamp updated_at;
+	private Timestamp updatedAt;
 
 	public PurchaseOrder() {}
 
 	public PurchaseOrder(Integer id, OrderStatus orderStatus, Provider provider, LocalDate issueDate,
-			LocalDate deliveryDate, String receptionInfo, Double total, Boolean isEnabled, Timestamp created_at,
-			Timestamp updated_at) {
+			LocalDate deliveryDate, String receptionInfo, Double total, Boolean isEnabled, Timestamp createdAt,
+			Timestamp updatedAt) {
 		this.id = id;
 		this.orderStatus = orderStatus;
 		this.provider = provider;
@@ -83,8 +83,8 @@ public class PurchaseOrder {
 		this.receptionInfo = receptionInfo;
 		this.total = total;
 		this.isEnabled = isEnabled;
-		this.created_at = created_at;
-		this.updated_at = updated_at;
+		this.createdAt = createdAt;
+		this.updatedAt = updatedAt;
 	}
 
 	public Integer getId() {
@@ -147,20 +147,20 @@ public class PurchaseOrder {
 		this.isEnabled = isEnabled;
 	}
 
-	public Timestamp getCreated_at() {
-		return created_at;
+	public Timestamp getCreatedAt() {
+		return createdAt;
 	}
 
-	public void setCreated_at(Timestamp created_at) {
-		this.created_at = created_at;
+	public void setCreatedAt(Timestamp createdAt) {
+		this.createdAt = createdAt;
 	}
 
-	public Timestamp getUpdated_at() {
-		return updated_at;
+	public Timestamp getUpdatedAt() {
+		return updatedAt;
 	}
 
-	public void setUpdated_at(Timestamp updated_at) {
-		this.updated_at = updated_at;
+	public void setUpdatedAt(Timestamp updatedAt) {
+		this.updatedAt = updatedAt;
 	}
 	
 }

@@ -1,6 +1,5 @@
 package com.bootcamp.todolist.services;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,10 +14,6 @@ public class AddressService {
 	@Autowired
 	AddressRepository addressRepository;
 	
-	public List<Address> getAddresses(){
-		return addressRepository.findAll();
-	}
-	
 	public Optional<Address> getAddressById(Integer id){
 		return addressRepository.findById(id);
 	}
@@ -29,6 +24,6 @@ public class AddressService {
 	
 	public String updateAddress(Integer id, Address updatedAddress) {
 		addressRepository.save(updatedAddress);
-		return "Address updated correctly";
+		return "Dirección actualizada correctamente";
 	}
 }

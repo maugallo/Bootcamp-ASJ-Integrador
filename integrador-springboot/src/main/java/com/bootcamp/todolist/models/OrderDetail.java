@@ -41,21 +41,21 @@ public class OrderDetail {
 	private Integer quantity;
 	
 	@CreationTimestamp
-	private Timestamp created_at;
+	private Timestamp createdAt;
 	
 	@UpdateTimestamp
-	private Timestamp updated_at;
+	private Timestamp updatedAt;
 
 	public OrderDetail() {}
 
-	public OrderDetail(Integer id, PurchaseOrder purchaseOrder, Product product, Integer quantity, Timestamp created_at,
-			Timestamp updated_at) {
+	public OrderDetail(Integer id, PurchaseOrder purchaseOrder, Product product, Integer quantity, Timestamp createdAt,
+			Timestamp updatedAt) {
 		this.id = id;
 		this.purchaseOrder = purchaseOrder;
 		this.product = product;
 		this.quantity = quantity;
-		this.created_at = created_at;
-		this.updated_at = updated_at;
+		this.createdAt = createdAt;
+		this.updatedAt = updatedAt;
 	}
 
 	public Integer getId() {
@@ -86,20 +86,20 @@ public class OrderDetail {
 		this.quantity = quantity;
 	}
 
-	public Timestamp getCreated_at() {
-		return created_at;
+	public Timestamp getCreatedAt() {
+		return createdAt;
 	}
 
-	public void setCreated_at(Timestamp created_at) {
-		this.created_at = created_at;
+	public void setCreatedAt(Timestamp createdAt) {
+		this.createdAt = createdAt;
 	}
 
-	public Timestamp getUpdated_at() {
-		return updated_at;
+	public Timestamp getUpdatedAt() {
+		return updatedAt;
 	}
 
-	public void setUpdated_at(Timestamp updated_at) {
-		this.updated_at = updated_at;
+	public void setUpdatedAt(Timestamp updatedAt) {
+		this.updatedAt = updatedAt;
 	}
 	
 }

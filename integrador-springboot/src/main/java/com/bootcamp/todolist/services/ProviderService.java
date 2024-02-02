@@ -6,13 +6,13 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.bootcamp.todolist.exceptions.DataRepeatedException;
+import com.bootcamp.todolist.exceptions.ObjectNotFoundException;
 import com.bootcamp.todolist.models.Address;
 import com.bootcamp.todolist.models.Contact;
 import com.bootcamp.todolist.models.Provider;
 import com.bootcamp.todolist.repositories.ProviderRepository;
+import com.bootcamp.todolist.specification.ProviderSpecification;
 
-import jakarta.transaction.TransactionScoped;
 import jakarta.transaction.Transactional;
 
 @Service
@@ -26,35 +26,22 @@ public class ProviderService {
 	
 	@Autowired
 	AddressService addressService;
-
-	public List<Provider> getProviders() {
-		return providerRepository.findAll();
+	
+	//GET METHODS:
+	public List<Provider> getProviders(ProviderSpecification providerSpecification){
+		return providerRepository.findAll(providerSpecification);
 	}
 
-	public List<Provider> getEnabledProviders() {
-		return providerRepository.findByIsEnabledTrue();
-	}
-
-	public List<Provider> getDisabledProviders() {
-		return providerRepository.findByIsEnabledFalse();
-	}
-
-	public Optional<Provider> getProviderByCode(String code) {
-		return providerRepository.findByCode(code);
+	public Provider getProviderById(Integer id) {
+		Optional<Provider> provider = providerRepository.findById(id);
+		if (provider.isPresent()) {
+			return provider.get();
+		} else {
+			throw new ObjectNotFoundException("No se pudo encontrar el proveedor solicitado con id: " + id);
+		}
 	}
 	
-	public Boolean existsByCode(String code) {
-		return providerRepository.existsByCode(code);
-	}
-	
-	public Boolean existsByCuit(String cuit) {
-		return providerRepository.existsByCuit(cuit);
-	}
-	
-	public Boolean existsByCompanyName(String companyName) {
-		return providerRepository.existsByCompanyName(companyName);
-	}
-
+	//CREATE METHOD:
 	@Transactional
 	public String createProvider(Provider provider) {
 
@@ -74,11 +61,11 @@ public class ProviderService {
 			
 			return "Proveedor creado correctamente";
 	}
-
+	
+	//UPDATE METHOD: ***FIJARSE SI HACE FALTA LLAMAR A TODOS LOS PRODUCTOS RELACIONADOS A DICHO PROVEEDOR Y CAMBIARLES SU VALOR O NO***
 	@Transactional
 	public String updateProvider(Integer id, Provider updatedProvider) {
-		try {
-
+		
 			Contact contact = updatedProvider.getContact();
 			contactService.updateContact(contact.getId(), contact);
 			
@@ -87,27 +74,33 @@ public class ProviderService {
 			
 			providerRepository.save(updatedProvider);
 			
-			return "Provider updated correctly";
-		} catch (Exception e) {
-			e.printStackTrace();
-			return "Error updating the provider: " + e.getMessage();
+			return "Proveedor actualizado correctamente";
+	}
+	
+	//DELETE & RECOVER METHOD: ***FALTA LLAMAR A TODOS LOS PRODUCTOS RELACIONADOS A DICHO PROVEEDOR Y ELIMINARLOS***
+	public String toggleIsEnabled(Integer id) {
+		Optional<Provider> optProvider = providerRepository.findById(id);
+		if (optProvider.isPresent()) {
+			Provider provider = optProvider.get();
+			provider.setIsEnabled(!provider.getIsEnabled());
+			providerRepository.save(provider);
+			return provider.getIsEnabled() ? "Proveedor agregado correctamente" : "Proveedor eliminado correctamente";
+		} else {
+			throw new ObjectNotFoundException("No se pudo encontrar el proveedor solicitado con id: " + id);
 		}
 	}
-
-	public String logicalDeleteProvider(Integer id) {
-		try {
-			Provider provider = providerRepository.findById(id).get();
-			if (provider != null) {
-				provider.setIsEnabled(false);
-				providerRepository.save(provider);
-				return "Provider deleted correctly";
-			} else {
-				return "Provider doesn't exist";
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			return "Error deleting the provider: " + e.getMessage();
-		}
+	
+	//VALIDATION METHODS:
+	public Boolean existsByCode(String code) {
+		return providerRepository.existsByCode(code);
+	}
+	
+	public Boolean existsByCuit(String cuit) {
+		return providerRepository.existsByCuit(cuit);
+	}
+	
+	public Boolean existsByCompanyName(String companyName) {
+		return providerRepository.existsByCompanyName(companyName);
 	}
 
 }

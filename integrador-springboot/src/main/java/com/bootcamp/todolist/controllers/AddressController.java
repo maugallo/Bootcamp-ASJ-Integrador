@@ -28,11 +28,6 @@ public class AddressController {
 	@Autowired
 	AddressService addressService;
 	
-	@GetMapping()
-	public ResponseEntity<List<Address>> getProducts() {
-		return new ResponseEntity<List<Address>>(addressService.getAddresses(), HttpStatus.OK);
-	}
-	
 	@GetMapping("/{id}")
 	public ResponseEntity<Optional<Address>> getAddressById(@PathVariable Integer id){
 		return new ResponseEntity<Optional<Address>>(addressService.getAddressById(id), HttpStatus.OK);
