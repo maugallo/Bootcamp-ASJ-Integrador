@@ -12,14 +12,14 @@ export class ProviderDetailComponent implements OnInit {
 
   provider!: Provider;
 
-  param!: string;
+  param!: number;
 
   constructor(private providerService: ProviderService, private router: Router, private activatedRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
       this.param = this.activatedRoute.snapshot.params['id'];
 
-      this.providerService.getProviderByCode(this.param).subscribe({
+      this.providerService.getProviderById(this.param).subscribe({
         next: (data) => {
           this.provider = data;
         },

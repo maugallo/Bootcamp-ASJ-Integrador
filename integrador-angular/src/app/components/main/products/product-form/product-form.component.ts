@@ -77,6 +77,7 @@ export class ProductFormComponent implements OnInit {
 
             this.preRenderProvider();
             this.preRenderCategory();
+
             this.formTitle = 'EDITAR PRODUCTO';
             this.buttonName = 'Editar';
           } else {
@@ -112,14 +113,14 @@ export class ProductFormComponent implements OnInit {
   preRenderProvider(){
     this.provider = this.providerSelect.find(
       (provider) =>
-        provider.id === this.product.provider.id
+        provider.id === this.realProduct.provider.id
     )!;
   }
 
   preRenderCategory(){
     this.category = this.categorySelect.find(
       (category) =>
-        category.id === this.product.category.id
+        category.id === this.realProduct.category.id
     )!;
   }
 

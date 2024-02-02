@@ -100,7 +100,7 @@ export class ProviderFormComponent implements OnInit {
   buttonName: string = 'Agregar';
 
   //Variable para determinar si se editará o creará un proveedor:
-  param!: string;
+  param!: number;
 
   //Validaciones del back:
   @ViewChild('email') emailNgModel!: NgModel;
@@ -123,7 +123,7 @@ export class ProviderFormComponent implements OnInit {
 
     this.param = this.getParameter();
     if (this.param) {
-      this.providerService.getProviderByCode(this.param).subscribe((data) => {
+      this.providerService.getProviderById(this.param).subscribe((data) => {
         if (data) {
           this.realProvider = data;
 

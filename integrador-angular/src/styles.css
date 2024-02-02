@@ -28,14 +28,16 @@ body{
     color:#FBFEF9;
 }
 
+/* Tooltip styles */
 .custom-tooltip .tooltip-inner {
     max-width: 100rem;
-    background-color: #FBFEF9;
+    background-color: #ffffff;
     color: #011d69;
     font-weight: bold;
     white-space: nowrap;
 }
 
-.custom-tooltip.bs-tooltip-bottom .tooltip-arrow::before {
-    border-bottom-color: #FBFEF9;
+.custom-tooltip.bs-tooltip-top .tooltip-arrow::before {
+    border-top-color: transparent;
 }
+

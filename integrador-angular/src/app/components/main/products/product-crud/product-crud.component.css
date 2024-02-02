@@ -38,3 +38,13 @@ th{
     border-color: #011d69;
     color: #FBFEF9;
 }
+
+input, select {
+    border-color: #001652;
+    border-radius: 0;
+}
+
+.image-td {
+    height: 10%;
+    width: 10%;
+}

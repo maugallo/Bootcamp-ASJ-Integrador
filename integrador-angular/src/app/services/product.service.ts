@@ -1,6 +1,6 @@
 import { Injectable, Provider } from '@angular/core';
 import { Product } from '../models/product';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ProviderService } from './provider.service';
 
@@ -14,20 +14,23 @@ export class ProductService {
   private URL_API_PRODUCTS: string = "http://localhost:8080/products";
 
   //GET METHODS:
-  getEnabledProducts(): Observable<Product[]> {
-    return this.http.get<Product[]>(this.URL_API_PRODUCTS + "/enabled");
-  }
+   getProducts(titleOrDescription?: string, category?: string, isEnabled?: boolean): Observable<Product[]> {
 
-  getDisabledProducts(): Observable<Product[]> {
-    return this.http.get<Product[]>(this.URL_API_PRODUCTS + "/disabled");
+    let params = new HttpParams();
+
+    if (titleOrDescription !== '' || titleOrDescription !== undefined) params = params.append('titleOrDescription', titleOrDescription!);
+    if (category !== '' || category !== undefined) params = params.append('category', category!);
+    if (isEnabled !== undefined) params = params.append("isEnabled", isEnabled!);
+
+    return this.http.get<Product[]>(this.URL_API_PRODUCTS, { params }); //Optional query parameters.
   }
 
   getProductById(id: number): Observable<Product> {
-    return this.http.get<Product>(this.URL_API_PRODUCTS + "/get/" + id);
+    return this.http.get<Product>(this.URL_API_PRODUCTS + "/" + id);
   }
 
   getProvidersForSelect() {
-    return this.providerService.getEnabledProviders();
+    return this.providerService.getProviders("", true);
   }
 
   //CREATE METHOD:
@@ -42,12 +45,12 @@ export class ProductService {
 
   //DELETE & RECOVER METHOD:
   deleteOrRecoverProduct(id: number): Observable<string> {
-    return this.http.delete(this.URL_API_PRODUCTS + "/toggle-isEnabled/" + id, { responseType: 'text' });
+    return this.http.delete(this.URL_API_PRODUCTS + "/" + id, { responseType: 'text' });
   }
 
   //VALIDATION METHOD:
   validateSku(sku: string): Observable<Boolean>{
-    return this.http.get<Boolean>(this.URL_API_PRODUCTS + "/validate-sku/" + sku);
+    return this.http.get<Boolean>(this.URL_API_PRODUCTS + "/validate/" + sku);
   }
 
 }

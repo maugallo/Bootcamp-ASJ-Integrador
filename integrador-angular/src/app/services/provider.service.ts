@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Provider } from '../models/provider';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -17,24 +17,18 @@ export class ProviderService {
   private URL_API_LOCALITIES: string = "http://localhost:8080/localities";
 
   //GET METHODS:
-  getEnabledProviders(): Observable<Provider[]> {
-    return this.http.get<Provider[]>(this.URL_API_PROVIDERS + "/enabled");
-  }
+  getProviders(companyNameOrCode?: string, isEnabled?: boolean): Observable<Provider[]> {
 
-  getDisabledProviders(): Observable<Provider[]> {
-    return this.http.get<Provider[]>(this.URL_API_PROVIDERS + "/disabled");
+    let params = new HttpParams();
+
+    if (companyNameOrCode != "" || companyNameOrCode !== undefined) params = params.append("companyNameOrCode", companyNameOrCode!);
+    if (isEnabled !== undefined) params = params.append("isEnabled", isEnabled!);
+
+    return this.http.get<Provider[]>(this.URL_API_PROVIDERS, {params});
   }
   
-  getProviderByCode(code: string): Observable<Provider> {
-    return this.http.get<Provider>(this.URL_API_PROVIDERS + "/get/" + code);
-  }
-
-  filterEnabledProviders(value: string): Observable<Provider[]> {
-    return this.http.get<Provider[]>(this.URL_API_PROVIDERS + "/filter-enabled/" + value);
-  }
-
-  filterDisabledProviders(value: string): Observable<Provider[]> {
-    return this.http.get<Provider[]>(this.URL_API_PROVIDERS + "/filter-disabled/" + value);
+  getProviderById(id: number): Observable<Provider> {
+    return this.http.get<Provider>(this.URL_API_PROVIDERS + "/" + id);
   }
 
   //CREATE METHOD:
@@ -49,20 +43,38 @@ export class ProviderService {
 
   //DELETE & RECOVER METHOD:
   deleteOrRecoverProvider(id: number): Observable<string> {
-    return this.http.delete(this.URL_API_PROVIDERS + "/toggle-isEnabled/" + id, { responseType: 'text' });
+    return this.http.delete(this.URL_API_PROVIDERS + "/" + id, { responseType: 'text' });
   }
 
   //VALIDATION METHODS:
   validateCode(code: string): Observable<Boolean> {
-    return this.http.get<Boolean>(this.URL_API_PROVIDERS + "/validate-code/" + code);
+
+    let params = new HttpParams();
+
+    params = params.append("type", "code");
+    params = params.append("value", code);
+
+    return this.http.get<Boolean>(this.URL_API_PROVIDERS + "/validate", {params});
   }
 
   validateCuit(cuit: string): Observable<Boolean> {
-    return this.http.get<Boolean>(this.URL_API_PROVIDERS + "/validate-cuit/" + cuit);
+    
+    let params = new HttpParams();
+
+    params = params.append("type", "cuit");
+    params = params.append("value", cuit);
+
+    return this.http.get<Boolean>(this.URL_API_PROVIDERS + "/validate", {params});
   }
 
   validateCompanyName(companyName: string): Observable<Boolean> {
-    return this.http.get<Boolean>(this.URL_API_PROVIDERS + "/validate-companyName/" + companyName);
+        
+    let params = new HttpParams();
+
+    params = params.append("type", "companyName");
+    params = params.append("value", companyName);
+
+    return this.http.get<Boolean>(this.URL_API_PROVIDERS + "/validate", {params});
   }
 
   //Form methods:

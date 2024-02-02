@@ -16,7 +16,7 @@ export class ProviderCrudComponent implements OnInit {
 
   seeDisabled: boolean = false;
 
-  filterValue: string = "";
+  companyNameOrCode: string = "";
 
   constructor(private providerService: ProviderService) {}
 
@@ -41,34 +41,34 @@ export class ProviderCrudComponent implements OnInit {
   }
 
   renderTables(){
-    this.providerService.getEnabledProviders().subscribe((data) => {
+    this.providerService.getProviders("", true).subscribe((data) => {
       this.arrayEnabled = data;
     });
 
-    this.providerService.getDisabledProviders().subscribe((data) => {
+    this.providerService.getProviders("", false).subscribe((data) => {
       this.arrayDisabled = data;
     });
   }
 
   clearFilter(){
-    if (this.filterValue != ''){
-      this.filterValue = '';
+    if (this.companyNameOrCode != ''){
+      this.companyNameOrCode = '';
       this.renderTables();
     }
   }
 
-  filterProviders(){
-    if (this.filterValue === ''){
+  OnFilter(){
+    if (this.companyNameOrCode === ''){
       this.renderTables();
     } else {
       if (this.seeDisabled){
-        this.providerService.filterDisabledProviders(this.filterValue).subscribe({
+        this.providerService.getProviders(this.companyNameOrCode, false).subscribe({
           next: (data) => {
             this.arrayDisabled = data;
           }
         })
       } else {
-        this.providerService.filterEnabledProviders(this.filterValue).subscribe({
+        this.providerService.getProviders(this.companyNameOrCode, true).subscribe({
           next: (data) => {
             this.arrayEnabled = data;
           }

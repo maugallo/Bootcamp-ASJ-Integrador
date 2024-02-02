@@ -36,3 +36,7 @@ input {
     border-color: #001652;
     border-radius: 0;
 }
+
+.info-button {
+    font-size: 0.7rem;  
+}
