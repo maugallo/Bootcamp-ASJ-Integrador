@@ -8,5 +8,5 @@ import com.bootcamp.todolist.models.Provider;
 public interface ProviderRepository extends JpaRepository<Provider, Integer>, JpaSpecificationExecutor<Provider> {	
 	Boolean existsByCode(String code);
 	Boolean existsByCuit(String cuit);
-	Boolean existsByCompanyName(String companyName);
+	Boolean existsByCompanyNameIgnoreCase(String companyName);
 }

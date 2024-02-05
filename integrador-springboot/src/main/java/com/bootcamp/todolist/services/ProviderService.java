@@ -100,7 +100,7 @@ public class ProviderService {
 	}
 	
 	public Boolean existsByCompanyName(String companyName) {
-		return providerRepository.existsByCompanyName(companyName);
+		return providerRepository.existsByCompanyNameIgnoreCase(companyName);
 	}
 
 }

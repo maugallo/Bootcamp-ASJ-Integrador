@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.bootcamp.todolist.exceptions.ObjectNotFoundException;
 import com.bootcamp.todolist.models.Country;
 import com.bootcamp.todolist.repositories.CountryRepository;
 
@@ -19,17 +20,17 @@ public class CountryService {
 		return countryRepository.findAll();
 	}
 	
-	public Optional<Country> getCountryById(Integer id){
-		return countryRepository.findById(id);
+	public Country getCountryById(Integer id){
+		Optional<Country> country = countryRepository.findById(id);
+		if (country.isPresent()) {
+			return country.get();
+		} else {
+			throw new ObjectNotFoundException("No se pudo encontrar el país solicitado con id " + id);
+		}
 	}
 	
 	public String createCountry(Country country) {
-		try {
-			countryRepository.save(country);
-			return "Country created correctly";
-		} catch (Exception e) {
-			e.printStackTrace();
-			return "Error creating the country";
-		}
+		countryRepository.save(country);
+		return "País creado correctamente";
 	}
 }

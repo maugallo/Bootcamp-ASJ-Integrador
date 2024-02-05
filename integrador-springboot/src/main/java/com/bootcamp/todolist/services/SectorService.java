@@ -6,6 +6,8 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.bootcamp.todolist.exceptions.ObjectNotFoundException;
+import com.bootcamp.todolist.models.Category;
 import com.bootcamp.todolist.models.Sector;
 import com.bootcamp.todolist.repositories.SectorRepository;
 
@@ -15,54 +17,48 @@ public class SectorService {
 	@Autowired
 	SectorRepository sectorRepository;
 	
-	public List<Sector> getSectors(){
-		return sectorRepository.findAll();
+	//GET METHODS:
+	public List<Sector> getSectors(Boolean isEnabled){
+		return sectorRepository.findByIsEnabled(isEnabled);
 	}
 	
-	public List<Sector> getEnabledSectors(){
-		return sectorRepository.findByIsEnabledTrue();
+	public Sector getSectorById(Integer id){
+		Optional<Sector> sector = sectorRepository.findById(id);
+		if (sector.isPresent()) {
+			return sector.get();
+		} else {
+			throw new ObjectNotFoundException("No se pudo encontrar el sector solicitado con id " + id);
+		}
 	}
 	
-	public Optional<Sector> getSectorById(Integer id){
-		return sectorRepository.findById(id);
-	}
-	
+	//CREATE METHOD:
 	public String createSector(Sector sector) {
-		try {
-			sectorRepository.save(sector);
-			return "Sector created correctly";
-		} catch (Exception e) {
-			e.printStackTrace();
-			return "Error creating the sector";
-		}
+		sectorRepository.save(sector);
+		return "Sector creado correctamente";
 	}
 	
+	//UPDATE METHOD:
 	public String updateSector(Integer id, Sector updatedSector) {
-		try {
-			sectorRepository.save(updatedSector);
-			return "Sector updated correctly";
-		} catch (Exception e) {
-			e.printStackTrace();
-			return "Error updating the sector";
+		sectorRepository.save(updatedSector);
+		return "Sector modificado correctamente";
+	}
+	
+	//DELETE & RECOVER METHOD:
+	public String toggleIsEnabled(Integer id) {
+		Optional<Sector> optSector = sectorRepository.findById(id);
+		
+		if (optSector.isPresent()) {
+			Sector sector = optSector.get();
+			sector.setIsEnabled(!sector.getIsEnabled());
+			sectorRepository.save(sector);
+			return sector.getIsEnabled() ? "Sector agregado correctamente" : "Sector eliminado correctamente";
+		} else {
+			throw new ObjectNotFoundException("No se pudo encontrar el sector solicitado con id: " + id);
 		}
 	}
 	
-	public String logicalDeleteSector(Integer id) {
-		try {
-			Optional<Sector> optionalSector = sectorRepository.findById(id);
-			
-			if (optionalSector.isPresent()) {
-				Sector sector = optionalSector.get();
-				sector.setIsEnabled(false);
-				sectorRepository.save(sector);
-				return "Sector deleted correctly";
-			} else {
-				return "Sector doesn't exist";
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			return "Error deleting the sector";
-		}
+	//VALIDATE METHOD:
+	public Boolean existsByName(String name) {
+		return sectorRepository.existsByNameIgnoreCase(name);
 	}
-	
 }

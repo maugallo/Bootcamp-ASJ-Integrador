@@ -7,5 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import com.bootcamp.todolist.models.Sector;
 
 public interface SectorRepository extends JpaRepository<Sector, Integer> {
-	List<Sector> findByIsEnabledTrue();
+	List<Sector> findByIsEnabled(Boolean isEnabled);
+	
+	Boolean existsByNameIgnoreCase(String name);
 }

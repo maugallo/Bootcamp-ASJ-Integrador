@@ -33,8 +33,8 @@ public class CountryController {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Optional<Country>> getCountryById(@PathVariable Integer id){
-		return new ResponseEntity<Optional<Country>>(countryService.getCountryById(id), HttpStatus.OK);
+	public ResponseEntity<Country> getCountryById(@PathVariable Integer id){
+		return new ResponseEntity<Country>(countryService.getCountryById(id), HttpStatus.OK);
 	}
 	
 	@PostMapping()

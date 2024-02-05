@@ -52,6 +52,8 @@ public class ProductSpecification implements Specification<Product> {
 			predicates.add(hasIsEnabled);
 		}
 		
+		query.orderBy(criteriaBuilder.asc(root.get("title")));
+		
 		Predicate[] arrayPredicates = predicates.toArray( new Predicate[predicates.size()] );
 		
 		return criteriaBuilder.and(arrayPredicates);

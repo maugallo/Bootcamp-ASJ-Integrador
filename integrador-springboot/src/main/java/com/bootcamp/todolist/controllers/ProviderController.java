@@ -37,7 +37,7 @@ public class ProviderController {
 	@GetMapping()
 	public ResponseEntity<List<Provider>> getProviders(
 			@RequestParam(required = false) String companyNameOrCode,
-			@RequestParam(required = false) Boolean isEnabled) {
+			@RequestParam(required = true) Boolean isEnabled) {
 		
 		ProviderSpecification providerSpecification = new ProviderSpecification(companyNameOrCode, isEnabled);
 		
@@ -91,7 +91,7 @@ public class ProviderController {
 		case "cuit": {
 			return new ResponseEntity<>(providerService.existsByCuit(value), HttpStatus.OK);
 		}
-		case "companyName": {
+		case "companyname": {
 			return new ResponseEntity<>(providerService.existsByCompanyName(value), HttpStatus.OK);
 		}
 		default:

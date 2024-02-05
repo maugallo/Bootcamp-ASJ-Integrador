@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.bootcamp.todolist.exceptions.ObjectNotFoundException;
 import com.bootcamp.todolist.models.Province;
 import com.bootcamp.todolist.repositories.ProvinceRepository;
 
@@ -23,17 +24,17 @@ public class ProvinceService {
 		return provinceRepository.findByCountryId(countryId);
 	}
 	
-	public Optional<Province> getProvinceById(Integer id){
-		return provinceRepository.findById(id);
+	public Province getProvinceById(Integer id){
+		Optional<Province> province = provinceRepository.findById(id);
+		if (province.isPresent()) {
+			return province.get();
+		} else {
+			throw new ObjectNotFoundException("No se pudo encontrar la provincia solicitada con id " + id);
+		}
 	}
 	
 	public String createProvince(Province province) {
-		try {
-			provinceRepository.save(province);
-			return "Province created correctly";
-		} catch (Exception e) {
-			e.printStackTrace();
-			return "Error creating the province";
-		}
+		provinceRepository.save(province);
+		return "Provincia creada correctamente";
 	}
 }

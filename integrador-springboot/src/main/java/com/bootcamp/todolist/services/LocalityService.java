@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.bootcamp.todolist.exceptions.ObjectNotFoundException;
 import com.bootcamp.todolist.models.Locality;
 import com.bootcamp.todolist.repositories.LocalityRepository;
 
@@ -23,18 +24,18 @@ public class LocalityService {
 		return localityRepository.findByProvinceId(provinceId);
 	}
 	
-	public Optional<Locality> getLocalityById(Integer id){
-		return localityRepository.findById(id);
+	public Locality getLocalityById(Integer id){
+		Optional<Locality> locality = localityRepository.findById(id);
+		if (locality.isPresent()) {
+			return locality.get();
+		} else {
+			throw new ObjectNotFoundException("No se pudo encontrar la localidad solicitada con id " + id);
+		}
 	}
 	
 	public String createLocality(Locality locality) {
-		try {
-			localityRepository.save(locality);
-			return "Locality created correctly";
-		} catch (Exception e) {
-			e.printStackTrace();
-			return "Error creating the locality";
-		}
+		localityRepository.save(locality);
+		return "Localidad creada correctamente";
 	}
 	
 }

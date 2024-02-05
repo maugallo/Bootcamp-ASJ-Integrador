@@ -11,7 +11,7 @@ public class ErrorHandler {
 		List<String> errorList = new ArrayList<String>();
 		
 		bindingResult.getFieldErrors().forEach((error) -> {
-			errorList.add("[" + error.getField() + "] = [" + error.getDefaultMessage() + "]");
+			errorList.add("El atributo " + error.getField() + " " + error.getDefaultMessage());
 		});
 		
 		return errorList;

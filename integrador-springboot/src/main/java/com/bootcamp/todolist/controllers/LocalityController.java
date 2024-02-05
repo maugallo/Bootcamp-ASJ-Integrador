@@ -38,8 +38,8 @@ public class LocalityController {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Optional<Locality>> getLocalityById(@PathVariable Integer id){
-		return new ResponseEntity<Optional<Locality>>(localityService.getLocalityById(id), HttpStatus.OK);
+	public ResponseEntity<Locality> getLocalityById(@PathVariable Integer id){
+		return new ResponseEntity<Locality>(localityService.getLocalityById(id), HttpStatus.OK);
 	}
 	
 	@PostMapping()

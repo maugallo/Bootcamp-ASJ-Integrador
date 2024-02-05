@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bootcamp.todolist.ErrorHandler;
@@ -29,48 +30,53 @@ public class SectorController {
 	@Autowired
 	SectorService sectorService;
 	
-	@GetMapping()
-	public ResponseEntity<List<Sector>> getSectors() {
-		return new ResponseEntity<List<Sector>>(sectorService.getSectors(), HttpStatus.OK);
-	}
-	
-	@GetMapping("/enabled")
-	public ResponseEntity<List<Sector>> getEnabledSectors() {
-		return new ResponseEntity<List<Sector>>(sectorService.getEnabledSectors(), HttpStatus.OK);
+	//GET METHODS:
+	@GetMapping("")
+	public ResponseEntity<List<Sector>> getSectors(@RequestParam(required = true) Boolean isEnabled) {
+		return new ResponseEntity<List<Sector>>(sectorService.getSectors(isEnabled), HttpStatus.OK);
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Optional<Sector>> getSectorById(@PathVariable Integer id){
-		return new ResponseEntity<Optional<Sector>>(sectorService.getSectorById(id), HttpStatus.OK);
+	public ResponseEntity<Sector> getSectorById(@PathVariable Integer id){
+		return new ResponseEntity<Sector>(sectorService.getSectorById(id), HttpStatus.OK);
 	}
 	
+	//CREATE METHOD:
 	@PostMapping()
 	public ResponseEntity<String> createSector(@Valid @RequestBody Sector sector, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
 			List<String> errorList = ErrorHandler.loadErrorMessages(bindingResult);
 			ErrorHandler.printErrorMessages(errorList);
 			
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(ErrorHandler.getErrorMessages(errorList), HttpStatus.BAD_REQUEST);
 		} else {
 			return new ResponseEntity<>(sectorService.createSector(sector), HttpStatus.OK);
 		}
 	}
 	
+	//UPDATE METHOD:
 	@PutMapping("/{id}")
 	public ResponseEntity<String> updateSector(@PathVariable Integer id, @Valid @RequestBody Sector sector, BindingResult bindingResult){
 		if (bindingResult.hasErrors()) {
 			List<String> errorList = ErrorHandler.loadErrorMessages(bindingResult);
 			ErrorHandler.printErrorMessages(errorList);
 			
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(ErrorHandler.getErrorMessages(errorList), HttpStatus.BAD_REQUEST);
 		} else {
 			return new ResponseEntity<>(sectorService.updateSector(id, sector), HttpStatus.OK);
 		}
 	}
 	
+	//DELETE & RECOVER METHOD:
 	@DeleteMapping("/{id}")
-	public ResponseEntity<String> logicalDeleteSector(@PathVariable Integer id){
-		return new ResponseEntity<>(sectorService.logicalDeleteSector(id), HttpStatus.OK);
+	public ResponseEntity<String> toggleIsEnabled(@PathVariable Integer id){
+		return new ResponseEntity<>(sectorService.toggleIsEnabled(id), HttpStatus.OK);
+	}
+	
+	//VALIDATION METHOD:
+	@GetMapping("/validate/{name}")
+	public ResponseEntity<Boolean> existsByName(@PathVariable String name){
+		return new ResponseEntity<>(sectorService.existsByName(name), HttpStatus.OK);
 	}
 	
 }

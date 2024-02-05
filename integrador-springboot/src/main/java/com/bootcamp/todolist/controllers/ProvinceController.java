@@ -38,8 +38,8 @@ public class ProvinceController {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Optional<Province>> getProvinceById(@PathVariable Integer id){
-		return new ResponseEntity<Optional<Province>>(provinceService.getProvinceById(id), HttpStatus.OK);
+	public ResponseEntity<Province> getProvinceById(@PathVariable Integer id){
+		return new ResponseEntity<Province>(provinceService.getProvinceById(id), HttpStatus.OK);
 	}
 	
 	@PostMapping()

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.bootcamp.todolist.exceptions.ObjectNotFoundException;
+import com.bootcamp.todolist.models.Category;
 import com.bootcamp.todolist.models.Product;
 import com.bootcamp.todolist.repositories.ProductRepository;
 import com.bootcamp.todolist.specification.ProductSpecification;

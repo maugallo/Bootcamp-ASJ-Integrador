@@ -36,7 +36,7 @@ public class ProductController {
 	public ResponseEntity<List<Product>> getProducts(
 			@RequestParam(required = false) String titleOrDescription,
 			@RequestParam(required = false) String category,
-			@RequestParam(required = false) Boolean isEnabled){
+			@RequestParam(required = true) Boolean isEnabled){
 		
 		ProductSpecification productSpecification = new ProductSpecification(titleOrDescription, category, isEnabled);
 		

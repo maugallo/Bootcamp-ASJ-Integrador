@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.bootcamp.todolist.exceptions.ObjectNotFoundException;
 import com.bootcamp.todolist.models.Category;
 import com.bootcamp.todolist.repositories.CategoryRepository;
 
@@ -15,54 +16,48 @@ public class CategoryService {
 	@Autowired
 	CategoryRepository categoryRepository;
 	
-	public List<Category> getCategories(){
-		return categoryRepository.findAll();
+	//GET METHODS:
+	public List<Category> getCategories(Boolean isEnabled){
+		return categoryRepository.findByIsEnabled(isEnabled);
 	}
 	
-	public List<Category> getEnabledCategories(){
-		return categoryRepository.findByIsEnabledTrue();
+	public Category getCategoryById(Integer id){
+		Optional<Category> category = categoryRepository.findById(id);
+		if (category.isPresent()) {
+			return category.get();
+		} else {
+			throw new ObjectNotFoundException("No se pudo encontrar la categoría solicitada con id " + id);
+		}
 	}
 	
-	public Optional<Category> getCategoryById(Integer id){
-		return categoryRepository.findById(id);
-	}
-	
+	//CREATE METHOD:
 	public String createCategory(Category category) {
-		try {
-			categoryRepository.save(category);
-			return "Category created correctly";
-		} catch (Exception e) {
-			e.printStackTrace();
-			return "Error creating the category";
-		}
+		categoryRepository.save(category);
+		return "Categoría agregada correctamente";
 	}
 	
+	//UPDATE METHOD:
 	public String updateCategory(Integer id, Category updatedCategory) {
-		try {
-			categoryRepository.save(updatedCategory);
-			return "Category updated correctly";
-		} catch (Exception e) {
-			e.printStackTrace();
-			return "Error updating the category";
+		categoryRepository.save(updatedCategory);
+		return "Categoría actualizada correctamente";
+	}
+	
+	//DELETE & RECOVER METHOD:
+	public String toggleIsEnabled(Integer id) {
+		Optional<Category> optCategory = categoryRepository.findById(id);
+		
+		if (optCategory.isPresent()) {
+			Category category = optCategory.get();
+			category.setIsEnabled(!category.getIsEnabled());
+			categoryRepository.save(category);
+			return category.getIsEnabled() ? "Categoría agregada correctamente" : "Categoría eliminada correctamente";
+		} else {
+			throw new ObjectNotFoundException("No se pudo encontrar la categoría solicitada con id: " + id);
 		}
 	}
 	
-	public String logicalDeleteCategory(Integer id) {
-		try {
-			Optional<Category> optionalCategory = categoryRepository.findById(id);
-			
-			if (optionalCategory.isPresent()) {
-				Category category = optionalCategory.get();
-				category.setIsEnabled(false);
-				categoryRepository.save(category);
-				return "Category deleted correctly";
-			} else {
-				return "Category doesn't exist";
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			return "Error deleting the category";
-		}
+	//VALIDATE METHOD:
+	public Boolean existsByName(String name) {
+		return categoryRepository.existsByNameIgnoreCase(name);
 	}
-	
 }
