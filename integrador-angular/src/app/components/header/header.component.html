@@ -23,7 +23,8 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item fw-medium font-blue" routerLink="/providers/">VER</a></li>
-                                <li><a class="dropdown-item fw-medium font-blue" routerLink="providers/form-provider">AGREGAR</a></li>
+                                <li><a class="dropdown-item fw-medium font-blue"
+                                        routerLink="providers/form-provider">AGREGAR</a></li>
                             </ul>
                         </li>
                         <!-- Administración productos -->
@@ -34,7 +35,8 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item fw-medium font-blue" routerLink="products/">VER</a></li>
-                                <li><a class="dropdown-item fw-medium font-blue" routerLink="products/form-product">AGREGAR</a></li>
+                                <li><a class="dropdown-item fw-medium font-blue"
+                                        routerLink="products/form-product">AGREGAR</a></li>
                             </ul>
                         </li>
                         <!-- Administración ordenes de compra -->
@@ -45,7 +47,21 @@
                             </a>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item fw-medium font-blue" routerLink="orders/">VER</a></li>
-                                <li><a class="dropdown-item fw-medium font-blue" routerLink="orders/form-order">AGREGAR</a></li>
+                                <li><a class="dropdown-item fw-medium font-blue"
+                                        routerLink="orders/form-order">AGREGAR</a></li>
+                            </ul>
+                        </li>
+                        <!-- Administración de categorías y rubros -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" role="button" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                                CONFIGURACIÓN <i class="bi bi-gear"></i>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item fw-medium font-blue click" data-bs-toggle="modal"
+                                        data-bs-target="#categoryModal">CATEGORÍAS</a></li>
+                                <li><a class="dropdown-item fw-medium font-blue click" data-bs-toggle="modal"
+                                        data-bs-target="#sectorModal">RUBROS</a></li>
                             </ul>
                         </li>
                     </ul>
@@ -53,4 +69,83 @@
             </div>
         </div>
     </nav>
+    <!-- Modal de categorías -->
+    <section class="modal fade rounded-0" id="categoryModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-scrollable">
+            <div class="modal-content rounded-0">
+                <div class="modal-header">
+                    <h1 class="modal-title w-100 text-center fs-2 font-blue" id="exampleModalLabel">CATEGORÍAS <i class="bi bi-tags-fill"></i></h1>
+                </div>
+                <div class="modal-body">
+                    
+                    <div class="offset-3 col-6">
+                        <div class="d-flex justify-content-end mb-2">
+                            <div class="btn-group me-2" role="group" aria-label="Basic checkbox toggle button group">
+                                <input type="checkbox" [(ngModel)]="seeDisabledCategories" class="btn-check " id="btncheck1"
+                                    autocomplete="off">
+                                <label class="btn btn-outline-primary checkbox-custom rounded-0 " for="btncheck1">Ver eliminados</label>
+                            </div>
+                            <div class="">
+                                <button type="button " class="btn btn-add rounded-0" data-bs-dismiss="modal" (click)="openAddCategoryModal()">Agregar</button>
+                            </div>
+                        </div>
+
+                        <ng-container *ngIf="arrayEnabledCategories && arrayDisabledCategories">
+                            <table *ngIf="arrayEnabledCategories.length > 0 || (seeDisabledCategories === true && arrayDisabledCategories.length > 0)" class="table table-bordered">
+                                <ng-container *ngIf="seeDisabledCategories === false">
+                                    <tbody class="text-center">
+                                        <tr *ngFor="let category of arrayEnabledCategories" class="fs-5">
+                                            <th class="fw-medium">{{category.name}}</th>
+                                            <td>
+                                                <a class="click text-decoration-none" (click)="openDeleteOrRecoverCategoryModal(category.id)">🗑️</a>
+                                            </td>
+                                            <td>
+                                                ✏️
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </ng-container>
+                                <ng-container *ngIf="seeDisabledCategories && arrayDisabledCategories.length > 0">
+                                    <tbody class="text-center table-secondary ">
+                                        <tr *ngFor="let category of arrayDisabledCategories" class="fs-5">
+                                            <th class="fw-medium">{{category.name}}</th>
+                                            <td>
+                                                <a class="click text-decoration-none" (click)="openDeleteOrRecoverCategoryModal(category.id)">🔄</a>
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </ng-container>
+                              </table>
+                        </ng-container>
+
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary rounded-0" data-bs-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Modal de rubros -->
+    <section class="modal fade rounded-0" id="sectorModal" tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content rounded-0">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-4 font-blue" id="exampleModalLabel">Agregar proveedor <i
+                            class="bi bi-person-fill-add"></i></h1>
+                </div>
+                <div class="modal-body">
+                    <p class="font-blue fs-5">¿Estás seguro que quieres volver a agregar este elemento?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary rounded-0" data-bs-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-add rounded-0" data-bs-dismiss="modal"
+                        >Agregar</button>
+                </div>
+            </div>
+        </div>
+    </section>
 </header>

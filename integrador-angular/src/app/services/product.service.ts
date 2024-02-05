@@ -14,7 +14,7 @@ export class ProductService {
   private URL_API_PRODUCTS: string = "http://localhost:8080/products";
 
   //GET METHODS:
-   getProducts(titleOrDescription?: string, category?: string, isEnabled?: boolean): Observable<Product[]> {
+  getProducts(titleOrDescription?: string, category?: string, isEnabled?: boolean): Observable<Product[]> {
 
     let params = new HttpParams();
 
@@ -49,7 +49,7 @@ export class ProductService {
   }
 
   //VALIDATION METHOD:
-  validateSku(sku: string): Observable<Boolean>{
+  validateSku(sku: string): Observable<Boolean> {
     return this.http.get<Boolean>(this.URL_API_PRODUCTS + "/validate/" + sku);
   }
 

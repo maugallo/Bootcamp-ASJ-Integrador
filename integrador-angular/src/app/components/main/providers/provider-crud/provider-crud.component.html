@@ -51,7 +51,7 @@
                 <ng-container *ngIf="arrayEnabled && arrayDisabled">
                     <div class="d-flex justify-content-start w-50">
                         <div class="w-50 me-2">
-                            <input [(ngModel)]="companyNameOrCode" type="text" class="form-control" placeholder="Ingrese razón social o código">
+                            <input [(ngModel)]="companyNameOrCode" type="text" class="form-control" placeholder="Filtrar por razón social o código">
                         </div>
                         <div>
                             <button (click)="OnFilter()" class="btn btn-add rounded-0"><i class="bi bi-sliders"></i></button>
@@ -60,9 +60,9 @@
                 </ng-container>
                 <div class="text-end">
                     <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
-                        <input type="checkbox" [(ngModel)]="seeDisabled" class="btn-check" id="btncheck1"
+                        <input type="checkbox" [(ngModel)]="seeDisabled" class="btn-check" id="disabledProviders"
                             autocomplete="off">
-                        <label class="btn btn-outline-primary checkbox-custom rounded-0" for="btncheck1" (click)="clearFilter()">Ver eliminados</label>
+                        <label class="btn btn-outline-primary checkbox-custom rounded-0" for="disabledProviders" (click)="clearFilter()">Ver eliminados</label>
                     </div>
                     <a class="btn btn-add rounded-0 ms-2" [routerLink]="['/providers/form-provider']">Agregar proveedor</a>
                 </div>

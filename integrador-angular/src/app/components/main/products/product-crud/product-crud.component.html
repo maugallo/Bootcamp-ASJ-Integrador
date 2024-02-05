@@ -50,11 +50,11 @@
                 <ng-container *ngIf="arrayEnabled && arrayDisabled">
                     <div class="d-flex justify-content-start w-50">
                         <div class="w-50 me-2">
-                            <input [(ngModel)]="filterValue" type="text" class="form-control" placeholder="Ingrese nombre o descripción">
+                            <input [(ngModel)]="filterValue" type="text" class="form-control" placeholder="Filtrar por nombre o descripción">
                         </div>
                         <div class=" me-2">
                             <select class="form-select" name="" id="" [(ngModel)]="filterCategoryValue">
-                                <option value="" disabled selected hidden>Categorias</option>
+                                <option value="" disabled selected hidden>Filtrar por categoría</option>
                                 <option *ngFor="let category of categorySelect" [ngValue]="category.name">
                                     {{category.name}}</option>
                             </select>
@@ -66,9 +66,9 @@
                 </ng-container>
                 <div class="text-end">
                     <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
-                        <input type="checkbox" [(ngModel)]="seeDisabled" class="btn-check" id="btncheck1"
+                        <input type="checkbox" [(ngModel)]="seeDisabled" class="btn-check" id="disabledProducts"
                             autocomplete="off">
-                        <label class="btn btn-outline-primary checkbox-custom rounded-0" for="btncheck1" (click)="clearFilter()">Ver eliminados</label>
+                        <label class="btn btn-outline-primary checkbox-custom rounded-0" for="disabledProducts" (click)="clearFilter()">Ver eliminados</label>
                     </div>
                     <a class="btn btn-add rounded-0 ms-2" [routerLink]="['/products/form-product']">Agregar producto</a>
                 </div>

@@ -31,7 +31,7 @@ body{
 /* Tooltip styles */
 .custom-tooltip .tooltip-inner {
     max-width: 100rem;
-    background-color: #ffffff;
+    background-color: #FBFEF9;
     color: #011d69;
     font-weight: bold;
     white-space: nowrap;
@@ -41,3 +41,32 @@ body{
     border-top-color: transparent;
 }
 
+/* SweetAlert2 Custom */
+.swal2-popup{
+    border-radius: 0 !important;
+}
+
+.swal2-icon {
+    border-color: #011d69 !important;
+    color: #011d69 !important;
+}  
+
+.swal2-title {
+    color: #011d69 !important;
+}
+
+.swal2-styled {
+    border-radius: 0 !important;
+}
+
+.swal2-confirm{
+    background-color: #011d69 !important;
+}
+
+.swal2-cancel{
+    background-color: #9FA6B2 !important;
+}
+
+.swal2-input{
+    border-color: #001652 !important;
+}
