@@ -1,7 +1,7 @@
 export interface Category{
-    id: number;
+    id?: number;
     name: string;
-    enabled: boolean;
+    isEnabled: boolean;
     createdAt?: Date;
     updatedAt?: Date;
 }

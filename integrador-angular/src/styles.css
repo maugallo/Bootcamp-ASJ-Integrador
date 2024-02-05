@@ -69,4 +69,9 @@ body{
 
 .swal2-input{
     border-color: #001652 !important;
+    border-radius: 0;
+}
+
+.swal2-title{
+    font-size: 1.2rem !important;
 }

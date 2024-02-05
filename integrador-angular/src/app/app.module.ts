@@ -20,6 +20,7 @@ import { ProviderDetailComponent } from './components/main/providers/provider-de
 import { ProductDetailComponent } from './components/main/products/product-detail/product-detail.component';
 import { OrderDetailComponent } from './components/main/orders/order-detail/order-detail.component';
 import { VatConditionPipe } from './pipes/vat-condition.pipe';
+import { CategoryCrudComponent } from './components/main/products/product-crud/category-crud/category-crud.component';
 
 @NgModule({
   declarations: [
@@ -37,7 +38,8 @@ import { VatConditionPipe } from './pipes/vat-condition.pipe';
     ProviderDetailComponent,
     ProductDetailComponent,
     OrderDetailComponent,
-    VatConditionPipe
+    VatConditionPipe,
+    CategoryCrudComponent
   ],
   imports: [
     BrowserModule,

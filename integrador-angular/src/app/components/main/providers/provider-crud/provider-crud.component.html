@@ -54,7 +54,10 @@
                             <input [(ngModel)]="companyNameOrCode" type="text" class="form-control" placeholder="Filtrar por razón social o código">
                         </div>
                         <div>
-                            <button (click)="OnFilter()" class="btn btn-add rounded-0"><i class="bi bi-sliders"></i></button>
+                            <button (click)="OnFilter()" class="btn btn-add rounded-0 me-2"><i class="bi bi-sliders"></i></button>
+                        </div>
+                        <div>
+                            <button (click)="clearFilter()" class="btn btn-add rounded-0"><i class="bi bi-arrow-counterclockwise"></i></button>
                         </div>
                     </div>
                 </ng-container>
@@ -72,7 +75,7 @@
                 <section class="mt-2">
                     <table *ngIf="arrayEnabled.length > 0 || (seeDisabled === true && arrayDisabled.length > 0)"
                         class="table table-hover table-bordered border-secondary-subtle">
-                        <thead>
+                        <thead class="custom-bordered">
                             <tr>
                                 <th>Logo</th>
                                 <th>Código</th>

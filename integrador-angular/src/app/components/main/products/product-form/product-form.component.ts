@@ -6,6 +6,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgForm, NgModel } from '@angular/forms';
 import { Category } from '../../../../models/category';
 import { CategoryService } from '../../../../services/category.service';
+import Swal from 'sweetalert2';
+import { AlertHandler } from '../../../../utils/alertHandler';
 
 @Component({
   selector: 'app-product-form',
@@ -54,6 +56,8 @@ export class ProductFormComponent implements OnInit {
 
   //Validaciones del back:
   @ViewChild('sku') skuNgModel!: NgModel;
+
+  private alertHandler = new AlertHandler();
 
   constructor(
     private productService: ProductService,
@@ -162,11 +166,19 @@ export class ProductFormComponent implements OnInit {
   addProduct(){
     this.productService.addProduct(this.realProduct).subscribe({
       next: (data) => {
-        alert(data);
+        this.alertHandler.getToast().fire({
+          icon: "success",
+          title: data,
+        });
+
         this.router.navigate(['products/']);
       },
       error: (error) => {
-        alert(error.error);
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: error.error
+        });
       }
     })
   }
@@ -174,11 +186,19 @@ export class ProductFormComponent implements OnInit {
   updateProduct(){
     this.productService.updateProduct(this.realProduct).subscribe({
       next: (data) => {
-        alert(data);
+        this.alertHandler.getToast().fire({
+          icon: "success",
+          title: data,
+        });
+
         this.router.navigate(['products/']);
       },
       error: (error) => {
-        alert(error.error);
+         Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: error.error
+        });
       }
     })
   }

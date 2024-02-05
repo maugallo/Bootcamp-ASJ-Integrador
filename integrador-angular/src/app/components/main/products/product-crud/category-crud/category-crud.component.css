@@ -1,20 +1,14 @@
-th{
-    background-color: #011d69;
-    color: #FBFEF9;
-    border-color: #011d69;
-}
-
 .custom-bordered{
-    border-color: #011d69 !important;
-}
-
-.option:hover{
-    cursor: pointer;
+    border-color: #011d69;
 }
 
 .alert-custom{
     border-color: #011d69;
     background-color: #adadad35;
+}
+
+.click{
+    cursor: pointer;
 }
 
 .checkbox-custom{

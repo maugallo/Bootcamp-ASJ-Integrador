@@ -1,0 +1,73 @@
+<!-- Botón de administrar categorías -->
+<div class="text-end">
+    <button class="btn btn-add rounded-0" data-bs-toggle="modal"
+    data-bs-target="#categoryModal">Administrar Categorías</button>
+</div>
+<!-- Modal de categorías -->
+<section class="modal fade rounded-0" id="categoryModal" data-bs-focus="false" tabindex="-1"
+    aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content rounded-0">
+            <div class="modal-header">
+                <h1 class="modal-title w-100 text-center fs-2 font-blue" id="exampleModalLabel">CATEGORÍAS <i
+                        class="bi bi-tags-fill"></i></h1>
+            </div>
+            <div class="modal-body">
+
+                <div class="offset-3 col-6">
+                    <div class="d-flex justify-content-end mb-2">
+                        <div class="btn-group me-2" role="group" aria-label="Basic checkbox toggle button group">
+                            <input type="checkbox" [(ngModel)]="seeDisabled" class="btn-check "
+                                id="disabledCategories" autocomplete="off">
+                            <label class="btn btn-outline-primary checkbox-custom rounded-0 "
+                                for="disabledCategories">Ver eliminados</label>
+                        </div>
+                        <div class="">
+                            <button type="button " class="btn btn-add rounded-0"
+                                (click)="openAddCategoryModal()">Agregar</button>
+                        </div>
+                    </div>
+
+                    <ng-container *ngIf="arrayEnabled && arrayDisabled">
+                        <div *ngIf="(arrayDisabled.length === 0 && seeDisabled && arrayEnabled.length > 0)" class="alert alert-primary rounded-0 alert-custom mb-0">
+                            <span class="fs-4 font-blue">Todavía no cuentas con categorías eliminadas</span>
+                        </div>
+                        <table *ngIf="arrayEnabled.length > 0 || (seeDisabled === true && arrayDisabled.length > 0)"
+                            class="table table-bordered custom-bordered">
+                            <ng-container *ngIf="seeDisabled === false">
+                                <tbody class="text-center">
+                                    <tr *ngFor="let category of arrayEnabled" class="fs-5">
+                                        <th class="fw-medium">{{category.name}}</th>
+                                        <td>
+                                            <a class="click text-decoration-none"
+                                                (click)="openDeleteOrRecoverCategoryModal(category.id!)">🗑️</a>
+                                        </td>
+                                        <td>
+                                            <a class="click text-decoration-none"
+                                                (click)="openEditCategoryModal(category)">✏️</a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </ng-container>
+                            <ng-container *ngIf="seeDisabled && arrayDisabled.length > 0">
+                                <tbody class="text-center table-secondary custom-bordered">
+                                    <tr *ngFor="let category of arrayDisabled" class="fs-5">
+                                        <th class="fw-medium">{{category.name}}</th>
+                                        <td>
+                                            <a class="click text-decoration-none"
+                                                (click)="openDeleteOrRecoverCategoryModal(category.id!)">🔄</a>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </ng-container>
+                        </table>
+                    </ng-container>
+                </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary rounded-0" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</section>

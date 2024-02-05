@@ -3,7 +3,9 @@ import { ProductService } from '../../../../services/product.service';
 import { Product } from '../../../../models/product';
 import { Category } from '../../../../models/category';
 import { CategoryService } from '../../../../services/category.service';
-import { filter } from 'rxjs';
+import { SharedProductCategoryService } from '../../../../services/shared-product-category.service';
+import Swal from 'sweetalert2';
+import { AlertHandler } from '../../../../utils/alertHandler';
 
 @Component({
   selector: 'app-product-crud',
@@ -20,46 +22,77 @@ export class ProductCrudComponent {
   selectedId!: number;
 
   seeDisabled: boolean = false;
-  
+
   filterValue: string = "";
   filterCategoryValue: string = "";
 
-  constructor(private productService: ProductService, private categoryService: CategoryService) {}
+  constructor(private productService: ProductService, private categoryService: CategoryService, private sharedProductCategoryService: SharedProductCategoryService) { }
+
+  private alertHandler = new AlertHandler();
 
   ngOnInit(): void {
+    this.subscribeToSharedObservable(); //This method will subscribe to a shared Observable and let the component render the products table and categories select whenever it detects a change in the Observable. The Observable will emmit a change due to the category component.
+
     this.renderTables();
     this.renderCategorySelect();
   }
 
-  openModal(id: number){
-    this.selectedId = id;
+  subscribeToSharedObservable(){
+    this.sharedProductCategoryService.renderTriggerObservable.subscribe({
+      next: () => {
+        this.renderTables();
+        this.renderCategorySelect();
+      }
+    });
   }
 
-  deleteOrRecoverProduct(){
-    this.productService.deleteOrRecoverProduct(this.selectedId).subscribe({
+  openDeleteOrRecoverCategoryModal(id: number) {
+    Swal.fire({
+      title: this.seeDisabled ? "¿Estás seguro que deseas volver a agregar el producto?" : "¿Estás seguro que deseas eliminar el producto?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: this.seeDisabled ? "Agregar" : "Eliminar",
+      cancelButtonText: "Cerrar"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.deleteOrRecoverProduct(id);
+      }
+    });
+  }
+
+  deleteOrRecoverProduct(id: number) {
+    this.productService.deleteOrRecoverProduct(id).subscribe({
       next: (data) => {
-        alert(data);
         this.renderTables();
+
+        this.alertHandler.getToast().fire({
+          icon: "success",
+          title: data,
+        });
       },
       error: (error) => {
-        alert("Error eliminando o agregando el producto: " + error.error);
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: error.error
+        });
       }
     })
   }
 
-  clearFilter(){
-    if (this.filterValue != '' || this.filterCategoryValue != ''){
+  clearFilter() {
+    if (this.filterValue != '' || this.filterCategoryValue != '') {
       this.filterValue = '';
       this.filterCategoryValue = '';
       this.renderTables();
     }
   }
 
-  onFilter(){
-    if (this.filterValue === '' && this.filterCategoryValue === ''){
+  onFilter() {
+    if (this.filterValue === '' && this.filterCategoryValue === '') {
       this.renderTables();
     } else {
-      if (this.seeDisabled){
+      if (this.seeDisabled) {
         this.productService.getProducts(this.filterValue, this.filterCategoryValue, false).subscribe({
           next: (data) => {
             this.arrayDisabled = data;
@@ -75,7 +108,7 @@ export class ProductCrudComponent {
     }
   }
 
-  renderTables(){
+  renderTables() {
     this.productService.getProducts("", "", true).subscribe({
       next: (data) => {
         this.arrayEnabled = data;
@@ -89,11 +122,12 @@ export class ProductCrudComponent {
     })
   }
 
-  renderCategorySelect(){
+  renderCategorySelect() {
     this.categoryService.getEnabledCategories().subscribe({
       next: (data) => {
         this.categorySelect = data;
       }
     })
   }
+
 }
