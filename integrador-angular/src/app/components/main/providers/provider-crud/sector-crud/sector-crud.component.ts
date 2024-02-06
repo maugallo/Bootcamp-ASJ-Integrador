@@ -1,22 +1,22 @@
 import { Component, OnInit } from '@angular/core';
-import { Category } from '../../../../../models/category';
+import { Sector } from '../../../../../models/sector';
 import { AlertHandler } from '../../../../../utils/alertHandler';
-import Swal from 'sweetalert2';
-import { CategoryService } from '../../../../../services/category.service';
-import { firstValueFrom } from 'rxjs';
 import { SharedProductCategoryService } from '../../../../../services/shared-product-category.service';
+import Swal from 'sweetalert2';
+import { SectorService } from '../../../../../services/sector.service';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
-  selector: 'app-category-crud',
-  templateUrl: './category-crud.component.html',
-  styleUrl: './category-crud.component.css'
+  selector: 'app-sector-crud',
+  templateUrl: './sector-crud.component.html',
+  styleUrl: './sector-crud.component.css'
 })
-export class CategoryCrudComponent implements OnInit {
+export class SectorCrudComponent implements OnInit {
 
-  arrayEnabled!: Category[];
-  arrayDisabled!: Category[];
+  arrayEnabled!: Sector[];
+  arrayDisabled!: Sector[];
 
-  category: Category = {
+  sector: Sector = {
     name: '',
     isEnabled: false,
   }
@@ -25,44 +25,44 @@ export class CategoryCrudComponent implements OnInit {
 
   private alertHandler = new AlertHandler();
 
-  constructor(private categoryService: CategoryService, private sharedProductCategoryService: SharedProductCategoryService) {}
+  constructor(private sectorService: SectorService, private sharedProductCategoryService: SharedProductCategoryService) {}
 
   ngOnInit(): void {
-    this.renderCategoriesTable();
+    this.renderSectorsTable();
   }
 
-  renderCategoriesTable() {
-    this.categoryService.getCategories(true).subscribe({
+  renderSectorsTable() {
+    this.sectorService.getSectors(true).subscribe({
       next: (data) => {
         this.arrayEnabled = data;
       }
     })
 
-    this.categoryService.getCategories(false).subscribe({
+    this.sectorService.getSectors(false).subscribe({
       next: (data) => {
         this.arrayDisabled = data;
       }
     })
   }
 
-  openDeleteOrRecoverCategoryModal(id: number) {
+  openDeleteOrRecoverSectorModal(id: number) {
     Swal.fire({
-      title: this.seeDisabled ? "¿Estás seguro que deseas volver a agregar la categoría?" : "¿Estás seguro que deseas eliminar la categoría?",
+      title: this.seeDisabled ? "¿Estás seguro que deseas volver a agregar el rubro?" : "¿Estás seguro que deseas eliminar el rubro?",
       icon: "warning",
       showCancelButton: true,
       confirmButtonText: this.seeDisabled ? "Agregar" : "Eliminar",
       cancelButtonText: "Cerrar"
     }).then((result) => {
       if (result.isConfirmed) {
-        this.deleteOrRecoverCategory(id);
+        this.deleteOrRecoverSector(id);
       }
     });
   }
 
-  deleteOrRecoverCategory(id: number) {
-    this.categoryService.deleteOrRecoverCategory(id).subscribe({
+  deleteOrRecoverSector(id: number) {
+    this.sectorService.deleteOrRecoverSector(id).subscribe({
       next: (data) => {
-        this.renderCategoriesTable();
+        this.renderSectorsTable();
 
         this.sharedProductCategoryService.triggerProductCrud();
 
@@ -81,9 +81,9 @@ export class CategoryCrudComponent implements OnInit {
     })
   }
 
-  openAddCategoryModal() {
+  openAddSectorModal() {
     Swal.fire({
-      title: `Agregar Categoría <i class="bi bi-tag-fill"></i>`,
+      title: `Agregar Rubro <i class="bi bi-grid-fill"></i>`,
       input: "text",
       inputPlaceholder: "Ingrese el nombre",
       showCancelButton: true,
@@ -93,7 +93,7 @@ export class CategoryCrudComponent implements OnInit {
         if (!value) {
           return Promise.resolve("Este campo no puede estar vacío");
         } else {
-          return firstValueFrom(this.categoryService.validateName(value))
+          return firstValueFrom(this.sectorService.validateName(value))
             .then((isRepeated) => {
               if (isRepeated) {
                 return Promise.resolve("Este nombre ya existe");
@@ -106,18 +106,18 @@ export class CategoryCrudComponent implements OnInit {
     })
       .then((result) => {
         if (result.isConfirmed) {
-          this.category.name = result.value;
-          this.category.isEnabled = true;
+          this.sector.name = result.value;
+          this.sector.isEnabled = true;
 
-          this.addCategory(this.category);
+          this.addSector(this.sector);
         }
       });
   }
 
-  addCategory(category: Category) {
-    this.categoryService.addCategory(category).subscribe({
+  addSector(sector: Sector) {
+    this.sectorService.addSector(sector).subscribe({
       next: (data) => {
-        this.renderCategoriesTable();
+        this.renderSectorsTable();
 
         this.sharedProductCategoryService.triggerProductCrud();
 
@@ -136,12 +136,12 @@ export class CategoryCrudComponent implements OnInit {
     })
   }
 
-  openEditCategoryModal(category: Category) {
+  openEditSectorModal(sector: Sector) {
     Swal.fire({
-      title: `Editar Categoría <i class="bi bi-tag-fill"></i>`,
+      title: `Editar Sector `,
       input: "text",
       inputPlaceholder: "Ingrese el nombre",
-      inputValue: category.name,
+      inputValue: sector.name,
       showCancelButton: true,
       confirmButtonText: "Editar",
       cancelButtonText: "Cerrar",
@@ -149,8 +149,8 @@ export class CategoryCrudComponent implements OnInit {
         if (!value) {
           return Promise.resolve("Este campo no puede estar vacío");
         } else {
-          if (value !== category.name){
-            return firstValueFrom(this.categoryService.validateName(value))
+          if (value !== sector.name){
+            return firstValueFrom(this.sectorService.validateName(value))
             .then((isRepeated) => {
               if (isRepeated) {
                 return Promise.resolve("Este nombre ya existe");
@@ -166,17 +166,17 @@ export class CategoryCrudComponent implements OnInit {
     })
       .then((result) => {
         if (result.isConfirmed) {
-          category.name = result.value;
+          sector.name = result.value;
 
-          this.updateCategory(category);
+          this.updateSector(sector);
         }
       });
   }
 
-  updateCategory(category: Category) {
-    this.categoryService.updateCategory(category).subscribe({
+  updateSector(sector: Sector) {
+    this.sectorService.updateSector(sector).subscribe({
       next: (data) => {
-        this.renderCategoriesTable();
+        this.renderSectorsTable();
 
         this.sharedProductCategoryService.triggerProductCrud();
 

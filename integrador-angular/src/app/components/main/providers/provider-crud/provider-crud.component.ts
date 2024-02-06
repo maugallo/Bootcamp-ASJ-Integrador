@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ProviderService } from '../../../../services/provider.service';
 import { Provider } from '../../../../models/provider';
+import { AlertHandler } from '../../../../utils/alertHandler';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-provider-crud',
@@ -18,24 +20,45 @@ export class ProviderCrudComponent implements OnInit {
 
   companyNameOrCode: string = "";
 
+  private alertHandler = new AlertHandler();
+
   constructor(private providerService: ProviderService) {}
 
   ngOnInit(): void {
     this.renderTables();
   }
 
-  openModal(id: number){
-    this.selectedId = id;
+  openDeleteOrRecoverProviderModal(id: number) {
+    Swal.fire({
+      title: this.seeDisabled ? "¿Estás seguro que deseas volver a agregar el proveedor?" : "¿Estás seguro que deseas eliminar el proveedor?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: this.seeDisabled ? "Agregar" : "Eliminar",
+      cancelButtonText: "Cerrar",
+      text: this.seeDisabled ? "" : "Esta acción eliminará los productos relacionados"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.deleteOrRecoverProvider(id);
+      }
+    });
   }
 
-  deleteOrRecoverProvider(){
-    this.providerService.deleteOrRecoverProvider(this.selectedId).subscribe({
+  deleteOrRecoverProvider(id: number){
+    this.providerService.deleteOrRecoverProvider(id).subscribe({
       next: (data) => {
-        alert(data);
         this.renderTables();
+
+        this.alertHandler.getToast().fire({
+          icon: "success",
+          title: data,
+        });
       },
       error: (error) => {
-        alert("Error eliminando o agregando el provider: " + error.error);
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: error.error
+        });
       }
     })
   }

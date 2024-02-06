@@ -2,47 +2,7 @@
     <div class="row">
         <div class="col-auto col-lg-1"></div>
         <div class="col-12 col-lg-10">
-            <!-- Modal de eliminación -->
-            <section class="modal fade rounded-0" id="deleteModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-                aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content rounded-0">
-                        <div class="modal-header">
-                            <h1 class="modal-title fs-4 font-blue" id="exampleModalLabel">Eliminar proveedor <i class="bi bi-person-fill-x"></i></h1>
-                        </div>
-                        <div class="modal-body">
-                            <p class="font-blue fs-5">¿Estás seguro que quieres eliminar este elemento?</p>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary rounded-0"
-                                data-bs-dismiss="modal">Cerrar</button>
-                            <button type="button" class="btn btn-add rounded-0" data-bs-dismiss="modal"
-                                (click)="deleteOrRecoverProvider()">Eliminar</button>
-                        </div>
-                    </div>
-                </div>
-            </section>
-            <!-- Modal de recuperación -->
-            <section class="modal fade rounded-0" id="recoverModal" tabindex="-1" aria-labelledby="exampleModalLabel"
-                aria-hidden="true">
-                <div class="modal-dialog">
-                    <div class="modal-content rounded-0">
-                        <div class="modal-header">
-                            <h1 class="modal-title fs-4 font-blue" id="exampleModalLabel">Agregar proveedor <i
-                                class="bi bi-person-fill-add"></i></h1>
-                        </div>
-                        <div class="modal-body">
-                            <p class="font-blue fs-5">¿Estás seguro que quieres volver a agregar este elemento?</p>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary rounded-0"
-                                data-bs-dismiss="modal">Cerrar</button>
-                            <button type="button" class="btn btn-add rounded-0" data-bs-dismiss="modal"
-                                (click)="deleteOrRecoverProvider()">Agregar</button>
-                        </div>
-                    </div>
-                </div>
-            </section>
+            <!-- Título -->
             <section class="mt-3">
                 <h2 class="display-5 fw-semibold font-blue">GESTIÓN DE PROVEEDORES <i class="bi bi-person-fill"></i></h2>
             </section>
@@ -107,7 +67,7 @@
                                         <div class="text-start" > <i class="bi bi-telephone-fill"></i> {{provider.contact.telephone}}</div>
                                     </ng-template>
                                     <td>
-                                        <a class="fs-5 me-2 text-decoration-none option" data-bs-toggle="modal" data-bs-target="#deleteModal" (click)="openModal(provider.id!)">🗑️</a>
+                                        <a class="fs-5 me-2 text-decoration-none option" data-bs-toggle="modal" data-bs-target="#deleteModal" (click)="openDeleteOrRecoverProviderModal(provider.id!)">🗑️</a>
                                         <a class="fs-5 me-2 text-decoration-none option" [routerLink]="['form-provider', provider.id]">✏️</a>
                                         <a class="fs-5 text-decoration-none option" [routerLink]="['/providers', provider.id]">👁️</a>
                                     </td>
@@ -133,7 +93,7 @@
                                         <div class="text-start" > <i class="bi bi-envelope"></i> {{provider.contact.email}}</div>
                                         <div class="text-start" > <i class="bi bi-telephone-fill"></i> {{provider.contact.telephone}}</div>
                                     </ng-template>
-                                    <td><a class="fs-5 text-decoration-none option" data-bs-toggle="modal" data-bs-target="#recoverModal" (click)="openModal(provider.id!)">🔄​</a></td>
+                                    <td><a class="fs-5 text-decoration-none option" data-bs-toggle="modal" data-bs-target="#recoverModal" (click)="openDeleteOrRecoverProviderModal(provider.id!)">🔄​</a></td>
                                 </tr>
                             </ng-container>
                         </tbody>
@@ -146,6 +106,8 @@
                     </div>
                 </section>
             </ng-container>
+            <!-- Botón administrar rubros -->
+            <app-sector-crud></app-sector-crud>
         </div>
         <div class="col-auto col-lg-1"></div>
     </div>

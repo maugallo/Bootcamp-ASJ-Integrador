@@ -1,4 +1,4 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { Category } from '../models/category';
@@ -13,12 +13,13 @@ export class CategoryService {
   constructor(private http: HttpClient) { }
 
   //GET METHODS:
-  getEnabledCategories(): Observable<Category[]>{
-    return this.http.get<Category[]>(this.URL_API + "/enabled");
-  }
+  getCategories(isEnabled: boolean): Observable<Category[]>{
 
-  getDisabledCategories(): Observable<Category[]>{
-    return this.http.get<Category[]>(this.URL_API + "/disabled");
+    let params = new HttpParams();
+
+    params = params.append('isEnabled', isEnabled);
+
+    return this.http.get<Category[]>(this.URL_API, { params });
   }
 
   //CREATE METHOD:

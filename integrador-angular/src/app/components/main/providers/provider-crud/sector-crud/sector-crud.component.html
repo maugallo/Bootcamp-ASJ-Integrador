@@ -1,16 +1,15 @@
-<!-- Botón de administrar categorías -->
+<!-- Botón de administrar rubros -->
 <div class="text-end">
     <button class="btn btn-add rounded-0" data-bs-toggle="modal"
-    data-bs-target="#categoryModal">Administrar Categorías</button>
+    data-bs-target="#sectorModal">Administrar Rubros</button>
 </div>
-<!-- Modal de categorías -->
-<section class="modal fade rounded-0" id="categoryModal" data-bs-focus="false" tabindex="-1"
+<!-- Modal de rubros -->
+<section class="modal fade rounded-0" id="sectorModal" data-bs-focus="false" tabindex="-1"
     aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-scrollable">
         <div class="modal-content rounded-0">
             <div class="modal-header">
-                <h1 class="modal-title w-100 text-center fs-2 font-blue" id="exampleModalLabel">GESTIÓN DE CATEGORÍAS <i
-                        class="bi bi-tags-fill"></i></h1>
+                <h1 class="modal-title w-100 text-center fs-2 font-blue" id="exampleModalLabel">GESTIÓN DE RUBROS <i class="bi bi-grid-fill"></i></h1>
             </div>
             <div class="modal-body">
 
@@ -24,38 +23,38 @@
                         </div>
                         <div class="">
                             <button type="button " class="btn btn-add rounded-0"
-                                (click)="openAddCategoryModal()">Agregar</button>
+                                (click)="openAddSectorModal()">Agregar</button>
                         </div>
                     </div>
 
                     <ng-container *ngIf="arrayEnabled && arrayDisabled">
                         <div *ngIf="(arrayDisabled.length === 0 && seeDisabled && arrayEnabled.length > 0)" class="alert alert-primary rounded-0 alert-custom mb-0">
-                            <span class="fs-4 font-blue">Todavía no cuentas con categorías eliminadas</span>
+                            <span class="fs-4 font-blue">Todavía no cuentas con rubros eliminados</span>
                         </div>
                         <table *ngIf="arrayEnabled.length > 0 || (seeDisabled === true && arrayDisabled.length > 0)"
                             class="table table-bordered custom-bordered">
                             <ng-container *ngIf="seeDisabled === false">
                                 <tbody class="text-center">
-                                    <tr *ngFor="let category of arrayEnabled" class="fs-5">
-                                        <th class="fw-medium">{{category.name}}</th>
+                                    <tr *ngFor="let sector of arrayEnabled" class="fs-5">
+                                        <th class="fw-medium">{{sector.name}}</th>
                                         <td>
                                             <a class="click text-decoration-none"
-                                                (click)="openDeleteOrRecoverCategoryModal(category.id!)">🗑️</a>
+                                                (click)="openDeleteOrRecoverSectorModal(sector.id!)">🗑️</a>
                                         </td>
                                         <td>
                                             <a class="click text-decoration-none"
-                                                (click)="openEditCategoryModal(category)">✏️</a>
+                                                (click)="openEditSectorModal(sector)">✏️</a>
                                         </td>
                                     </tr>
                                 </tbody>
                             </ng-container>
                             <ng-container *ngIf="seeDisabled && arrayDisabled.length > 0">
                                 <tbody class="text-center table-secondary custom-bordered">
-                                    <tr *ngFor="let category of arrayDisabled" class="fs-5">
-                                        <th class="fw-medium">{{category.name}}</th>
+                                    <tr *ngFor="let sector of arrayDisabled" class="fs-5">
+                                        <th class="fw-medium">{{sector.name}}</th>
                                         <td>
                                             <a class="click text-decoration-none"
-                                                (click)="openDeleteOrRecoverCategoryModal(category.id!)">🔄</a>
+                                                (click)="openDeleteOrRecoverSectorModal(sector.id!)">🔄</a>
                                         </td>
                                     </tr>
                                 </tbody>

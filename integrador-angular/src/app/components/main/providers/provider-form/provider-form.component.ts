@@ -11,6 +11,8 @@ import { Country } from '../../../../models/country';
 import { Province } from '../../../../models/province';
 import { Contact } from '../../../../models/contact';
 import { ContactService } from '../../../../services/contact.service';
+import { AlertHandler } from '../../../../utils/alertHandler';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-provider-form',
@@ -109,6 +111,8 @@ export class ProviderFormComponent implements OnInit {
   @ViewChild('cuit') cuitNgModel!: NgModel;
   @ViewChild('companyName') companyNameNgModel!: NgModel;
 
+  private alertHandler = new AlertHandler();
+
   constructor(
     public providerService: ProviderService,
     public contactService: ContactService,
@@ -150,7 +154,7 @@ export class ProviderFormComponent implements OnInit {
   }
 
   renderSectorSelect() {
-    this.sectorService.getEnabledSectors().subscribe((data) => {
+    this.sectorService.getSectors(true).subscribe((data) => {
       this.sectorSelect = data;
     });
   }
@@ -334,12 +338,20 @@ export class ProviderFormComponent implements OnInit {
       //We pass one argument to subscribe: An Observer object. Which has the neccesary functions to handle the results that the Observable we are susbcribed to, like new data or an error.
       next: (data) => {
         //If the observable emmits new data, we use 'next'.
-        alert(data); //Usar SweetAlert2
+        this.alertHandler.getToast().fire({
+          icon: "success",
+          title: data,
+        });
+
         this.router.navigate(['providers/']);
       },
       error: (error) => {
         //If the observable emmits an error, we use 'error'.
-        alert(error.error); //Usar SweetAlert2
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: error.error
+        });
       },
     });
   }
@@ -347,11 +359,19 @@ export class ProviderFormComponent implements OnInit {
   updateProvider() {
     this.providerService.updateProvider(this.realProvider).subscribe({
       next: (data) => {
-        alert(data);
+        this.alertHandler.getToast().fire({
+          icon: "success",
+          title: data,
+        });
+
         this.router.navigate(['providers/']);
       },
       error: (error) => {
-        alert(error.error);
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: error.error
+        });
       },
     });
   }

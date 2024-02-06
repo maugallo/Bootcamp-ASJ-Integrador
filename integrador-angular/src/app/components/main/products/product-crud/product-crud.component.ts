@@ -123,7 +123,7 @@ export class ProductCrudComponent {
   }
 
   renderCategorySelect() {
-    this.categoryService.getEnabledCategories().subscribe({
+    this.categoryService.getCategories(true).subscribe({
       next: (data) => {
         this.categorySelect = data;
       }

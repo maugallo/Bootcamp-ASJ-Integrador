@@ -1,7 +1,7 @@
 export interface Sector {
-    id: number;
+    id?: number;
     name: string;
     isEnabled: boolean;
-    createdAt: Date;
-    updatedAt: Date;
+    createdAt?: Date;
+    updatedAt?: Date;
 }

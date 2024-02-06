@@ -107,7 +107,7 @@ export class ProductFormComponent implements OnInit {
   }
 
   renderCategorySelect(){
-    this.categoryService.getEnabledCategories().subscribe({
+    this.categoryService.getCategories(true).subscribe({
       next: (data) => {
         this.categorySelect = data;
       }

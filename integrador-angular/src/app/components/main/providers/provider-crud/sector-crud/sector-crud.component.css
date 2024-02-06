@@ -1,0 +1,27 @@
+.custom-bordered{
+    border-color: #011d69;
+}
+
+.alert-custom{
+    border-color: #011d69;
+    background-color: #adadad35;
+}
+
+.click{
+    cursor: pointer;
+}
+
+.checkbox-custom{
+    border-color: #011d69;
+    color:#011d69;
+}
+
+.checkbox-custom:hover{
+    border-color: #011d69;
+    color:#011d69;
+}
+.btn-check:checked + .checkbox-custom {
+    background-color: #011d69;
+    border-color: #011d69;
+    color: #FBFEF9;
+}
