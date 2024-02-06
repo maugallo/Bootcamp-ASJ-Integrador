@@ -324,6 +324,7 @@ export class ProviderFormComponent implements OnInit {
     if (form.valid) {
       this.provider.address = this.address;
       this.provider.contact = this.contact;
+      this.provider.code = this.provider.code.toUpperCase();
       this.realProvider = this.provider;
       if (this.buttonName === 'Agregar') {
         this.addProvider();

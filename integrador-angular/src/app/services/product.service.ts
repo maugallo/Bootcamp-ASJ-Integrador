@@ -14,15 +14,34 @@ export class ProductService {
   private URL_API_PRODUCTS: string = "http://localhost:8080/products";
 
   //GET METHODS:
-  getProducts(titleOrDescription?: string, category?: string, isEnabled?: boolean): Observable<Product[]> {
+  getProducts(isEnabled: boolean){
 
     let params = new HttpParams();
 
-    if (titleOrDescription !== '' || titleOrDescription !== undefined) params = params.append('titleOrDescription', titleOrDescription!);
-    if (category !== '' || category !== undefined) params = params.append('category', category!);
+    params = params.append('isEnabled', isEnabled);
+
+    return this.http.get<Product[]>(this.URL_API_PRODUCTS, { params });
+  }
+
+  getProductsByFilter(titleOrDescription?: string, category?: string, isEnabled?: boolean): Observable<Product[]> {
+
+    let params = new HttpParams();
+
+    if (titleOrDescription !== undefined && titleOrDescription !== '') params = params.append('titleOrDescription', titleOrDescription!);
+    if (category !== undefined && category !== '') params = params.append('category', category!);
     if (isEnabled !== undefined) params = params.append("isEnabled", isEnabled!);
 
     return this.http.get<Product[]>(this.URL_API_PRODUCTS, { params }); //Optional query parameters.
+  }
+
+  getProductsByProviderId(idProvider: number): Observable<Product[]>{
+
+    let params = new HttpParams();
+
+    params = params.append('idProvider', idProvider);
+    params = params.append('isEnabled', true); //Only the products that are enabled will be returned.
+
+    return this.http.get<Product[]>(this.URL_API_PRODUCTS, { params });
   }
 
   getProductById(id: number): Observable<Product> {

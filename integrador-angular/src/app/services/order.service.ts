@@ -1,31 +1,49 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { PurchaseOrder } from '../models/purchaseOrder';
+import { ProviderService } from './provider.service';
+import { ProductService } from './product.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class OrderService {
 
-  constructor(private http: HttpClient) { }
+  private URL_API: string = "http://localhost:8080/purchase-orders";
 
-  getOrder(){
+  constructor(private http: HttpClient, private providerService: ProviderService, private productService: ProductService) { }
 
+  //GET METHODS:
+  getOrders(orderStatus?: string): Observable<PurchaseOrder[]>{
+
+    let params = new HttpParams();
+
+    if (orderStatus !== '' && orderStatus !== undefined) params = params.append('status', orderStatus!);
+
+    return this.http.get<PurchaseOrder[]>(this.URL_API, {params});
+  }
+
+  getOrderById(id: number): Observable<PurchaseOrder>{
+    return this.http.get<PurchaseOrder>(this.URL_API + "/" + id);
   }
 
   getProvidersForSelect(){
-
+    return this.providerService.getProviders("", true);
   }
 
-  getProductsForSelect(){
-
+  getProductsForSelect(id: number){
+    return this.productService.getProductsByProviderId(id);
   }
 
-  addOrder(){
-
+  //CREATE METHOD:
+  addOrder(order: PurchaseOrder): Observable<string>{
+    return this.http.post(this.URL_API, order, {responseType: 'text'});
   }
 
+  //UPDATE METHOD:
   updateOrder(){
-    
+    return this.http.get(this.URL_API);
   }
   
 }

@@ -19,13 +19,13 @@
                             <div class="col">
                                 <div class="w-100">
                                     <label for="proveedor" class="form-label">Proveedor</label>
-                                    <select [disabled]="order.orderDetails.length > 0" (change)="selectProvider()" #provider="ngModel" id="selectProveedor"
-                                        [(ngModel)]="codeSelectedProvider" class="form-select " name="proveedor" required>
-                                        <option *ngFor="let provider of providerSelect" value="{{provider.code}}">
+                                    <select [disabled]="order.details.length > 0 && order.details !== undefined" (change)="selectProvider()" #providerVar="ngModel" id="selectProveedor"
+                                        [(ngModel)]="order.provider" class="form-select " name="proveedor" required>
+                                        <option *ngFor="let provider of providerSelect" [ngValue]="provider">
                                             {{provider.companyName}}</option>
                                     </select>
                                     <!-- Mensaje de error -->
-                                    <div *ngIf="provider.touched && provider.errors?.['required']"
+                                    <div *ngIf="providerVar.touched && providerVar.errors?.['required']"
                                         class="text-danger ">
                                         <p><small>Este campo no puede estar vacío</small></p>
                                     </div>
@@ -36,26 +36,26 @@
                             <div class="col d-flex justify-content-between ">
                                 <div class="w-75 me-2">
                                     <label for="productos" class="form-label">Producto</label>
-                                    <select id="selectProductos" #product="ngModel" [(ngModel)]="skuSelectedProduct"
+                                    <select id="selectProductos" #productVar="ngModel" [(ngModel)]="productInput"
                                         class="form-select " name="productos" required>
-                                        <option *ngFor="let product of productSelect" value="{{product.sku}}">
+                                        <option *ngFor="let product of productSelect" [ngValue]="product">
                                             {{product.title}}</option>
                                     </select>
                                     <!-- Mensaje de error -->
-                                    <div *ngIf="product.touched && product.errors?.['required']" class="text-danger ">
+                                    <div *ngIf="productVar.touched && productVar.errors?.['required']" class="text-danger ">
                                         <p><small>Este campo no puede estar vacío</small></p>
                                     </div>
                                 </div>
                                 <div class="w-25">
                                     <label for="cantidad" class="form-label">Cantidad</label>
-                                    <input type="number" #quantity="ngModel" id="txtCantidad"
-                                        [(ngModel)]="selectedProductQuantity" name="cantidad" class="form-control"
+                                    <input type="number" #quantityVar="ngModel" id="txtCantidad"
+                                        [(ngModel)]="quantityInput" name="cantidad" class="form-control"
                                         placeholder="1" min="1" max="9999" required>
                                     <!-- Mensaje de error -->
-                                    <div *ngIf="quantity.touched && quantity.errors?.['min']" class="text-danger ">
+                                    <div *ngIf="quantityVar.touched && quantityVar.errors?.['min']" class="text-danger ">
                                         <p><small>El valor del campo debe ser mayor a 0</small></p>
                                     </div>
-                                    <div *ngIf="quantity.touched && quantity.errors?.['max']" class="text-danger ">
+                                    <div *ngIf="quantityVar.touched && quantityVar.errors?.['max']" class="text-danger ">
                                         <p><small>El valor del campo debe ser menor a 9.999</small></p>
                                     </div>
                                 </div>
@@ -77,12 +77,8 @@
                         <div class="row">
                             <div class="col">
                                 <label class="form-label" for="fechaEmision">Fecha de emisión</label>
-                                <input id="txtFechaEmision" #fechaEmision="ngModel" [(ngModel)]="order.issueDate" class="form-control"
-                                    name="fechaEmision" type="date" required>
-                                <!-- Mensaje de error -->
-                                <div *ngIf="fechaEmision.touched && fechaEmision.errors?.['required']" class="text-danger ">
-                                    <p><small>Este campo no puede estar vacío</small></p>
-                                </div>
+                                <input id="txtFechaEmision" class="form-control"
+                                    name="fechaEmision" type="date" [value]="formatDate(order.issueDate)" disabled>
                             </div>
                             <div class="col">
                                 <label for="fechaEntrega" class="form-label">Fecha de entrega</label>
@@ -110,7 +106,7 @@
                                 <div class="card rounded-0 p-2 card-border-blue">
                                     <div class="scrollable">
                                     <!-- Tabla de detalles agregados -->
-                                    <table *ngIf="order.orderDetails.length > 0" class="table m-0">
+                                    <table *ngIf="order.details.length > 0" class="table m-0">
                                         <thead>
                                           <tr class="text-center">
                                             <th class="fw-medium font-blue">Producto</th>
@@ -120,7 +116,7 @@
                                           </tr>
                                         </thead>
                                         <tbody>
-                                          <tr *ngFor="let detail of order.orderDetails" class="text-center">
+                                          <tr *ngFor="let detail of order.details" class="text-center">
                                             <td  class="fw-medium font-blue">{{detail.product.title}}</td>
                                             <td  class="fw-medium font-blue">x{{detail.quantity}}</td>
                                             <td  class="fw-medium font-blue">{{(detail.product.price * detail.quantity) | currency}}</td>
@@ -134,7 +130,7 @@
                                         </tbody>
                                       </table>
                                     </div>
-                                    <p *ngIf="order.orderDetails.length === 0" class="text-secondary ">Todavía no hay details agregados</p>
+                                    <p *ngIf="order.details.length === 0" class="text-secondary ">Todavía no hay detalles agregados</p>
                                 </div>
                             </div>
                         </div>

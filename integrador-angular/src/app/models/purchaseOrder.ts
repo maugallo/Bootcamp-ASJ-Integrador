@@ -1,13 +1,15 @@
 import { OrderDetail } from "./orderDetail";
 import { Provider } from "./provider";
 
-export interface Order{
-    orderNumber: number;
+export interface PurchaseOrder{
+    id?: number;
+    details: OrderDetail[];
+    orderStatus: string;
+    provider: Provider;
     issueDate: Date;
     deliveryDate: Date;
     receptionInfo: string;
-    provider: Provider;
-    orderDetails: OrderDetail[];
     total: number;
-    enabled: boolean;
+    createdAt?: Date;
+    updatedAt?: Date;
 }

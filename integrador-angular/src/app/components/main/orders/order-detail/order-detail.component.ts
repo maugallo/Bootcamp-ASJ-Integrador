@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Order } from '../../../../models/order';
+import { PurchaseOrder } from '../../../../models/purchaseOrder';
 import { OrderService } from '../../../../services/order.service';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -10,15 +10,23 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class OrderDetailComponent implements OnInit {
 
-  order!: Order;
+  order!: PurchaseOrder;
 
   param!: number;
 
   constructor(private orderService: OrderService, private router: Router, private activatedRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
-      this.param = Number(this.activatedRoute.snapshot.params['id']);
-      let orderByParam = this.orderService.getOrder();
-      
-        this.router.navigate(['orders/form-order']);}
+    this.param = this.activatedRoute.snapshot.params['id'];
+    
+    this.orderService.getOrderById(this.param).subscribe({
+      next: (data) => {
+        this.order = data;
+      },
+      error: (error) => {
+        alert(error.error)
+        this.router.navigate(['products/form-provider']);
+      }
+    });
   }
+}

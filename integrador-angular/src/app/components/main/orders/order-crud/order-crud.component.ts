@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
-import { Order } from '../../../../models/order';
+import { PurchaseOrder } from '../../../../models/purchaseOrder';
 import { OrderService } from '../../../../services/order.service';
+import { AlertHandler } from '../../../../utils/alertHandler';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-order-crud',
@@ -9,28 +11,63 @@ import { OrderService } from '../../../../services/order.service';
 })
 export class OrderCrudComponent {
 
-  arrayEnabled!: Order[];
-  arrayDisabled!: Order[];
+  arrayEnabled!: PurchaseOrder[];
 
-  seeDisabled: boolean = false;
+  constructor(private orderService: OrderService) { }
 
-  selectedOrderNumber!: number;
-
-  constructor(private orderService: OrderService) {}
+  private alertHandler = new AlertHandler();
 
   ngOnInit(): void {
-    this.renderTables();
+    this.renderTable();
   }
 
-  openModal(orderNumber: number){
-    this.selectedOrderNumber = orderNumber;
+  openCancelOrderModal(id: number) {
+    Swal.fire({
+      title: "¿Estás seguro que deseas cancelar esta órden?",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Cancelar",
+      cancelButtonText: "Cerrar"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.cancelOrder(id);
+      }
+    });
   }
 
-  deleteOrder(){
+  cancelOrder(id: number) {
+    this.orderService.updateOrder().subscribe({
+      next: (data) => {
+        this.renderTable();
+
+        this.alertHandler.getToast().fire({
+          icon: "success",
+          title: data,
+        });
+      },
+      error: (error) => {
+        Swal.fire({
+          icon: "error",
+          title: "Error",
+          text: error.error
+        });
+      }
+    })
+  }
+
+  clearFilter() {
     
   }
 
-  renderTables(){
+  onFilter() {
     
+  }
+
+  renderTable() {
+    this.orderService.getOrders().subscribe({
+      next: (data) => {
+        this.arrayEnabled = data;
+      }
+    })
   }
 }

@@ -19,8 +19,6 @@ export class ProductCrudComponent {
 
   categorySelect!: Category[];
 
-  selectedId!: number;
-
   seeDisabled: boolean = false;
 
   filterValue: string = "";
@@ -93,13 +91,13 @@ export class ProductCrudComponent {
       this.renderTables();
     } else {
       if (this.seeDisabled) {
-        this.productService.getProducts(this.filterValue, this.filterCategoryValue, false).subscribe({
+        this.productService.getProductsByFilter(this.filterValue, this.filterCategoryValue, false).subscribe({
           next: (data) => {
             this.arrayDisabled = data;
           }
         })
       } else {
-        this.productService.getProducts(this.filterValue, this.filterCategoryValue, true).subscribe({
+        this.productService.getProductsByFilter(this.filterValue, this.filterCategoryValue, true).subscribe({
           next: (data) => {
             this.arrayEnabled = data;
           }
@@ -109,13 +107,13 @@ export class ProductCrudComponent {
   }
 
   renderTables() {
-    this.productService.getProducts("", "", true).subscribe({
+    this.productService.getProducts(true).subscribe({
       next: (data) => {
         this.arrayEnabled = data;
       }
     })
 
-    this.productService.getProducts("", "", false).subscribe({
+    this.productService.getProducts(false).subscribe({
       next: (data) => {
         this.arrayDisabled = data;
       }

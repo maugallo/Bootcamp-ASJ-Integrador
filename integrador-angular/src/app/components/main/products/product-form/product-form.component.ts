@@ -74,7 +74,7 @@ export class ProductFormComponent implements OnInit {
     if (this.param) {
       this.productService.getProductById(this.param).subscribe({
         next: (data) => {
-          if (data){
+          if (data) {
             this.realProduct = data;
 
             this.product = JSON.parse(JSON.stringify(this.realProduct));

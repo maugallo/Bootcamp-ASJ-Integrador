@@ -8,13 +8,13 @@ import { Observable } from 'rxjs';
 })
 export class ProviderService {
 
-  constructor(private http: HttpClient) { }
-
   private URL_API_PROVIDERS: string = "http://localhost:8080/providers";
   
   private URL_API_COUNTRIES: string = "http://localhost:8080/countries";
   private URL_API_PROVINCES: string = "http://localhost:8080/provinces";
   private URL_API_LOCALITIES: string = "http://localhost:8080/localities";
+
+  constructor(private http: HttpClient) { }
 
   //GET METHODS:
   getProviders(companyNameOrCode?: string, isEnabled?: boolean): Observable<Provider[]> {

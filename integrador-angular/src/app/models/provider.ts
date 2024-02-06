@@ -4,8 +4,7 @@ import { Product } from "./product";
 import { Sector } from "./sector";
 
 export interface Provider{
-    id?: number; //Optional attribute
-    products?: Product[];
+    id?: number;
     sector: Sector;
     vatCondition: string;
     contact: Contact;

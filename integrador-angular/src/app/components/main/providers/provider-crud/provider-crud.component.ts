@@ -14,8 +14,6 @@ export class ProviderCrudComponent implements OnInit {
   arrayEnabled!: Provider[];
   arrayDisabled!: Provider[];
 
-  selectedId!: number;
-
   seeDisabled: boolean = false;
 
   companyNameOrCode: string = "";
@@ -35,7 +33,7 @@ export class ProviderCrudComponent implements OnInit {
       showCancelButton: true,
       confirmButtonText: this.seeDisabled ? "Agregar" : "Eliminar",
       cancelButtonText: "Cerrar",
-      text: this.seeDisabled ? "" : "Esta acción eliminará los productos relacionados"
+      text: this.seeDisabled ? "" : "Los productos relacionados podrán seguir usándose"
     }).then((result) => {
       if (result.isConfirmed) {
         this.deleteOrRecoverProvider(id);
@@ -80,7 +78,7 @@ export class ProviderCrudComponent implements OnInit {
     }
   }
 
-  OnFilter(){
+  onFilter(){
     if (this.companyNameOrCode === ''){
       this.renderTables();
     } else {

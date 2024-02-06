@@ -4,7 +4,7 @@
         <p class="my-4"><a class=" fs-6 font-blue" [routerLink]="['/orders']">VOLVER</a></p>
         <div class="card card-border-blue rounded-0 p-3">
             <section class="font-blue subtitle mb-4">
-                <h3 class="fs-1 fw-semibold text-center ">Orden de Compra N°{{order.orderNumber}}</h3>
+                <h3 class="fs-1 fw-semibold text-center ">Orden de Compra N°{{order.id}}</h3>
             </section>
             <div class="row text-center mb-5">
                 <section class="col">
@@ -57,7 +57,7 @@
                           </tr>
                         </thead>
                         <tbody>
-                          <tr *ngFor="let detail of order.orderDetails" class="text-center">
+                          <tr *ngFor="let detail of order.details" class="text-center">
                             <td  class="fs-5 fw-medium font-blue">{{detail.product.title}}</td>
                             <td  class="fs-5 fw-medium font-blue">{{detail.product.description}}</td>
                             <td  class="fs-5 fw-medium font-blue">x{{detail.quantity}}</td>
