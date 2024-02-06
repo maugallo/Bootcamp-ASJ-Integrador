@@ -4,10 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.data.jpa.domain.Specification;
+import org.springframework.util.NumberUtils;
 import org.springframework.util.StringUtils;
 
 import com.bootcamp.todolist.models.Category;
 import com.bootcamp.todolist.models.Product;
+import com.bootcamp.todolist.models.Provider;
 
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -19,12 +21,14 @@ public class ProductSpecification implements Specification<Product> {
 
 	 private String titleOrDescription;
 	 private String category;
+	 private Integer idProvider;
 	 private Boolean isEnabled;
 	
-	public ProductSpecification(String titleOrDescription, String category, Boolean isEnabled) {
+	public ProductSpecification(String titleOrDescription, String category, Integer idProvider, Boolean isEnabled) {
 		
 		this.titleOrDescription = titleOrDescription;
 		this.category = category;
+		this.idProvider = idProvider;
 		this.isEnabled = isEnabled;
 	}
 
@@ -45,6 +49,12 @@ public class ProductSpecification implements Specification<Product> {
 		if (StringUtils.hasText(category)) { // IF TRUE THEN WE ARE CREATING A QUERY --> c.name LIKE %:category%
 			Predicate hasCategory = criteriaBuilder.like(productCategoryJoin.get("name"), "%".concat(category).concat("%"));
 			predicates.add(hasCategory);
+		}
+		
+		Join<Product, Provider> productProviderJoin = root.join("provider");
+		if (idProvider != null && idProvider != 0) {
+			Predicate hasProviderId = criteriaBuilder.equal(productProviderJoin.get("id"), idProvider);
+			predicates.add(hasProviderId);
 		}
 		
 		if (isEnabled != null) {

@@ -24,13 +24,8 @@ public class OrderDetailService {
 	}
 	
 	public String createOrderDetail(OrderDetail orderDetail) {
-		try {
-			orderDetailRepository.save(orderDetail);
-			return "Order detail created correctly";
-		} catch (Exception e) {
-			e.printStackTrace();
-			return "Error creating the order detail";
-		}
+		orderDetailRepository.save(orderDetail);
+		return "Detalle de orden creado correctamente";
 	}
 	
 	public String updateOrderDetail(Integer id, OrderDetail updatedOrderDetail) {

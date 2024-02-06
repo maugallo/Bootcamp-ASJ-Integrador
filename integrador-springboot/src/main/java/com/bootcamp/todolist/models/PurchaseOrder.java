@@ -7,6 +7,8 @@ import java.util.List;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -31,6 +33,7 @@ public class PurchaseOrder {
 	private Integer id;
 	
 	@OneToMany(mappedBy = "purchaseOrder")
+	@JsonManagedReference
 	List<OrderDetail> details;
 	
 	@Enumerated(EnumType.STRING)
@@ -61,9 +64,6 @@ public class PurchaseOrder {
 	@Column
 	private Double total;
 	
-	@Column
-	private Boolean isEnabled;
-	
 	@CreationTimestamp
 	private Timestamp createdAt;
 	
@@ -72,23 +72,32 @@ public class PurchaseOrder {
 
 	public PurchaseOrder() {}
 
-	public PurchaseOrder(Integer id, OrderStatus orderStatus, Provider provider, LocalDate issueDate,
-			LocalDate deliveryDate, String receptionInfo, Double total, Boolean isEnabled, Timestamp createdAt,
-			Timestamp updatedAt) {
+	public PurchaseOrder(Integer id, List<OrderDetail> details, OrderStatus orderStatus, Provider provider,
+			@NotNull LocalDate issueDate, @NotNull LocalDate deliveryDate, @NotNull String receptionInfo, Double total,
+			Timestamp createdAt, Timestamp updatedAt) {
+		super();
 		this.id = id;
+		this.details = details;
 		this.orderStatus = orderStatus;
 		this.provider = provider;
 		this.issueDate = issueDate;
 		this.deliveryDate = deliveryDate;
 		this.receptionInfo = receptionInfo;
 		this.total = total;
-		this.isEnabled = isEnabled;
 		this.createdAt = createdAt;
 		this.updatedAt = updatedAt;
 	}
 
 	public Integer getId() {
 		return id;
+	}
+
+	public List<OrderDetail> getDetails() {
+		return details;
+	}
+
+	public void setDetails(List<OrderDetail> details) {
+		this.details = details;
 	}
 
 	public OrderStatus getOrderStatus() {
@@ -137,14 +146,6 @@ public class PurchaseOrder {
 
 	public void setTotal(Double total) {
 		this.total = total;
-	}
-
-	public Boolean getIsEnabled() {
-		return isEnabled;
-	}
-
-	public void setIsEnabled(Boolean isEnabled) {
-		this.isEnabled = isEnabled;
 	}
 
 	public Timestamp getCreatedAt() {

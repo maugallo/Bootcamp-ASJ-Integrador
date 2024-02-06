@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bootcamp.todolist.ErrorHandler;
@@ -29,43 +30,45 @@ public class PurchaseOrderController {
 	@Autowired
 	PurchaseOrderService purchaseOrderService;
 	
+	//GET METHODS:
 	@GetMapping()
-	public ResponseEntity<List<PurchaseOrder>> getPurchaseOrders() {
-		return new ResponseEntity<List<PurchaseOrder>>(purchaseOrderService.getPurchaseOrders(), HttpStatus.OK);
+	public ResponseEntity<List<PurchaseOrder>> getPurchaseOrders(@RequestParam(required = false) String status) {
+		if (status != null) {
+			return new ResponseEntity<>(purchaseOrderService.getPurchaseOrdersByStatus(status), HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(purchaseOrderService.getPurchaseOrders(), HttpStatus.OK);
+		}
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Optional<PurchaseOrder>> getpurchaseOrderServiceById(@PathVariable Integer id){
-		return new ResponseEntity<Optional<PurchaseOrder>>(purchaseOrderService.getPurchaseOrderById(id), HttpStatus.OK);
+	public ResponseEntity<PurchaseOrder> getpurchaseOrderServiceById(@PathVariable Integer id){
+		return new ResponseEntity<>(purchaseOrderService.getPurchaseOrderById(id), HttpStatus.OK);
 	}
 	
+	//CREATE METHOD:
 	@PostMapping()
 	public ResponseEntity<String> createPurchaseOrder(@Valid @RequestBody PurchaseOrder purchaseOrder, BindingResult bindingResult) {
 		if (bindingResult.hasErrors()) {
 			List<String> errorList = ErrorHandler.loadErrorMessages(bindingResult);
 			ErrorHandler.printErrorMessages(errorList);
 			
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(ErrorHandler.getErrorMessages(errorList), HttpStatus.BAD_REQUEST);
 		} else {
 			return new ResponseEntity<>(purchaseOrderService.createPurchaseOrder(purchaseOrder), HttpStatus.OK);
 		}
 	}
 	
+	//UPDATE METHOD:
 	@PutMapping("/{id}")
 	public ResponseEntity<String> updatePurchaseOrder(@PathVariable Integer id  ,@Valid @RequestBody PurchaseOrder purchaseOrder, BindingResult bindingResult){
 		if (bindingResult.hasErrors()) {
 			List<String> errorList = ErrorHandler.loadErrorMessages(bindingResult);
 			ErrorHandler.printErrorMessages(errorList);
 			
-			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>(ErrorHandler.getErrorMessages(errorList), HttpStatus.BAD_REQUEST);
 		} else {
 			return new ResponseEntity<>(purchaseOrderService.updatePurchaseOrder(id, purchaseOrder), HttpStatus.OK);
 		}
-	}
-	
-	@DeleteMapping("/{id}")
-	public ResponseEntity<String> logicalDeletePurchaseOrder(@PathVariable Integer id){
-		return new ResponseEntity<>(purchaseOrderService.logicalDeletePurchaseOrder(id), HttpStatus.OK);
 	}
 	
 }

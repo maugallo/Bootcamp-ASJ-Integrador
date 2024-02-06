@@ -6,8 +6,12 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.bootcamp.todolist.exceptions.ObjectNotFoundException;
+import com.bootcamp.todolist.models.OrderStatus;
 import com.bootcamp.todolist.models.PurchaseOrder;
 import com.bootcamp.todolist.repositories.PurchaseOrderRepository;
+
+import jakarta.transaction.Transactional;
 
 @Service
 public class PurchaseOrderService {
@@ -15,50 +19,57 @@ public class PurchaseOrderService {
 	@Autowired
 	PurchaseOrderRepository purchaseOrderRepository;
 	
+	@Autowired
+	OrderDetailService orderDetailService;
+	
+	//GET METHODS:
 	public List<PurchaseOrder> getPurchaseOrders(){
 		return purchaseOrderRepository.findAll();
 	}
 	
-	public Optional<PurchaseOrder> getPurchaseOrderById(Integer id){
-		return purchaseOrderRepository.findById(id);
+	public List<PurchaseOrder> getPurchaseOrdersByStatus(String status){
+		OrderStatus orderStatus = OrderStatus.valueOf(status.toUpperCase());
+		return purchaseOrderRepository.findByOrderStatus(orderStatus);
 	}
 	
+	public PurchaseOrder getPurchaseOrderById(Integer id){
+		Optional<PurchaseOrder> purchaseOrder = purchaseOrderRepository.findById(id);
+		if (purchaseOrder.isPresent()) {
+			return purchaseOrder.get();
+		} else {
+			throw new ObjectNotFoundException("No se pudo encontrar la órden de compra solicitada con id: " + id);
+		}
+	}
+	
+	//CREATE METHOD: (Transactional)
+	@Transactional
 	public String createPurchaseOrder(PurchaseOrder purchaseOrder) {
-		try {
-			purchaseOrderRepository.save(purchaseOrder);
-			return "Purchase order created correctly";
-		} catch (Exception e) {
-			e.printStackTrace();
-			return "Error creating the purchase order";
-		}
+		
+		PurchaseOrder savedOrder = purchaseOrderRepository.save(purchaseOrder);
+		
+		purchaseOrder.getDetails().forEach((detail) -> {
+			detail.setPurchaseOrder(savedOrder);
+			orderDetailService.createOrderDetail(detail);
+		});
+		
+		return "Orden de compra agregada correctamente";
 	}
 	
+	//UPDATE METHOD:
 	public String updatePurchaseOrder(Integer id, PurchaseOrder updatedPurchaseOrder) {
-		try {
-			purchaseOrderRepository.save(updatedPurchaseOrder);
-			return "Purchase order updated correctly";
-		} catch (Exception e) {
-			e.printStackTrace();
-			return "Error updating the purchase order";
-		}
+		return null;
 	}
 	
-	public String logicalDeletePurchaseOrder(Integer id) {
-		try {
-			Optional<PurchaseOrder> optionalPurchaseOrder = purchaseOrderRepository.findById(id);
-			
-			if (optionalPurchaseOrder.isPresent()) {
-				PurchaseOrder purchaseOrder = optionalPurchaseOrder.get();
-				purchaseOrder.setIsEnabled(false);
-				purchaseOrderRepository.save(purchaseOrder);
-				return "Purchase order deleted correctly";
-			} else {
-				return "Purchase order doesn't exist";
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			return "Error deleting the purchase order";
-		}
+	//CANCEL METHOD:
+	public String cancelPurchaseOrder(Integer id) {
+		PurchaseOrder purchaseOrder = this.getPurchaseOrderById(id);
+		
+		purchaseOrder.setOrderStatus(OrderStatus.CANCELADA);
+		purchaseOrderRepository.save(purchaseOrder);
+		return "Orden de compra cancelada correctamente";
 	}
+	
+	//VALIDATION METHODS:
+	
 	
 }

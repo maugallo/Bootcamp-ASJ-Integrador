@@ -59,10 +59,10 @@ public class ProviderService {
 			
 			providerRepository.save(provider);
 			
-			return "Proveedor creado correctamente";
+			return "Proveedor agregado correctamente";
 	}
 	
-	//UPDATE METHOD: ***FIJARSE SI HACE FALTA LLAMAR A TODOS LOS PRODUCTOS RELACIONADOS A DICHO PROVEEDOR Y CAMBIARLES SU VALOR O NO***
+	//UPDATE METHOD:
 	@Transactional
 	public String updateProvider(Integer id, Provider updatedProvider) {
 		
@@ -77,7 +77,7 @@ public class ProviderService {
 			return "Proveedor actualizado correctamente";
 	}
 	
-	//DELETE & RECOVER METHOD: ***FALTA LLAMAR A TODOS LOS PRODUCTOS RELACIONADOS A DICHO PROVEEDOR Y ELIMINARLOS***
+	//DELETE & RECOVER METHOD:
 	public String toggleIsEnabled(Integer id) {
 		Optional<Provider> optProvider = providerRepository.findById(id);
 		if (optProvider.isPresent()) {
