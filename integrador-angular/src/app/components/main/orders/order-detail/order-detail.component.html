@@ -1,78 +1,80 @@
 <div class="row">
     <div class="col-1"></div>
     <div class="col-10">
-        <p class="my-4"><a class=" fs-6 font-blue" [routerLink]="['/orders']">VOLVER</a></p>
-        <div class="card card-border-blue rounded-0 p-3">
-            <section class="font-blue subtitle mb-4">
-                <h3 class="fs-1 fw-semibold text-center ">Orden de Compra N°{{order.id}}</h3>
-            </section>
-            <div class="row text-center mb-5">
-                <section class="col">
-                    <div>
-                        <p class="fs-3 font-blue fw-semibold">Fecha de emisión:</p>
-                    </div>
-                    <div>
-                        <span class="fs-3">{{order.issueDate | date: 'dd/MM/yyyy'}}</span>
-                    </div>
+        <ng-container *ngIf="order != null">
+            <p class="my-4"><a class=" fs-6 font-blue" [routerLink]="['/orders']">VOLVER</a></p>
+            <div class="card card-border-blue rounded-0 p-3">
+                <section class="font-blue subtitle mb-4">
+                    <h3 class="fs-1 fw-semibold text-center ">Orden de Compra N°{{order.id}}</h3>
                 </section>
-                <section class="col">
-                    <div>
-                        <p class="fs-3 font-blue fw-semibold">Fecha de entrega:</p>
-                    </div>
-                    <div>
-                        <span class="fs-3">{{order.deliveryDate | date: 'dd/MM/yyyy'}}</span>
-                    </div>
-                </section>
-                <section class="col">
-                    <div>
-                        <p class="fs-3 font-blue fw-semibold">Proveedor:</p>
-                    </div>
-                    <div>
-                        <span class="fs-3">{{order.provider.companyName}}</span>
-                    </div>
-                </section>
+                <div class="row text-center mb-5">
+                    <section class="col">
+                        <div>
+                            <p class="fs-3 font-blue fw-semibold">Fecha de emisión:</p>
+                        </div>
+                        <div>
+                            <span class="fs-3">{{order.issueDate | date: 'dd/MM/yyyy'}}</span>
+                        </div>
+                    </section>
+                    <section class="col">
+                        <div>
+                            <p class="fs-3 font-blue fw-semibold">Fecha de entrega:</p>
+                        </div>
+                        <div>
+                            <span class="fs-3">{{order.deliveryDate | date: 'dd/MM/yyyy'}}</span>
+                        </div>
+                    </section>
+                    <section class="col">
+                        <div>
+                            <p class="fs-3 font-blue fw-semibold">Proveedor:</p>
+                        </div>
+                        <div>
+                            <span class="fs-3">{{order.provider.companyName}}</span>
+                        </div>
+                    </section>
+                </div>
+                <div class="row mb-4">
+                    <section class="col mx-4 p-4">
+                        <div>
+                            <p class="fs-3 font-blue fw-semibold ">Información de recepción:</p>
+                        </div>
+                        <div>
+                            <span class="fs-5">{{order.receptionInfo}}</span>
+                        </div>
+                    </section>
+                </div>
+                <div class="row">
+                    <section class="col mx-3">
+                        <div>
+                            <p class="fs-3 font-blue fw-semibold text-center ">Detalle de la orden:</p>
+                        </div>
+                        <table class="table table-bordered  m-0">
+                            <thead>
+                            <tr class="text-center">
+                                <th class="fs-5 fw-medium font-blue">Producto</th>
+                                <th class="fs-5 fw-medium font-blue">Descripción</th>
+                                <th class="fs-5 fw-medium font-blue">Cantidad</th>
+                                <th class="fs-5 fw-medium font-blue">Subtotal</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr *ngFor="let detail of order.details" class="text-center">
+                                <td  class="fs-5 fw-medium font-blue">{{detail.product.title}}</td>
+                                <td  class="fs-5 fw-medium font-blue">{{detail.product.description}}</td>
+                                <td  class="fs-5 fw-medium font-blue">x{{detail.quantity}}</td>
+                                <td  class="fs-5 fw-medium font-blue">{{detail.product.price * detail.quantity | currency}}</td>
+                            </tr>
+                            <tr class="text-center ">
+                                <td colspan="2"></td>
+                                <td class="fs-5 fw-medium font-blue">Total</td>
+                                <td class="fs-5 fw-medium font-blue">{{order.total | currency}}</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </section>
+                </div>
             </div>
-            <div class="row mb-4">
-                <section class="col mx-4 p-4">
-                    <div>
-                        <p class="fs-3 font-blue fw-semibold ">Información de recepción:</p>
-                    </div>
-                    <div>
-                        <span class="fs-5">{{order.receptionInfo}}</span>
-                    </div>
-                </section>
-            </div>
-            <div class="row">
-                <section class="col mx-3">
-                    <div>
-                        <p class="fs-3 font-blue fw-semibold text-center ">Detalle de la orden:</p>
-                    </div>
-                    <table class="table table-bordered  m-0">
-                        <thead>
-                          <tr class="text-center">
-                            <th class="fs-5 fw-medium font-blue">Producto</th>
-                            <th class="fs-5 fw-medium font-blue">Descripción</th>
-                            <th class="fs-5 fw-medium font-blue">Cantidad</th>
-                            <th class="fs-5 fw-medium font-blue">Subtotal</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr *ngFor="let detail of order.details" class="text-center">
-                            <td  class="fs-5 fw-medium font-blue">{{detail.product.title}}</td>
-                            <td  class="fs-5 fw-medium font-blue">{{detail.product.description}}</td>
-                            <td  class="fs-5 fw-medium font-blue">x{{detail.quantity}}</td>
-                            <td  class="fs-5 fw-medium font-blue">${{detail.product.price * detail.quantity}}</td>
-                          </tr>
-                          <tr class="text-center ">
-                            <td colspan="2"></td>
-                            <td class="fs-5 fw-medium font-blue">Total</td>
-                            <td class="fs-5 fw-medium font-blue">${{order.total}}</td>
-                          </tr>
-                        </tbody>
-                      </table>
-                </section>
-            </div>
-        </div>
+        </ng-container>
     </div>
     <div class="col-1"></div>
 </div>

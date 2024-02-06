@@ -22,9 +22,9 @@
                                 <th>N° de órden</th>
                                 <th>Fecha de emisión</th>
                                 <th>Fecha de entrega</th>
-                                <th>Info. Recepción</th>
                                 <th>Proveedor</th>
-                                <th>Detalle de órden</th>
+                                <th>Total</th>
+                                <th>Estado</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
@@ -33,18 +33,13 @@
                                 <td>{{order.id}}</td>
                                 <td>{{order.issueDate | date: 'dd/MM/yyyy'}}</td>
                                 <td>{{order.deliveryDate | date: 'dd/MM/yyyy'}}</td>
-                                <td>{{order.receptionInfo}}</td>
                                 <td>{{order.provider.companyName}}</td>
-                                <td class="text-start ">
-                                    <ng-container *ngFor="let detail of order.details">
-                                        <div class="mb-2">{{detail.product.title}} x({{detail.quantity}}) {{detail.product.price | currency}}</div>
-                                    </ng-container>
-                                    Total {{order.total | currency}}
-                                </td>
+                                <td>{{order.total | currency}}</td>
+                                <td>{{order.orderStatus | titlecase}}</td>
                                 <td>
-                                    <a class="fs-5 me-2 text-decoration-none option">🚫</a>
-                                    <a class="fs-5 me-2 text-decoration-none option" [routerLink]="['form-product', order.id]">✏️</a>
-                                    <a class="fs-5 text-decoration-none option" [routerLink]="['/products', order.id]">👁️</a>
+                                    <a class="fs-5 me-2 text-decoration-none option" (click)="openCancelOrderModal(order.id!)">🚫</a>
+                                    <a class="fs-5 me-2 text-decoration-none option" [routerLink]="['form-order', order.id]">✏️</a>
+                                    <a class="fs-5 text-decoration-none option" [routerLink]="['/orders', order.id]">👁️</a>
                                 </td>
                             </tr>
                         </tbody>
