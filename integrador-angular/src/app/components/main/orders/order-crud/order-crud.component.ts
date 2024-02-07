@@ -3,6 +3,7 @@ import { PurchaseOrder } from '../../../../models/purchaseOrder';
 import { OrderService } from '../../../../services/order.service';
 import { AlertHandler } from '../../../../utils/alertHandler';
 import Swal from 'sweetalert2';
+import { OrderStatus } from '../../../../models/orderStatus';
 
 @Component({
   selector: 'app-order-crud',
@@ -12,6 +13,15 @@ import Swal from 'sweetalert2';
 export class OrderCrudComponent {
 
   arrayEnabled!: PurchaseOrder[];
+
+  orderStatusSelect: OrderStatus[] = [
+    'PENDIENTE',
+    'COMPLETADA',
+    'CANCELADA',
+    'EXPIRADA',
+  ];
+
+  filterSelectedStatus: string = '';
 
   constructor(private orderService: OrderService) { }
 
@@ -23,20 +33,51 @@ export class OrderCrudComponent {
 
   openCancelOrderModal(id: number) {
     Swal.fire({
-      title: "¿Estás seguro que deseas cancelar esta órden?",
+      title: "¿Deseas cancelar esta orden?",
+      text: "Esta operación no se puede deshacer",
       icon: "warning",
       showCancelButton: true,
-      confirmButtonText: "Cancelar",
+      confirmButtonText: "Confirmar",
       cancelButtonText: "Cerrar"
     }).then((result) => {
       if (result.isConfirmed) {
-        this.cancelOrder(id);
+        this.updateOrderStatus(id, "CANCELADA");
       }
     });
   }
 
-  cancelOrder(id: number) {
-    this.orderService.updateOrder().subscribe({
+  openCompleteOrderModal(id: number) {
+    Swal.fire({
+      title: "¿Deseas completar esta orden?",
+      text: "Esta operación no se puede deshacer",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Confirmar",
+      cancelButtonText: "Cerrar"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.updateOrderStatus(id, "COMPLETADA");
+      }
+    });
+  }
+
+  openExpireOrderModal(id: number){
+    Swal.fire({
+      title: "¿Deseas marcar esta orden como expirada?",
+      text: "Esta operación no se puede deshacer",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Confirmar",
+      cancelButtonText: "Cerrar"
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.updateOrderStatus(id, "EXPIRADA");
+      }
+    });
+  }
+
+  updateOrderStatus(id: number, orderStatus: string) {
+    this.orderService.updateOrderStatus(id, orderStatus).subscribe({
       next: (data) => {
         this.renderTable();
 
@@ -55,12 +96,16 @@ export class OrderCrudComponent {
     })
   }
 
-  clearFilter() {
-    
-  }
-
   onFilter() {
-    
+    if (this.filterSelectedStatus !== ''){
+      this.orderService.getOrdersByFilter(this.filterSelectedStatus).subscribe({
+        next: (data) => {
+          this.arrayEnabled = data;
+        }
+      })
+    } else {
+      this.renderTable();
+    }
   }
 
   renderTable() {

@@ -15,7 +15,6 @@ export class ProductService {
 
   //GET METHODS:
   getProducts(isEnabled: boolean){
-
     let params = new HttpParams();
 
     params = params.append('isEnabled', isEnabled);
@@ -24,7 +23,6 @@ export class ProductService {
   }
 
   getProductsByFilter(titleOrDescription?: string, category?: string, isEnabled?: boolean): Observable<Product[]> {
-
     let params = new HttpParams();
 
     if (titleOrDescription !== undefined && titleOrDescription !== '') params = params.append('titleOrDescription', titleOrDescription!);
@@ -49,7 +47,7 @@ export class ProductService {
   }
 
   getProvidersForSelect() {
-    return this.providerService.getProviders("", true);
+    return this.providerService.getProviders(true);
   }
 
   //CREATE METHOD:

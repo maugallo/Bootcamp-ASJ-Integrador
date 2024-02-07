@@ -32,6 +32,9 @@
                         <div *ngIf="(arrayDisabled.length === 0 && seeDisabled && arrayEnabled.length > 0)" class="alert alert-primary rounded-0 alert-custom mb-0">
                             <span class="fs-4 font-blue">Todavía no cuentas con categorías eliminadas</span>
                         </div>
+                        <div *ngIf="(arrayEnabled.length === 0 && seeDisabled === false) || (arrayDisabled.length === 0 && seeDisabled && arrayEnabled.length === 0)" class="alert alert-primary  rounded-0 alert-custom">
+                            <span class="fs-4 font-blue">Todavía no hay elementos, puedes agregar uno <a (click)="openAddCategoryModal()" class="alert-link click">presionando aquí</a></span>
+                        </div>
                         <table *ngIf="arrayEnabled.length > 0 || (seeDisabled === true && arrayDisabled.length > 0)"
                             class="table table-bordered custom-bordered">
                             <ng-container *ngIf="seeDisabled === false">

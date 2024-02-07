@@ -8,6 +8,11 @@ th{
     border-color: #011d69 !important;
 }
 
+select {
+    border-color: #001652;
+    border-radius: 0;
+}
+
 .option:hover{
     cursor: pointer;
 }

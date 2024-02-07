@@ -8,6 +8,7 @@ import { Product } from '../../../../models/product';
 import { OrderDetail } from '../../../../models/orderDetail';
 import { ProductService } from '../../../../services/product.service';
 import { AlertHandler } from '../../../../utils/alertHandler';
+import { format } from 'date-fns';
 import Swal from 'sweetalert2';
 
 @Component({
@@ -19,9 +20,9 @@ export class OrderFormComponent {
   //Objetos que se enlazarán mediante ngModel en el form:
   order: PurchaseOrder = {
     details: [],
-    orderStatus: '',
+    status: '',
     provider: null!,
-    issueDate: new Date(),
+    issueDate: format(new Date(), 'yyyy-MM-dd'),
     deliveryDate: null!,
     receptionInfo: '',
     total: 0
@@ -53,8 +54,8 @@ export class OrderFormComponent {
 
   ngOnInit(): void {
     this.renderProviderSelect();
-
-    this.param = this.getParameter();
+    
+    this.param = Number(this.activatedRoute.snapshot.params['id']);
     if (this.param){
       this.orderService.getOrderById(this.param).subscribe({
         next: (data) => {
@@ -87,10 +88,6 @@ export class OrderFormComponent {
     return [year, month, day].join('-');
   }
 
-  getParameter(){
-    return Number(this.activatedRoute.snapshot.params['id']);
-  }
-
   renderProviderSelect(){
     this.orderService.getProvidersForSelect().subscribe({
       next: (data) => {
@@ -103,22 +100,33 @@ export class OrderFormComponent {
     this.orderService.getProductsForSelect(this.order.provider.id!).subscribe({
       next: (data) => {
         this.productSelect = data;
+      },
+      error: () => {
+        this.productSelect = [];
       }
     })
   }
 
   preRenderProvider(){
-    this.order.provider = this.providerSelect.find(
-      (provider) =>
-        provider.id === this.order.provider.id
-    )!;
+    this.orderService.getProvidersForSelect().subscribe({
+      next: (data) => {
+        this.providerSelect = data;
+        this.order.provider = this.providerSelect.find(
+          (provider) =>
+            provider.id === this.order.provider.id
+        )!;
+      }
+    })
   }
 
   preRenderProduct(){
-    
+    this.orderService.getProductsForSelect(this.order.provider.id!).subscribe({
+      next: (data) => {
+        this.productSelect = data;
+      }
+    })
   }
 
-  //Métodos de formulario para agregar órdenes de compra:
   onSubmit(form: NgForm){
     if (form.valid){
       if (this.areOrderDetails() === false){
@@ -136,25 +144,21 @@ export class OrderFormComponent {
           this.addOrder();
         }
         else if (this.buttonName === "Editar"){
-          this.orderService.updateOrder();
-          alert("Orden modificada!");
+          this.updateOrder();
         }
-
         this.router.navigate(['/orders']);
       }
     }
   }
 
   addOrder(){
-    this.order.orderStatus = 'PENDIENTE';
+    this.order.status = 'PENDIENTE';
     this.orderService.addOrder(this.order).subscribe({
       next: (data) => {
         this.alertHandler.getToast().fire({
           icon: "success",
           title: data,
         });
-
-        this.router.navigate(['orders/']);
       },
       error: (error) => {
         Swal.fire({
@@ -167,14 +171,12 @@ export class OrderFormComponent {
   }
 
   updateOrder(){
-    this.orderService.updateOrder().subscribe({
+    this.orderService.updateOrder(this.order).subscribe({
       next: (data) => {
         this.alertHandler.getToast().fire({
           icon: "success",
           title: data,
         });
-
-        this.router.navigate(['orders/']);
       },
       error: (error) => {
         Swal.fire({
@@ -196,7 +198,9 @@ export class OrderFormComponent {
 
   areDatesCorrect(){
     let issueDate = new Date(this.order.issueDate);
+    console.log(issueDate);
     let deliveryDate = new Date(this.order.deliveryDate);
+    console.log(deliveryDate);
     if (issueDate >= deliveryDate){
       return false;
     } else{

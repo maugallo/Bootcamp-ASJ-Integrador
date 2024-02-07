@@ -17,7 +17,7 @@ import { AlertHandler } from '../../../../utils/alertHandler';
 export class ProductFormComponent implements OnInit {
   //Objetos que se enlazarán mediante ngModel en el form:
   category!: Category;
-  provider!: Provider;
+  providerInput!: Provider;
 
   product: Product = {
     category: null!,
@@ -115,17 +115,27 @@ export class ProductFormComponent implements OnInit {
   }
 
   preRenderProvider(){
-    this.provider = this.providerSelect.find(
-      (provider) =>
-        provider.id === this.realProduct.provider.id
-    )!;
+    this.productService.getProvidersForSelect().subscribe({
+      next: (data) => {
+        this.providerSelect = data;
+        this.providerInput = this.providerSelect.find(
+          (provider) =>
+            provider.id === this.realProduct.provider.id
+        )!;
+      }
+    })
   }
 
   preRenderCategory(){
-    this.category = this.categorySelect.find(
-      (category) =>
-        category.id === this.realProduct.category.id
-    )!;
+    this.categoryService.getCategories(true).subscribe({
+      next: (data) => {
+        this.categorySelect = data;
+        this.category = this.categorySelect.find(
+          (category) =>
+            category.id === this.realProduct.category.id
+        )!;
+      }
+    })
   }
 
   validateSku(){
@@ -152,7 +162,7 @@ export class ProductFormComponent implements OnInit {
   onSubmit(form: NgForm) {
     if (form.valid) {
       this.realProduct = this.product;
-      this.realProduct.provider = this.provider;
+      this.realProduct.provider = this.providerInput;
       this.realProduct.category = this.category;
 
       if (this.buttonName === 'Agregar'){

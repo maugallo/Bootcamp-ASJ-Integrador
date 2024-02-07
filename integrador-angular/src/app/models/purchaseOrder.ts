@@ -4,10 +4,10 @@ import { Provider } from "./provider";
 export interface PurchaseOrder{
     id?: number;
     details: OrderDetail[];
-    orderStatus: string;
+    status: string;
     provider: Provider;
-    issueDate: Date;
-    deliveryDate: Date;
+    issueDate: string;
+    deliveryDate: string;
     receptionInfo: string;
     total: number;
     createdAt?: Date;

@@ -17,8 +17,14 @@ export class ProviderService {
   constructor(private http: HttpClient) { }
 
   //GET METHODS:
-  getProviders(companyNameOrCode?: string, isEnabled?: boolean): Observable<Provider[]> {
+  getProviders(isEnabled: boolean): Observable<Provider[]> {
+    let params = new HttpParams();
+    params = params.append("isEnabled", isEnabled!);
 
+    return this.http.get<Provider[]>(this.URL_API_PROVIDERS, {params});
+  }
+
+  getProvidersByFilter(companyNameOrCode?: string, isEnabled?: boolean){
     let params = new HttpParams();
 
     if (companyNameOrCode != "" || companyNameOrCode !== undefined) params = params.append("companyNameOrCode", companyNameOrCode!);

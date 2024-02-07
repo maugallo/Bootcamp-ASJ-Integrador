@@ -98,7 +98,7 @@
                         <div class="col d-flex justify-content-around  mx-2">
                             <div class="me-2 w-50">
                                 <label for="provider" class="form-label">Proveedor</label>
-                                <select id="provider" #providerVar="ngModel" [(ngModel)]="provider" class="form-select "
+                                <select id="provider" #providerVar="ngModel" [(ngModel)]="providerInput" class="form-select "
                                     name="provider" required>
                                     <option *ngFor="let provider of providerSelect" [ngValue]="provider">
                                         {{provider.companyName}}</option>

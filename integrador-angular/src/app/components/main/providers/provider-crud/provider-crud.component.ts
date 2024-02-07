@@ -62,11 +62,11 @@ export class ProviderCrudComponent implements OnInit {
   }
 
   renderTables(){
-    this.providerService.getProviders("", true).subscribe((data) => {
+    this.providerService.getProviders(true).subscribe((data) => {
       this.arrayEnabled = data;
     });
 
-    this.providerService.getProviders("", false).subscribe((data) => {
+    this.providerService.getProviders(false).subscribe((data) => {
       this.arrayDisabled = data;
     });
   }
@@ -83,13 +83,13 @@ export class ProviderCrudComponent implements OnInit {
       this.renderTables();
     } else {
       if (this.seeDisabled){
-        this.providerService.getProviders(this.companyNameOrCode, false).subscribe({
+        this.providerService.getProvidersByFilter(this.companyNameOrCode, false).subscribe({
           next: (data) => {
             this.arrayDisabled = data;
           }
         })
       } else {
-        this.providerService.getProviders(this.companyNameOrCode, true).subscribe({
+        this.providerService.getProvidersByFilter(this.companyNameOrCode, true).subscribe({
           next: (data) => {
             this.arrayEnabled = data;
           }

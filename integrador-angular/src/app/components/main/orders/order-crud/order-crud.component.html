@@ -7,9 +7,21 @@
                 <h1 class="display-5 fw-semibold font-blue">GESTIÓN DE ÓRDENES DE COMPRA <i class="bi bi-clipboard-check"></i></h1>
             </section>
             <!-- Filtro y botón de agregar -->
-            <div class="mt-5">
-                <div class="text-end">
-                    <a class="btn btn-add rounded-0 ms-2" [routerLink]="['/orders/form-order']">Agregar órden</a>
+            <div class="d-flex justify-content-between mt-5">
+                <ng-container *ngIf="arrayEnabled">
+                    <div class="d-flex justify-content-start w-50">
+                        <div class="w-50 me-2">
+                            <select class="form-select" name="" id="" (change)="onFilter()" [(ngModel)]="filterSelectedStatus">
+                                <option value="">Todas</option>
+                                <option *ngFor="let status of orderStatusSelect" [ngValue]="status">{{(status + 's') | titlecase}}</option>
+                            </select>
+                        </div>
+                    </div>
+                </ng-container>
+                <div class="">
+                    <div class="text-end">
+                        <a class="btn btn-add rounded-0 ms-2" [routerLink]="['/orders/form-order']">Agregar órden</a>
+                    </div>
                 </div>
             </div>
             <!-- Tabla de órdenes -->
@@ -35,10 +47,12 @@
                                 <td>{{order.deliveryDate | date: 'dd/MM/yyyy'}}</td>
                                 <td>{{order.provider.companyName}}</td>
                                 <td>{{order.total | currency}}</td>
-                                <td>{{order.orderStatus | titlecase}}</td>
+                                <td>{{order.status | titlecase}}</td>
                                 <td>
-                                    <a class="fs-5 me-2 text-decoration-none option" (click)="openCancelOrderModal(order.id!)">🚫</a>
-                                    <a class="fs-5 me-2 text-decoration-none option" [routerLink]="['form-order', order.id]">✏️</a>
+                                    <a *ngIf="order.status === 'PENDIENTE' " class="fs-5 me-2 text-decoration-none option" (click)="openCancelOrderModal(order.id!)">🚫</a>
+                                    <a *ngIf="order.status === 'PENDIENTE' " class="fs-5 me-2 text-decoration-none option" (click)="openCompleteOrderModal(order.id!)">✔️</a>
+                                    <a *ngIf="order.status === 'PENDIENTE' " class="fs-5 me-2 text-decoration-none option" (click)="openExpireOrderModal(order.id!)">📆</a>
+                                    <a *ngIf="order.status === 'PENDIENTE' " class="fs-5 me-2 text-decoration-none option" [routerLink]="['form-order', order.id]">✏️</a>
                                     <a class="fs-5 text-decoration-none option" [routerLink]="['/orders', order.id]">👁️</a>
                                 </td>
                             </tr>

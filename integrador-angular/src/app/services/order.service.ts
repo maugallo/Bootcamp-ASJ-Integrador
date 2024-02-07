@@ -15,7 +15,11 @@ export class OrderService {
   constructor(private http: HttpClient, private providerService: ProviderService, private productService: ProductService) { }
 
   //GET METHODS:
-  getOrders(orderStatus?: string): Observable<PurchaseOrder[]>{
+  getOrders(): Observable<PurchaseOrder[]>{
+    return this.http.get<PurchaseOrder[]>(this.URL_API);
+  }
+
+  getOrdersByFilter(orderStatus: string): Observable<PurchaseOrder[]>{
 
     let params = new HttpParams();
 
@@ -29,7 +33,7 @@ export class OrderService {
   }
 
   getProvidersForSelect(){
-    return this.providerService.getProviders("", true);
+    return this.providerService.getProviders(true);
   }
 
   getProductsForSelect(id: number){
@@ -42,8 +46,13 @@ export class OrderService {
   }
 
   //UPDATE METHOD:
-  updateOrder(){
-    return this.http.get(this.URL_API);
+  updateOrder(order: PurchaseOrder): Observable<string>{
+    return this.http.put(this.URL_API + "/" + order.id, order, {responseType: 'text'});
+  }
+
+  //UPDATE ORDER STATUS METHOD:
+  updateOrderStatus(id: number, orderStatus: string): Observable<string>{
+    return this.http.patch(this.URL_API + "/" + id, orderStatus, { responseType: 'text' });
   }
   
 }
