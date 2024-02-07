@@ -1,7 +1,7 @@
 import { Province } from "./province";
 
 export interface Locality{
-    id: number;
+    id?: number;
     province: Province;
     name: string;
 }

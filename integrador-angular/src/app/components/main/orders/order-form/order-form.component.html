@@ -2,11 +2,21 @@
     <div class="row">
         <div class="col-auto col-lg-1"></div>
         <div class="col-12 col-lg-10">
+            <!-- Breadcrumb -->
+            <section class="mt-3">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                      <li class="breadcrumb-item"><a class="font-blue text-decoration-none fw-medium" [routerLink]="['/']">Inicio</a></li>
+                      <li class="breadcrumb-item"><a class="font-blue text-decoration-none fw-medium" [routerLink]="['/orders']">Órdenes de compra</a></li>
+                      <li class="breadcrumb-item"><a class="text-secondary text-decoration-none fw-medium" >{{buttonName}} orden de compra</a></li>
+                    </ol>
+                  </nav>
+            </section>
+            <!-- Título -->
             <section>
-                <div class="my-5">
+                <div class="mt-4 mb-5">
                     <h1 class="text-center mb-2 display-5 fw-semibold font-blue">{{formTitle}} <i class="bi bi-clipboard-plus"></i></h1>
                 </div>
-                <p><a class=" fs-6 font-blue" [routerLink]="['/orders']">VOLVER</a></p>
             </section>
             <div class="row">
                 <!-- Form de Detalles -->
@@ -16,8 +26,8 @@
                     </div>
                     <form #orderDetailForm="ngForm" (ngSubmit)="addDetail()">
                         <div class="row">
-                            <div class="col">
-                                <div class="w-100">
+                            <div class="col d-flex justify-content-around ">
+                                <div class="w-75 me-3">
                                     <label for="proveedor" class="form-label">Proveedor</label>
                                     <select [disabled]="order.details.length > 0 && order.details !== undefined" (change)="selectProvider()" #providerVar="ngModel" id="selectProveedor"
                                         [(ngModel)]="order.provider" class="form-select " name="proveedor" required>
@@ -29,6 +39,9 @@
                                         class="text-danger ">
                                         <p><small>Este campo no puede estar vacío</small></p>
                                     </div>
+                                </div>
+                                <div class="w-25 text-center ">
+                                    <img *ngIf="order.provider != null" [src]="order.provider.logo" width="70" height="70" alt="Provider logo" onerror="this.src = '/assets/images/default-logo.png'" >
                                 </div>
                             </div>
                         </div>

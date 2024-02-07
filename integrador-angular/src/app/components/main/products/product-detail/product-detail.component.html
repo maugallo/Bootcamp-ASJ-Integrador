@@ -2,7 +2,16 @@
     <div class="col-1"></div>
     <div class="col-10">
         <ng-container *ngIf="product != null">
-            <p class="my-4"><a class=" fs-6 font-blue" [routerLink]="['/products']">VOLVER</a></p>
+            <!-- Breadcrumb -->
+            <section class="mt-4 mb-5">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                      <li class="breadcrumb-item"><a class="font-blue text-decoration-none fw-medium" [routerLink]="['/']">Inicio</a></li>
+                      <li class="breadcrumb-item"><a class="font-blue text-decoration-none fw-medium" [routerLink]="['/products']">Productos</a></li>
+                      <li class="breadcrumb-item"><a class="text-secondary text-decoration-none fw-medium" >{{product.title}}</a></li>
+                    </ol>
+                  </nav>
+            </section>
             <div class="row">
                 <section class="col card card-border-blue rounded-0 p-0 me-2">
                     <div class="card-img">

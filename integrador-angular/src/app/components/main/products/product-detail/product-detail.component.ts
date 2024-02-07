@@ -23,9 +23,8 @@ export class ProductDetailComponent implements OnInit {
       next: (data) => {
         this.product = data;
       },
-      error: (error) => {
-        alert(error.error)
-        this.router.navigate(['products/form-provider']);
+      error: () => {
+        this.router.navigate(['products/form-product']);
       }
     });
   }

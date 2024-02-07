@@ -4,6 +4,11 @@ th{
     border-color: #011d69;
 }
 
+.custom-bread-crumb{
+    color:#011d69;
+    text-decoration: none;
+}
+
 .custom-bordered{
     border-color: #011d69 !important;
 }

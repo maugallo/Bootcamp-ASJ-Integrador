@@ -14,30 +14,32 @@ import { OrderDetailComponent } from './components/main/orders/order-detail/orde
 const routes: Routes = [
   { path: '', component: HomeComponent },
   
-
   { path: 'providers',
-  children: [
-    { path: '', component: ProviderCrudComponent},
-    { path: 'form-provider', component: ProviderFormComponent},
-    { path: ':id', component: ProviderDetailComponent},
-    { path: 'form-provider/:id', component: ProviderFormComponent}
-  ]},
+    children: [
+      { path: '', component: ProviderCrudComponent},
+      { path: 'detail/:id', component: ProviderDetailComponent},
+      { path: 'form-provider', component: ProviderFormComponent},
+      { path: 'form-provider/:id', component: ProviderFormComponent}
+    ]
+  },
 
   { path: 'products',
-  children: [
-    { path: '', component: ProductCrudComponent},
-    { path: 'form-product', component: ProductFormComponent},
-    { path: ':id', component: ProductDetailComponent},
-    { path: 'form-product/:id', component: ProductFormComponent}
-  ]},
+    children: [
+      { path: '', component: ProductCrudComponent},
+      { path: 'detail/:id', component: ProductDetailComponent},
+      { path: 'form-product', component: ProductFormComponent},
+      { path: 'form-product/:id', component: ProductFormComponent}
+    ]
+  },
   
   { path: 'orders',
-  children: [
-    { path: '', component: OrderCrudComponent},
-    { path: 'form-order', component: OrderFormComponent},
-    { path: ':id', component: OrderDetailComponent},
-    { path: 'form-order/:id', component: OrderFormComponent}
-  ]},
+    children: [
+      { path: '', component: OrderCrudComponent},
+      { path: 'detail/:id', component: OrderDetailComponent},
+      { path: 'form-order', component: OrderFormComponent},
+      { path: 'form-order/:id', component: OrderFormComponent}
+    ]
+  },
 
   { path: '**', redirectTo: ''},
 ];

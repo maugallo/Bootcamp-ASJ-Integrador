@@ -62,19 +62,93 @@ export class ProviderCrudComponent implements OnInit {
   }
 
   renderTables(){
-    this.providerService.getProviders(true).subscribe((data) => {
-      this.arrayEnabled = data;
+    this.providerService.getProviders(true).subscribe({
+      next: (data) => {
+        this.arrayEnabled = data;
+      },
+      error: () => {
+        this.arrayEnabled = [];
+      }
     });
 
-    this.providerService.getProviders(false).subscribe((data) => {
-      this.arrayDisabled = data;
+    this.providerService.getProviders(false).subscribe({
+      next: (data) => {
+        this.arrayDisabled = data;
+      },
+      error: () => {
+        this.arrayDisabled = [];
+      }
     });
   }
 
   clearFilter(){
-    if (this.companyNameOrCode != ''){
-      this.companyNameOrCode = '';
-      this.renderTables();
+    this.companyNameOrCode = '';
+    this.renderTables();
+  }
+
+  orderASC(attribute: string){
+    switch (attribute) {
+      case "code":
+        this.arrayEnabled = this.arrayEnabled.sort((a, b) => (a.code.localeCompare(b.code)));
+        this.arrayDisabled = this.arrayDisabled.sort((a, b) => (a.code.localeCompare(b.code)));
+      break;
+
+      case "companyName":
+        this.arrayEnabled = this.arrayEnabled.sort((a, b) => (a.companyName.localeCompare(b.companyName)));
+        this.arrayDisabled = this.arrayDisabled.sort((a, b) => (a.companyName.localeCompare(b.companyName)));
+      break;
+
+      case "ubication":
+        this.arrayEnabled = this.arrayEnabled.sort((a, b) => (
+          a.address.locality.province.country.name === b.address.locality.province.country.name ?
+          //Compare between provinces:
+          a.address.locality.province.name.localeCompare(b.address.locality.province.name) :
+          //Compare between countries:
+          a.address.locality.province.country.name.localeCompare(b.address.locality.province.country.name)));
+          
+        this.arrayDisabled = this.arrayDisabled.sort((a, b) => (
+          a.address.locality.province.country.name === b.address.locality.province.country.name ?
+          //Compare between provinces:
+          a.address.locality.province.name.localeCompare(b.address.locality.province.name) :
+          //Compare between countries:
+          a.address.locality.province.country.name.localeCompare(b.address.locality.province.country.name)));
+      break;
+    
+      default:
+      break;
+    }
+  }
+
+  orderDESC(attribute: string){
+    switch (attribute) {
+      case "code":
+        this.arrayEnabled = this.arrayEnabled.sort((a, b) => (b.code.localeCompare(a.code)));
+        this.arrayDisabled = this.arrayDisabled.sort((a, b) => (b.code.localeCompare(a.code)));
+      break;
+
+      case "companyName":
+        this.arrayEnabled = this.arrayEnabled.sort((a, b) => (b.companyName.localeCompare(a.companyName)));
+        this.arrayDisabled = this.arrayDisabled.sort((a, b) => (b.companyName.localeCompare(a.companyName)));
+      break;
+
+      case "ubication":
+        this.arrayEnabled = this.arrayEnabled.sort((a, b) => (
+          b.address.locality.province.country.name === a.address.locality.province.country.name ?
+          //Compare between provinces:
+          b.address.locality.province.name.localeCompare(a.address.locality.province.name) :
+          //Compare between countries:
+          b.address.locality.province.country.name.localeCompare(a.address.locality.province.country.name)));
+          
+        this.arrayDisabled = this.arrayDisabled.sort((a, b) => (
+          b.address.locality.province.country.name === a.address.locality.province.country.name ?
+          //Compare between provinces:
+          b.address.locality.province.name.localeCompare(a.address.locality.province.name) :
+          //Compare between countries:
+          b.address.locality.province.country.name.localeCompare(a.address.locality.province.country.name)));
+      break;
+    
+      default:
+      break;
     }
   }
 
@@ -86,12 +160,18 @@ export class ProviderCrudComponent implements OnInit {
         this.providerService.getProvidersByFilter(this.companyNameOrCode, false).subscribe({
           next: (data) => {
             this.arrayDisabled = data;
+          },
+          error: () => {
+            this.renderTables();
           }
         })
       } else {
         this.providerService.getProvidersByFilter(this.companyNameOrCode, true).subscribe({
           next: (data) => {
             this.arrayEnabled = data;
+          },
+          error: () => {
+            this.renderTables();
           }
         })
       }

@@ -101,6 +101,9 @@ export class OrderCrudComponent {
       this.orderService.getOrdersByFilter(this.filterSelectedStatus).subscribe({
         next: (data) => {
           this.arrayEnabled = data;
+        },
+        error: () => {
+          this.renderTable();
         }
       })
     } else {
@@ -112,6 +115,9 @@ export class OrderCrudComponent {
     this.orderService.getOrders().subscribe({
       next: (data) => {
         this.arrayEnabled = data;
+      },
+      error: () => {
+        this.arrayEnabled = [];
       }
     })
   }

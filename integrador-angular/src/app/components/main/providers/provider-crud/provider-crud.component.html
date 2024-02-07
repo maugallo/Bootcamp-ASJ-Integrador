@@ -2,8 +2,17 @@
     <div class="row">
         <div class="col-auto col-lg-1"></div>
         <div class="col-12 col-lg-10">
-            <!-- Título -->
+            <!-- Breadcrumb -->
             <section class="mt-3">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                      <li class="breadcrumb-item"><a class="font-blue text-decoration-none fw-medium" [routerLink]="['/']">Inicio</a></li>
+                      <li class="breadcrumb-item"><a class="text-secondary text-decoration-none fw-medium" >Proveedores</a></li>
+                    </ol>
+                  </nav>
+            </section>
+            <!-- Título -->
+            <section>
                 <h2 class="display-5 fw-semibold font-blue">GESTIÓN DE PROVEEDORES <i class="bi bi-person-fill"></i></h2>
             </section>
             <!-- Input de filtro, botón de agregar y botón de ver eliminados -->
@@ -38,15 +47,39 @@
                         <thead class="custom-bordered">
                             <tr>
                                 <th>Logo</th>
-                                <th>Código</th>
-                                <th>Razón Social</th>
-                                <th>Ubicación</th>
+                                <th>
+                                    Código
+                                    <a (click)="orderASC('code')" class="mx-2 text-decoration-none click">
+                                        <i class="bi bi-arrow-up-square text-light"></i>
+                                    </a>
+                                    <a (click)="orderDESC('code')" class=" text-decoration-none click">
+                                        <i class="bi bi-arrow-down-square text-light"></i>
+                                    </a>
+                                </th>
+                                <th>
+                                    Razón Social
+                                    <a (click)="orderASC('companyName')" class="mx-2 text-decoration-none click">
+                                        <i class="bi bi-arrow-up-square text-light"></i>
+                                    </a>
+                                    <a (click)="orderDESC('companyName')" class=" text-decoration-none click">
+                                        <i class="bi bi-arrow-down-square text-light"></i>
+                                    </a>
+                                </th>
+                                <th>
+                                    Ubicación
+                                    <a (click)="orderASC('ubication')" class="mx-2 text-decoration-none click">
+                                        <i class="bi bi-arrow-up-square text-light"></i>
+                                    </a>
+                                    <a (click)="orderDESC('ubication')" class=" text-decoration-none click">
+                                        <i class="bi bi-arrow-down-square text-light"></i>
+                                    </a>
+                                </th>
                                 <th>Datos de Contacto</th>
                                 <th>Acciones</th>
                             </tr>
                         </thead>
                         <tbody id="table-body">
-                            <ng-container *ngIf="seeDisabled === false">
+                            <ng-container *ngIf="seeDisabled === false && arrayEnabled != null">
                                 <tr *ngFor="let provider of arrayEnabled">
                                     <td>
                                         <img *ngIf="provider.logo" [src]="provider.logo" width="70" height="70" alt="Provider Logo" onerror="this.src = '/assets/images/default-logo.png'">
@@ -67,9 +100,9 @@
                                         <div class="text-start" > <i class="bi bi-telephone-fill"></i> {{provider.contact.telephone}}</div>
                                     </ng-template>
                                     <td>
-                                        <a class="fs-5 me-2 text-decoration-none option" data-bs-toggle="modal" data-bs-target="#deleteModal" (click)="openDeleteOrRecoverProviderModal(provider.id!)">🗑️</a>
+                                        <a class="fs-5 me-2 text-decoration-none option" (click)="openDeleteOrRecoverProviderModal(provider.id!)">🗑️</a>
                                         <a class="fs-5 me-2 text-decoration-none option" [routerLink]="['form-provider', provider.id]">✏️</a>
-                                        <a class="fs-5 text-decoration-none option" [routerLink]="['/providers', provider.id]">👁️</a>
+                                        <a class="fs-5 text-decoration-none option" [routerLink]="['/providers/detail', provider.id]">👁️</a>
                                     </td>
                                 </tr>
                             </ng-container>
@@ -93,7 +126,7 @@
                                         <div class="text-start" > <i class="bi bi-envelope"></i> {{provider.contact.email}}</div>
                                         <div class="text-start" > <i class="bi bi-telephone-fill"></i> {{provider.contact.telephone}}</div>
                                     </ng-template>
-                                    <td><a class="fs-5 text-decoration-none option" data-bs-toggle="modal" data-bs-target="#recoverModal" (click)="openDeleteOrRecoverProviderModal(provider.id!)">🔄​</a></td>
+                                    <td><a class="fs-5 text-decoration-none option" (click)="openDeleteOrRecoverProviderModal(provider.id!)">🔄​</a></td>
                                 </tr>
                             </ng-container>
                         </tbody>

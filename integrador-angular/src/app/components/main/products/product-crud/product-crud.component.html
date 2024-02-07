@@ -2,8 +2,19 @@
     <div class="row">
         <div class="col-auto col-lg-1"></div>
         <div class="col-12 col-lg-10">
-            <!-- Título -->
+            <!-- Breadcrumb -->
             <section class="mt-3">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a class="font-blue text-decoration-none fw-medium"
+                                [routerLink]="['/']">Inicio</a></li>
+                        <li class="breadcrumb-item"><a
+                                class="text-secondary text-decoration-none fw-medium">Productos</a></li>
+                    </ol>
+                </nav>
+            </section>
+            <!-- Título -->
+            <section>
                 <h1 class="display-5 fw-semibold font-blue">GESTIÓN DE PRODUCTOS <i class="bi bi-cart2"></i></h1>
             </section>
             <!-- Filtros, botón de agregar y botón de ver eliminados -->
@@ -11,7 +22,8 @@
                 <ng-container *ngIf="arrayEnabled && arrayDisabled">
                     <div class="d-flex justify-content-start w-50">
                         <div class="w-50 me-2">
-                            <input [(ngModel)]="filterValue" type="text" class="form-control" placeholder="Filtrar por nombre o descripción">
+                            <input [(ngModel)]="filterValue" type="text" class="form-control"
+                                placeholder="Filtrar por nombre o descripción">
                         </div>
                         <div class="w-50 me-2">
                             <select class="form-select" name="" id="" [(ngModel)]="filterCategoryValue">
@@ -21,10 +33,12 @@
                             </select>
                         </div>
                         <div>
-                            <button (click)="onFilter()" class="btn btn-add rounded-0 me-2"><i class="bi bi-sliders"></i></button>
+                            <button (click)="onFilter()" class="btn btn-add rounded-0 me-2"><i
+                                    class="bi bi-sliders"></i></button>
                         </div>
                         <div>
-                            <button (click)="clearFilter()" class="btn btn-add rounded-0"><i class="bi bi-arrow-counterclockwise"></i></button>
+                            <button (click)="clearFilter()" class="btn btn-add rounded-0"><i
+                                    class="bi bi-arrow-counterclockwise"></i></button>
                         </div>
                     </div>
                 </ng-container>
@@ -32,7 +46,8 @@
                     <div class="btn-group" role="group" aria-label="Basic checkbox toggle button group">
                         <input type="checkbox" [(ngModel)]="seeDisabled" class="btn-check" id="disabledProducts"
                             autocomplete="off">
-                        <label class="btn btn-outline-primary checkbox-custom rounded-0" for="disabledProducts" (click)="clearFilter()">Ver eliminados</label>
+                        <label class="btn btn-outline-primary checkbox-custom rounded-0" for="disabledProducts"
+                            (click)="clearFilter()">Ver eliminados</label>
                     </div>
                     <a class="btn btn-add rounded-0 ms-2" [routerLink]="['/products/form-product']">Agregar producto</a>
                 </div>
@@ -47,7 +62,15 @@
                                 <th>Imagen</th>
                                 <th>Nombre</th>
                                 <th>Categoría</th>
-                                <th>Precio</th>
+                                <th>
+                                    Precio
+                                    <a (click)="orderASC()" class="mx-2 text-decoration-none click">
+                                        <i class="bi bi-arrow-up-square text-light"></i>
+                                    </a>
+                                    <a (click)="orderDESC()" class=" text-decoration-none click">
+                                        <i class="bi bi-arrow-down-square text-light"></i>
+                                    </a>
+                                </th>
                                 <th>Proveedor</th>
                                 <th>Acciones</th>
                             </tr>
@@ -55,9 +78,13 @@
                         <tbody id="table-body">
                             <ng-container *ngIf="seeDisabled === false">
                                 <tr *ngFor="let product of arrayEnabled">
-                                    <td class="p-0 image-td" >
-                                        <img class="img-fluid " style="max-height: 6rem; min-height: 6rem; width: 100%; object-fit: cover;"  *ngIf="product.image" [src]="product.image"  alt="Provider Logo" onerror="this.src = '/assets/images/default-logo.png'">
-                                        <img  *ngIf="!product.image" [src]="'/assets/images/default-logo.png'"  alt="Provider Logo">
+                                    <td class="p-0 image-td">
+                                        <img class="img-fluid "
+                                            style="max-height: 6rem; min-height: 6rem; width: 100%; object-fit: cover;"
+                                            *ngIf="product.image" [src]="product.image" alt="Provider Logo"
+                                            onerror="this.src = '/assets/images/default-logo.png'">
+                                        <img *ngIf="!product.image" [src]="'/assets/images/default-logo.png'"
+                                            alt="Provider Logo">
                                     </td>
                                     <td class="d-flex flex-column ">
                                         <span>{{product.title}}</span>
@@ -71,17 +98,26 @@
                                         <div *ngIf="product.provider.isEnabled === false">(Eliminado)</div>
                                     </td>
                                     <td>
-                                        <a class="fs-5 me-2 text-decoration-none option" (click)="openDeleteOrRecoverCategoryModal(product.id!)">🗑️</a>
-                                        <a class="fs-5 me-2 text-decoration-none option" [routerLink]="['form-product', product.id]">✏️</a>
-                                        <a class="fs-5 text-decoration-none option" [routerLink]="['/products', product.id]">👁️</a>
+                                        <a class="fs-5 me-2 text-decoration-none option"
+                                            (click)="openDeleteOrRecoverCategoryModal(product.id!)">🗑️</a>
+                                        <a class="fs-5 me-2 text-decoration-none option"
+                                            [routerLink]="['form-product', product.id]">✏️</a>
+                                        <a class="fs-5 text-decoration-none option"
+                                            [routerLink]="['/products/detail', product.id]">👁️</a>
                                     </td>
                                 </tr>
                             </ng-container>
                             <ng-container *ngIf="seeDisabled && arrayDisabled.length > 0">
                                 <tr class="table-secondary" *ngFor="let product of arrayDisabled">
-                                    <td class="p-0 image-td" >
-                                        <img class="img-fluid " style="max-height: 6rem; min-height: 6rem; width: 100%; object-fit: cover;"  *ngIf="product.image" [src]="product.image"  alt="Product image" onerror="this.src = '/assets/images/default-logo.png'">
-                                        <img class="img-fluid " style="max-height: 6rem; min-height: 6rem; width: 100%; object-fit: cover;" *ngIf="!product.image" [src]="'/assets/images/default-logo.png'"  alt="Product image">
+                                    <td class="p-0 image-td">
+                                        <img class="img-fluid "
+                                            style="max-height: 6rem; min-height: 6rem; width: 100%; object-fit: cover;"
+                                            *ngIf="product.image" [src]="product.image" alt="Product image"
+                                            onerror="this.src = '/assets/images/default-logo.png'">
+                                        <img class="img-fluid "
+                                            style="max-height: 6rem; min-height: 6rem; width: 100%; object-fit: cover;"
+                                            *ngIf="!product.image" [src]="'/assets/images/default-logo.png'"
+                                            alt="Product image">
                                     </td>
                                     <td class="d-flex flex-column ">
                                         <span>{{product.title}}</span>
@@ -91,15 +127,20 @@
                                     <td>{{product.category.name}}</td>
                                     <td>{{product.price | currency}}</td>
                                     <td>{{product.provider.companyName}}</td>
-                                    <td><a class="fs-5 text-decoration-none option" (click)="openDeleteOrRecoverCategoryModal(product.id!)">🔄​</a></td>
+                                    <td><a class="fs-5 text-decoration-none option"
+                                            (click)="openDeleteOrRecoverCategoryModal(product.id!)">🔄​</a></td>
                                 </tr>
                             </ng-container>
                         </tbody>
                     </table>
-                    <div *ngIf="(arrayEnabled.length === 0 && seeDisabled === false) || (arrayDisabled.length === 0 && seeDisabled && arrayEnabled.length === 0)" class="alert alert-primary  rounded-0 alert-custom">
-                        <span class="fs-4 font-blue">Todavía no hay elementos, puedes agregar uno <a [routerLink]="['/products/form-product']" class="alert-link ">presionando aquí</a></span>
+                    <div *ngIf="(arrayEnabled.length === 0 && seeDisabled === false) || (arrayDisabled.length === 0 && seeDisabled && arrayEnabled.length === 0)"
+                        class="alert alert-primary  rounded-0 alert-custom">
+                        <span class="fs-4 font-blue">Todavía no hay elementos, puedes agregar uno <a
+                                [routerLink]="['/products/form-product']" class="alert-link ">presionando
+                                aquí</a></span>
                     </div>
-                    <div *ngIf="(arrayDisabled.length === 0 && seeDisabled && arrayEnabled.length > 0)" class="alert alert-primary  rounded-0 alert-custom">
+                    <div *ngIf="(arrayDisabled.length === 0 && seeDisabled && arrayEnabled.length > 0)"
+                        class="alert alert-primary  rounded-0 alert-custom">
                         <span class="fs-4 font-blue">Todavía no cuentas con productos eliminados</span>
                     </div>
                 </section>

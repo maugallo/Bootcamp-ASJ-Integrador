@@ -79,11 +79,19 @@ export class ProductCrudComponent {
   }
 
   clearFilter() {
-    if (this.filterValue != '' || this.filterCategoryValue != '') {
-      this.filterValue = '';
-      this.filterCategoryValue = '';
-      this.renderTables();
-    }
+    this.filterValue = '';
+    this.filterCategoryValue = '';
+    this.renderTables();
+  }
+
+  orderASC(){
+    this.arrayEnabled = this.arrayEnabled.sort((a, b) => (a.price - b.price));
+    this.arrayDisabled = this.arrayDisabled.sort((a, b) => (a.price - b.price));
+  }
+
+  orderDESC(){
+    this.arrayEnabled = this.arrayEnabled.sort((a, b) => (b.price - a.price));
+    this.arrayDisabled = this.arrayDisabled.sort((a, b) => (b.price - a.price));
   }
 
   onFilter() {
@@ -94,12 +102,18 @@ export class ProductCrudComponent {
         this.productService.getProductsByFilter(this.filterValue, this.filterCategoryValue, false).subscribe({
           next: (data) => {
             this.arrayDisabled = data;
+          },
+          error: () => {
+            this.renderTables();
           }
         })
       } else {
         this.productService.getProductsByFilter(this.filterValue, this.filterCategoryValue, true).subscribe({
           next: (data) => {
             this.arrayEnabled = data;
+          },
+          error: () => {
+            this.renderTables();
           }
         })
       }
@@ -110,12 +124,18 @@ export class ProductCrudComponent {
     this.productService.getProducts(true).subscribe({
       next: (data) => {
         this.arrayEnabled = data;
+      },
+      error: () => {
+        this.arrayEnabled = [];
       }
     })
 
     this.productService.getProducts(false).subscribe({
       next: (data) => {
         this.arrayDisabled = data;
+      },
+      error: () => {
+        this.arrayDisabled = [];
       }
     })
   }
@@ -124,6 +144,9 @@ export class ProductCrudComponent {
     this.categoryService.getCategories(true).subscribe({
       next: (data) => {
         this.categorySelect = data;
+      },
+      error: () => {
+        this.categorySelect = [];
       }
     })
   }

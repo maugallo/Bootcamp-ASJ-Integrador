@@ -15,6 +15,22 @@ export class HomeComponent implements OnInit {
   constructor(private homeService: HomeService){ }
 
   ngOnInit(): void {
-      
+    this.homeService.getProvidersCount().subscribe({
+      next: (data) => {
+        this.providersQuantity = data.length;
+      }
+    });
+
+    this.homeService.getProductsCount().subscribe({
+      next: (data) => {
+        this.productsQuantity = data.length;
+      }
+    });
+
+    this.homeService.getOrdersCount().subscribe({
+      next: (data) => {
+        this.ordersQuantity = data.length;
+      }
+    });
   }
 }

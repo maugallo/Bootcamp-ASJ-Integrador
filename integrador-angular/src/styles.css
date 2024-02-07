@@ -28,6 +28,10 @@ body{
     color:#FBFEF9;
 }
 
+.click{
+    cursor: pointer;
+}
+
 /* Tooltip styles */
 .custom-tooltip .tooltip-inner {
     max-width: 100rem;

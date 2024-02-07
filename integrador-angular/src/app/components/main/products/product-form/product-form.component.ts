@@ -87,6 +87,9 @@ export class ProductFormComponent implements OnInit {
           } else {
             this.router.navigate(['products/form-product']);
           }
+        },
+        error: () => {
+          this.router.navigate(['products/form-product']);
         }
       })
     } else {

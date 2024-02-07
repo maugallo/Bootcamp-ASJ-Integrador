@@ -23,9 +23,8 @@ export class ProviderDetailComponent implements OnInit {
         next: (data) => {
           this.provider = data;
         },
-        error: (error) => {
-          alert(error.error)
-          this.router.navigate(['products/form-provider']);
+        error: () => {
+          this.router.navigate(['providers/form-provider']);
         }
       });
   }

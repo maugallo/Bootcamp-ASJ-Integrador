@@ -4,6 +4,10 @@ th{
     border-color: #011d69;
 }
 
+.click{
+    cursor: pointer;
+}
+
 .custom-bordered{
     border-color: #011d69 !important;
 }
@@ -51,4 +55,17 @@ input, select {
 .image-td {
     height: 10%;
     width: 10%;
+}
+
+.btn-header {
+    background: none;
+    border: none;
+    color: inherit;
+    font: inherit;
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+    display: block;
+    width: 100%;
+    text-align: center;
 }

@@ -6,7 +6,6 @@ import { NgForm } from '@angular/forms';
 import { Provider } from '../../../../models/provider';
 import { Product } from '../../../../models/product';
 import { OrderDetail } from '../../../../models/orderDetail';
-import { ProductService } from '../../../../services/product.service';
 import { AlertHandler } from '../../../../utils/alertHandler';
 import { format } from 'date-fns';
 import Swal from 'sweetalert2';
@@ -50,7 +49,7 @@ export class OrderFormComponent {
 
   private alertHandler = new AlertHandler();
 
-  constructor(private orderService: OrderService, private productService: ProductService, private router: Router, private activatedRoute: ActivatedRoute) { }
+  constructor(private orderService: OrderService, private router: Router, private activatedRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
     this.renderProviderSelect();
@@ -70,6 +69,9 @@ export class OrderFormComponent {
           } else {
             this.router.navigate(['orders/form-order']);
           }
+        },
+        error: () => {
+          this.router.navigate(['orders/form-order']);
         }
       })
     } else {
@@ -146,7 +148,6 @@ export class OrderFormComponent {
         else if (this.buttonName === "Editar"){
           this.updateOrder();
         }
-        this.router.navigate(['/orders']);
       }
     }
   }
@@ -159,6 +160,7 @@ export class OrderFormComponent {
           icon: "success",
           title: data,
         });
+        this.router.navigate(['/orders']);
       },
       error: (error) => {
         Swal.fire({
@@ -177,6 +179,7 @@ export class OrderFormComponent {
           icon: "success",
           title: data,
         });
+        this.router.navigate(['/orders']);
       },
       error: (error) => {
         Swal.fire({
@@ -198,9 +201,7 @@ export class OrderFormComponent {
 
   areDatesCorrect(){
     let issueDate = new Date(this.order.issueDate);
-    console.log(issueDate);
     let deliveryDate = new Date(this.order.deliveryDate);
-    console.log(deliveryDate);
     if (issueDate >= deliveryDate){
       return false;
     } else{

@@ -13,6 +13,7 @@ import { Contact } from '../../../../models/contact';
 import { ContactService } from '../../../../services/contact.service';
 import { AlertHandler } from '../../../../utils/alertHandler';
 import Swal from 'sweetalert2';
+import { Locality } from '../../../../models/locality';
 
 @Component({
   selector: 'app-provider-form',
@@ -25,7 +26,10 @@ export class ProviderFormComponent implements OnInit {
   province!: Province;
 
   address: Address = {
-    locality: null!,
+    locality: {
+      name: '',
+      province: null!,
+    },
     street: '',
     num: '',
     zipCode: '',
@@ -95,7 +99,6 @@ export class ProviderFormComponent implements OnInit {
   //Select de países, provincias y localidades que se renderizarán en el form.
   countrySelect: any[] = [];
   provinceSelect: any[] = [];
-  localitySelect: any[] = [];
 
   //Variables para manejar el título y nombre del botón:
   formTitle: string = 'AGREGAR PROVEEDOR';
@@ -127,20 +130,25 @@ export class ProviderFormComponent implements OnInit {
 
     this.param = this.getParameter();
     if (this.param) {
-      this.providerService.getProviderById(this.param).subscribe((data) => {
-        if (data) {
-          this.realProvider = data;
-
-          this.provider = JSON.parse(JSON.stringify(this.realProvider)); //Deep copy of the object.
-
-          this.preRenderCountry();
-          this.preRenderSector();
-          this.contact = this.provider.contact;
-          this.address = this.provider.address;
-
-          this.formTitle = 'EDITAR PROVEEDOR';
-          this.buttonName = 'Editar';
-        } else {
+      this.providerService.getProviderById(this.param).subscribe({
+        next: (data) => {
+          if (data) {
+            this.realProvider = data;
+  
+            this.provider = JSON.parse(JSON.stringify(this.realProvider)); //Deep copy of the object.
+  
+            this.preRenderCountry();
+            this.preRenderSector();
+            this.contact = this.provider.contact;
+            this.address = this.provider.address;
+  
+            this.formTitle = 'EDITAR PROVEEDOR';
+            this.buttonName = 'Editar';
+          } else {
+            this.router.navigate(['providers/form-provider']);
+          }
+        },
+        error: () => {
           this.router.navigate(['providers/form-provider']);
         }
       });
@@ -171,12 +179,6 @@ export class ProviderFormComponent implements OnInit {
     });
   }
 
-  renderLocalitySelect() {
-    this.providerService.getLocalities(this.province.id).subscribe((data) => {
-      this.localitySelect = data;
-    });
-  }
-
   preRenderSector() {
     this.provider.sector = this.sectorSelect.find(
       (sector) => sector.id === this.provider.sector.id
@@ -186,7 +188,7 @@ export class ProviderFormComponent implements OnInit {
   preRenderCountry() {
     this.country = this.countrySelect.find(
       (country) =>
-        country.id === this.provider.address.locality.province.country.id
+        country.id === this.provider.address.locality.province!.country.id
     );
     this.preRenderProvince();
   }
@@ -199,7 +201,7 @@ export class ProviderFormComponent implements OnInit {
       complete: () => {
         this.province = this.provinceSelect.find(
           (province) =>
-            province.id === this.provider.address.locality.province.id
+            province.id === this.provider.address.locality.province!.id
         );
         this.preRenderLocality();
       },
@@ -209,13 +211,10 @@ export class ProviderFormComponent implements OnInit {
   preRenderLocality() {
     this.providerService.getLocalities(this.province.id).subscribe({
       next: (data) => {
-        this.localitySelect = data;
-      },
-      complete: () => {
-        this.address.locality = this.localitySelect.find(
-          (locality) => locality.id === this.provider.address.locality.id
+        this.address.locality = data.find(
+          (locality: Locality) => locality.id === this.provider.address.locality.id
         );
-      },
+      }
     });
   }
 
@@ -322,6 +321,7 @@ export class ProviderFormComponent implements OnInit {
   //Métodos de formulario para agregar proveedores:
   onSubmit(form: NgForm) {
     if (form.valid) {
+      this.address.locality.province = this.province;
       this.provider.address = this.address;
       this.provider.contact = this.contact;
       this.provider.code = this.provider.code.toUpperCase();
@@ -380,26 +380,13 @@ export class ProviderFormComponent implements OnInit {
   chooseCountry() {
     //Método del evento (change) del select de países.
     this.clearProvinceSelect();
-    this.clearLocalitySelect();
 
     this.renderProvinceSelect();
-  }
-
-  chooseProvince() {
-    //Método del evento (change) del select de provincias.
-    this.clearLocalitySelect();
-
-    this.renderLocalitySelect();
   }
 
   //Métodos auxiliares:
   clearProvinceSelect() {
     this.provinceSelect = []; //Limpio el select de provincias.
     this.province = null!;
-  }
-
-  clearLocalitySelect() {
-    this.localitySelect = []; //Limpio el select de localidades.
-    this.address.locality = null!;
   }
 }

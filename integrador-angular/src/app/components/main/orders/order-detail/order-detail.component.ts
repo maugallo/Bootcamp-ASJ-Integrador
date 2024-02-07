@@ -23,9 +23,8 @@ export class OrderDetailComponent implements OnInit {
       next: (data) => {
         this.order = data;
       },
-      error: (error) => {
-        alert(error.error)
-        this.router.navigate(['products/form-provider']);
+      error: () => {
+        this.router.navigate(['orders/form-order']);
       }
     });
   }

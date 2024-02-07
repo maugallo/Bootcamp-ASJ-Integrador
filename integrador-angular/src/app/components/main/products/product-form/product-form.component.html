@@ -2,11 +2,21 @@
     <div class="row">
         <div class="col-auto col-lg-2"></div>
         <div class="col-12 col-lg-8">
+            <!-- Breadcrumb -->
+            <section class="mt-3">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                      <li class="breadcrumb-item"><a class="font-blue text-decoration-none fw-medium" [routerLink]="['/']">Inicio</a></li>
+                      <li class="breadcrumb-item"><a class="font-blue text-decoration-none fw-medium" [routerLink]="['/products']">Productos</a></li>
+                      <li class="breadcrumb-item"><a class="text-secondary text-decoration-none fw-medium" >{{buttonName}} producto</a></li>
+                    </ol>
+                  </nav>
+            </section>
+            <!-- Título -->
             <section>
-                <div class="my-5">
+                <div class="mt-4 mb-5">
                     <h1 class="text-center mb-2 display-5 fw-semibold font-blue ">{{formTitle}} <i class="bi bi-cart-plus"></i></h1>
                 </div>
-                <p><a class=" fs-6 font-blue" [routerLink]="['/products']">VOLVER</a></p>
             </section>
             <section class="card p-5 rounded-0 card-border-blue">
                 <form #productsForm="ngForm" (ngSubmit)="onSubmit(productsForm)">
