@@ -37,7 +37,7 @@ public class PurchaseOrder {
 	List<OrderDetail> details;
 	
 	@Enumerated(EnumType.STRING)
-	private OrderStatus orderStatus;
+	private OrderStatus status;
 	
 	@ManyToOne
 	@JoinColumn(name = "provider_id")
@@ -72,13 +72,13 @@ public class PurchaseOrder {
 
 	public PurchaseOrder() {}
 
-	public PurchaseOrder(Integer id, List<OrderDetail> details, OrderStatus orderStatus, Provider provider,
+	public PurchaseOrder(Integer id, List<OrderDetail> details, OrderStatus status, Provider provider,
 			@NotNull LocalDate issueDate, @NotNull LocalDate deliveryDate, @NotNull String receptionInfo, Double total,
 			Timestamp createdAt, Timestamp updatedAt) {
 		super();
 		this.id = id;
 		this.details = details;
-		this.orderStatus = orderStatus;
+		this.status = status;
 		this.provider = provider;
 		this.issueDate = issueDate;
 		this.deliveryDate = deliveryDate;
@@ -100,12 +100,12 @@ public class PurchaseOrder {
 		this.details = details;
 	}
 
-	public OrderStatus getOrderStatus() {
-		return orderStatus;
+	public OrderStatus getStatus() {
+		return status;
 	}
 
-	public void setOrderStatus(OrderStatus orderStatus) {
-		this.orderStatus = orderStatus;
+	public void setStatus(OrderStatus status) {
+		this.status = status;
 	}
 
 	public Provider getProvider() {

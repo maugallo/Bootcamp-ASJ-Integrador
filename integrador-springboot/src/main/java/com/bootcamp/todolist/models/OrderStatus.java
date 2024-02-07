@@ -2,7 +2,7 @@ package com.bootcamp.todolist.models;
 
 public enum OrderStatus {
 	PENDIENTE,
-	FINALIZADA,
+	COMPLETADA,
 	CANCELADA,
 	EXPIRADA
 }

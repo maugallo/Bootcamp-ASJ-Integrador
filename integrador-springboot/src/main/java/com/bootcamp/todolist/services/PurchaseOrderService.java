@@ -2,6 +2,8 @@ package com.bootcamp.todolist.services;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -29,7 +31,7 @@ public class PurchaseOrderService {
 	
 	public List<PurchaseOrder> getPurchaseOrdersByStatus(String status){
 		OrderStatus orderStatus = OrderStatus.valueOf(status.toUpperCase());
-		return purchaseOrderRepository.findByOrderStatus(orderStatus);
+		return purchaseOrderRepository.findByStatus(orderStatus);
 	}
 	
 	public PurchaseOrder getPurchaseOrderById(Integer id){
@@ -41,7 +43,7 @@ public class PurchaseOrderService {
 		}
 	}
 	
-	//CREATE METHOD: (Transactional)
+	//CREATE METHOD:
 	@Transactional
 	public String createPurchaseOrder(PurchaseOrder purchaseOrder) {
 		
@@ -56,20 +58,40 @@ public class PurchaseOrderService {
 	}
 	
 	//UPDATE METHOD:
+	@Transactional
 	public String updatePurchaseOrder(Integer id, PurchaseOrder updatedPurchaseOrder) {
-		return null;
+		
+		//Declare variables:
+		PurchaseOrder oldPurchaseOrder = this.getPurchaseOrderById(id);
+		
+		Set<Integer> updatedDetailIds = updatedPurchaseOrder.getDetails().stream()
+				.map((detail) -> detail.getId())
+				.collect(Collectors.toSet());
+		
+		//Delete the order details that are not being used anymore:
+		oldPurchaseOrder.getDetails().forEach(detail -> {
+			if (!updatedDetailIds.contains(detail.getId())) {
+				orderDetailService.deleteOrderDetail(detail.getId());
+			}
+		});
+		
+		//Update & add order details:
+		updatedPurchaseOrder.getDetails().forEach((updatedDetail) -> {
+			orderDetailService.updateOrderDetail(updatedDetail.getId(), updatedDetail);
+		});
+		
+		//Update the order:
+		purchaseOrderRepository.save(updatedPurchaseOrder);
+		
+		return "Orden de compra actualizada correctamente";
 	}
 	
-	//CANCEL METHOD:
-	public String cancelPurchaseOrder(Integer id) {
+	//UPDATE ORDER STATUS METHOD:
+	public String updatePurchaseOrderStatus(Integer id, String orderStatus) {
 		PurchaseOrder purchaseOrder = this.getPurchaseOrderById(id);
 		
-		purchaseOrder.setOrderStatus(OrderStatus.CANCELADA);
+		purchaseOrder.setStatus(OrderStatus.valueOf(orderStatus));
 		purchaseOrderRepository.save(purchaseOrder);
-		return "Orden de compra cancelada correctamente";
+		return "Estado de orden modificado correctamente";
 	}
-	
-	//VALIDATION METHODS:
-	
-	
 }

@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -60,7 +61,7 @@ public class PurchaseOrderController {
 	
 	//UPDATE METHOD:
 	@PutMapping("/{id}")
-	public ResponseEntity<String> updatePurchaseOrder(@PathVariable Integer id  ,@Valid @RequestBody PurchaseOrder purchaseOrder, BindingResult bindingResult){
+	public ResponseEntity<String> updatePurchaseOrder(@PathVariable Integer id, @Valid @RequestBody PurchaseOrder purchaseOrder, BindingResult bindingResult){
 		if (bindingResult.hasErrors()) {
 			List<String> errorList = ErrorHandler.loadErrorMessages(bindingResult);
 			ErrorHandler.printErrorMessages(errorList);
@@ -69,6 +70,12 @@ public class PurchaseOrderController {
 		} else {
 			return new ResponseEntity<>(purchaseOrderService.updatePurchaseOrder(id, purchaseOrder), HttpStatus.OK);
 		}
+	}
+	
+	//PATCH STATUS METHOD:
+	@PatchMapping("/{id}")
+	public ResponseEntity<String> updatePurchaseOrderStatus(@PathVariable Integer id, @RequestBody String orderStatus){
+		return new ResponseEntity<>(purchaseOrderService.updatePurchaseOrderStatus(id, orderStatus), HttpStatus.OK);
 	}
 	
 }

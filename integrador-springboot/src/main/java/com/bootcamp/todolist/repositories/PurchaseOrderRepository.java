@@ -8,5 +8,5 @@ import com.bootcamp.todolist.models.OrderStatus;
 import com.bootcamp.todolist.models.PurchaseOrder;
 
 public interface PurchaseOrderRepository extends JpaRepository<PurchaseOrder, Integer> {
-	List<PurchaseOrder> findByOrderStatus(OrderStatus orderStatus);
+	List<PurchaseOrder> findByStatus(OrderStatus orderStatus);
 }
