@@ -20,10 +20,6 @@ public class LocalityService {
 		return localityRepository.findAll();
 	}
 	
-	public List<Locality> getLocalitiesByProvinceId(Integer provinceId){
-		return localityRepository.findByProvinceId(provinceId);
-	}
-	
 	public Locality getLocalityById(Integer id){
 		Optional<Locality> locality = localityRepository.findById(id);
 		if (locality.isPresent()) {

@@ -31,11 +31,6 @@ public class LocalityController {
 		return new ResponseEntity<List<Locality>>(localityService.getLocalities(), HttpStatus.OK);
 	}
 	
-	@GetMapping("/province/{provinceId}")
-	public ResponseEntity<List<Locality>> getLocalitiesByProvinceId(@PathVariable Integer provinceId) {
-		return new ResponseEntity<List<Locality>>(localityService.getLocalitiesByProvinceId(provinceId), HttpStatus.OK);
-	}
-	
 	@GetMapping("/{id}")
 	public ResponseEntity<Locality> getLocalityById(@PathVariable Integer id){
 		return new ResponseEntity<Locality>(localityService.getLocalityById(id), HttpStatus.OK);
