@@ -30,7 +30,7 @@
                         <div class="col d-flex justify-content-between mx-2">
                             <div class="me-2">
                                 <label for="code" class="form-label">Código</label>
-                                <input class="form-control" #code="ngModel" [(ngModel)]="provider.code" name="code"
+                                <input class="form-control" #code="ngModel" [(ngModel)]="inputCode" name="code"
                                     type="text" placeholder="AB12" required minlength="4" maxlength="10" (blur)="validateRepeatedCode()">
                                 <!-- Mensaje de error -->
                                 <div *ngIf="code.touched && code.errors?.['required']" class="text-danger ">
@@ -51,7 +51,7 @@
                             <div class="me-2">
                                 <label class="form-label" for="companyName">Razón Social</label>
                                 <input id="companyName" #companyName="ngModel" class="form-control"
-                                    [(ngModel)]="provider.companyName" name="companyName" type="text"
+                                    [(ngModel)]="inputCompanyName" name="companyName" type="text"
                                     placeholder="Ingrese razón social" required maxlength="100"
                                     pattern="^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ ]+$" (blur)="validateRepeatedCompanyName()">
                                 <!-- Mensaje de error -->
@@ -74,7 +74,7 @@
                             <div class="me-2">
                                 <label for="sector" class="form-label">Rubro</label>
                                 <select type="select" #sectorVar="ngModel" id="sector" name="sector" class="form-select"
-                                    [(ngModel)]="provider.sector" required>
+                                    [(ngModel)]="inputSector" required>
                                     <option *ngFor="let sector of sectorSelect" [ngValue]="sector">
                                         {{sector.name}}</option>
                                 </select>
@@ -89,12 +89,12 @@
                         <div class="col d-flex justify-content-between mx-2">
                             <div class="w-50 me-2">
                                 <label for="website" class="form-label">Sitio Web (Opcional)</label>
-                                <input type="text" name="website" [(ngModel)]="provider.website" class="form-control"
+                                <input type="text" name="website" [(ngModel)]="inputWebsite" class="form-control"
                                     placeholder="https://example.com">
                             </div>
                             <div class="w-50">
                                 <label for="logo" class="form-label">Logo (Opcional)</label>
-                                <input type="text" name="logo" [(ngModel)]="provider.logo" class="form-control"
+                                <input type="text" name="logo" [(ngModel)]="inputLogo" class="form-control"
                                     placeholder="Ingrese la url" maxlength="500">
                             </div>
                         </div>
@@ -104,7 +104,7 @@
                             <div class="col d-flex justify-content-center">
                                 <div class="me-2 w-75">
                                     <label for="street" class="form-label">Calle</label>
-                                    <input type="text" #street="ngModel" name="street" [(ngModel)]="address.street"
+                                    <input type="text" #street="ngModel" name="street" [(ngModel)]="inputStreet"
                                         class="form-control" placeholder="Ingrese la calle" required minlength="5"
                                         maxlength="100" pattern="^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ ]+$">
                                     <!-- Mensaje de error -->
@@ -120,7 +120,7 @@
                                 </div>
                                 <div class="me-2">
                                     <label for="streetNum" class="form-label">Número</label>
-                                    <input type="text" #num="ngModel" name="streetNum" [(ngModel)]="address.num"
+                                    <input type="text" #num="ngModel" name="streetNum" [(ngModel)]="inputNum"
                                         class="form-control" placeholder="0123" required maxlength="6"
                                         pattern="^[0-9]+$">
                                     <!-- Mensaje de error -->
@@ -133,7 +133,7 @@
                                 </div>
                                 <div>
                                     <label for="zipCode" class="form-label">Código Postal</label>
-                                    <input type="text" #zipCode="ngModel" name="zipCode" [(ngModel)]="address.zipCode"
+                                    <input type="text" #zipCode="ngModel" name="zipCode" [(ngModel)]="inputZipCode"
                                         class="form-control" placeholder="C.P" required minlength="1" maxlength="6"
                                         pattern="^[A-Za-z0-9]+$">
                                     <!-- Mensaje de error -->
@@ -152,7 +152,7 @@
                                 <div class="w-50 me-2">
                                     <label for="country" class="form-label">Pais</label>
                                     <select type="select" #countryVar="ngModel" name="country" class="form-select"
-                                        (change)="chooseCountry()" [(ngModel)]="country"
+                                        (change)="chooseCountry()" [(ngModel)]="inputCountry"
                                         required>
                                         <option *ngFor="let country of countrySelect" [ngValue]="country">
                                             {{country.name}}</option>
@@ -165,7 +165,7 @@
                                 </div>
                                 <div class="w-50 me-2">
                                     <label for="province" class="form-label">Provincia</label>
-                                    <select type="select" #provinceVar="ngModel" name="province" class="form-select" [(ngModel)]="province" required>
+                                    <select type="select" #provinceVar="ngModel" name="province" class="form-select" [(ngModel)]="inputProvince" required>
                                         <option *ngFor="let province of provinceSelect" [ngValue]="province">
                                             {{province.name}}</option>
                                     </select>
@@ -178,7 +178,7 @@
 
                                 <div class="w-50">
                                     <label for="locality" class="form-label">Localidad</label>
-                                    <input type="text" #localityVar="ngModel" name="locality" [(ngModel)]="address.locality.name"
+                                    <input type="text" #localityVar="ngModel" name="locality" [(ngModel)]="inputLocality.name"
                                         class="form-control" placeholder="Localidad" required minlength="1" maxlength="100"
                                         pattern="^[A-Za-z]+$">
                                     <!-- Mensaje de error -->
@@ -204,7 +204,7 @@
                         <div class="col d-flex justify-content-evenly ">
                             <div class="me-2 w-25">
                                 <label for="cuit" class="form-label">CUIT</label>
-                                <input type="text" #cuit="ngModel" [(ngModel)]="provider.cuit" name="cuit"
+                                <input type="text" #cuit="ngModel" [(ngModel)]="inputCuit" name="cuit"
                                     class="form-control" placeholder="XX-XXXXXXXX-X" required
                                     pattern="^[0-9]{2}-[0-9]{8}-[0-9]$" (blur)="validateRepeatedCuit()">
                                 <!-- Mensaje de error -->
@@ -226,7 +226,7 @@
                             <div class="w-75 text-center">
                                 <label for="vatCondition" class="form-label">Condición IVA</label>
                                 <select type="select" #vat="ngModel" name="vat" class="form-select"
-                                    [(ngModel)]="provider.vatCondition" required>
+                                    [(ngModel)]="inputVatCondition" required>
                                     <option *ngFor="let condition of vatConditionSelect" [ngValue]="condition">
                                         {{condition | vatCondition}}
                                     </option>
@@ -245,7 +245,7 @@
                             <div class="col d-flex justify-content-center mx-2">
                                 <div class="me-2 w-50 ">
                                     <label class="form-label" for="firstname">Nombre</label>
-                                    <input class="form-control" #firstname="ngModel" [(ngModel)]="provider.firstName"
+                                    <input class="form-control" #firstname="ngModel" [(ngModel)]="inputFirstName"
                                         name="firstname" type="text" placeholder="Ingrese el nombre" required
                                         maxlength="40" pattern="^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$">
                                     <!-- Mensaje de error -->
@@ -260,7 +260,7 @@
                                 </div>
                                 <div class="me-2 w-50">
                                     <label for="lastname" class="form-label">Apellido</label>
-                                    <input type="text" #lastname="ngModel" [(ngModel)]="provider.lastName"
+                                    <input type="text" #lastname="ngModel" [(ngModel)]="inputLastName"
                                         name="lastname" class="form-control" placeholder="Ingrese el apellido" required
                                         maxlength="40" pattern="^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$">
                                     <!-- Mensaje de error -->
@@ -273,7 +273,7 @@
                                 </div>
                                 <div class="w-50">
                                     <label for="telephone" class="form-label">Teléfono</label>
-                                    <input id="telephone" #telephone="ngModel" [(ngModel)]="contact.telephone"
+                                    <input id="telephone" #telephone="ngModel" [(ngModel)]="inputTelephone"
                                         type="text" name="telephone" class="form-control" placeholder="1234567890"
                                         required pattern="^[0-9]+$" minlength="7" maxlength="12" (blur)="validateRepeatedTelephone()">
                                     <!-- Mensaje de error -->
@@ -304,7 +304,7 @@
                             <div class="col d-flex justify-content-around  mx-2">
                                 <div class="me-2 w-50">
                                     <label for="email" class="form-label">Email</label>
-                                    <input id="txtEmail" #email="ngModel" type="email" [(ngModel)]="contact.email"
+                                    <input id="txtEmail" #email="ngModel" type="email" [(ngModel)]="inputEmail"
                                         name="email" class="form-control" placeholder="example@gmail.com" required email
                                         pattern=".*(\.com)$" (blur)="validateRepeatedEmail()">
                                     <!-- Mensaje de error -->
@@ -326,7 +326,7 @@
                                 </div>
                                 <div class="w-auto">
                                     <label for="role" class="form-label">Rol</label>
-                                    <input type="text" #role="ngModel" [(ngModel)]="provider.role" name="role"
+                                    <input type="text" #role="ngModel" [(ngModel)]="inputRole" name="role"
                                         class="form-control" placeholder="Ingrese el rol" required maxlength="100"
                                         pattern="^[a-zA-Z0-9ñÑáéíóúÁÉÍÓÚ ]+$">
                                     <!-- Mensaje de error -->

@@ -21,49 +21,48 @@ import { Locality } from '../../../../models/locality';
   styleUrl: './provider-form.component.css',
 })
 export class ProviderFormComponent implements OnInit {
-  //Objetos que se enlazarán mediante ngModel en el form:
-  country!: Country;
-  province!: Province;
+  //Country, province & locality attributes:
+  inputCountry!: Country;
+  inputProvince!: Province;
+  inputLocality: Locality = {
+    name: '',
+    province: null!,
+  }
 
-  address: Address = {
-    locality: {
-      name: '',
-      province: null!,
-    },
-    street: '',
-    num: '',
-    zipCode: '',
-  };
+  //Address object attributes:
+  inputStreet!: string;
+  inputNum!: string;
+  inputZipCode!: string;
 
-  contact: Contact = {
-    telephone: '',
-    email: '',
-  };
+  //Contact object attributes:
+  inputTelephone!: string;
+  inputEmail!: string;
+
+  //Provider object attributes:
+  inputSector!: Sector;
+  inputVatCondition!: string;
+  inputCode!: string;
+  inputCompanyName!: string;
+  inputLogo: string = ''; //Opcional
+  inputWebsite: string = ''; //Opcional
+  inputFirstName!: string;
+  inputLastName!: string;
+  inputRole!: string;
+  inputCuit!: string;
 
   provider: Provider = {
-    sector: null!,
-    vatCondition: null!,
-    contact: null!,
-    address: null!,
-    code: '',
-    companyName: '',
-    logo: '',
-    website: '',
-    firstName: '',
-    lastName: '',
-    role: '',
-    cuit: '',
-    isEnabled: true,
-  };
-
-  realProvider: Provider = {
-    sector: null!,
-    vatCondition: null!,
+    sector: undefined!,
+    vatCondition: '',
     contact: {
       telephone: '',
-      email: '',
+      email: ''
     },
-    address: null!,
+    address: {
+      locality: undefined!,
+      street: '',
+      num: '',
+      zipCode: '' 
+    },
     code: '',
     companyName: '',
     logo: '',
@@ -72,10 +71,10 @@ export class ProviderFormComponent implements OnInit {
     lastName: '',
     role: '',
     cuit: '',
-    isEnabled: true,
-  };
+    isEnabled: true
+  }
 
-  //Select de condiciones de IVA que se renderizarán en el form.
+  //Selects to render in the form:
   vatConditionSelect: VatCondition[] = [
     'IVA_RESPONSABLE_INSCRIPTO',
     'IVA_RESPONSABLE_NO_INSCRIPTO',
@@ -92,19 +91,15 @@ export class ProviderFormComponent implements OnInit {
     'MONOTRIBUTISTA_SOCIAL',
     'PEQUEÑO_CONTRIBUYENTE_EVENTUAL_SOCIAL',
   ];
-
-  //Select de rubros que se renderizarán en el form.
   sectorSelect: Sector[] = [];
-
-  //Select de países, provincias y localidades que se renderizarán en el form.
   countrySelect: any[] = [];
   provinceSelect: any[] = [];
 
-  //Variables para manejar el título y nombre del botón:
+  //Variables to handle create or update message:
   formTitle: string = 'AGREGAR PROVEEDOR';
   buttonName: string = 'Agregar';
 
-  //Variable para determinar si se editará o creará un proveedor:
+  //Variable to determine if we'll handle a creation or update:
   param!: number;
 
   //Validaciones del back:
@@ -133,14 +128,29 @@ export class ProviderFormComponent implements OnInit {
       this.providerService.getProviderById(this.param).subscribe({
         next: (data) => {
           if (data) {
-            this.realProvider = data;
-  
-            this.provider = JSON.parse(JSON.stringify(this.realProvider)); //Deep copy of the object.
-  
+            this.provider = data;
+            
+            //Precharge all the inputs:
             this.preRenderCountry();
             this.preRenderSector();
-            this.contact = this.provider.contact;
-            this.address = this.provider.address;
+
+            this.inputStreet = this.provider.address.street;
+            this.inputNum = this.provider.address.num;
+            this.inputZipCode = this.provider.address.zipCode;
+            
+            this.inputTelephone = this.provider.contact.telephone;
+            this.inputEmail = this.provider.contact.email;
+            
+            this.inputSector = this.provider.sector;
+            this.inputVatCondition = this.provider.vatCondition;
+            this.inputCode = this.provider.code;
+            this.inputCompanyName = this.provider.companyName;
+            this.inputLogo = this.provider.logo;
+            this.inputWebsite = this.provider.website;
+            this.inputFirstName = this.provider.firstName;
+            this.inputLastName = this.provider.lastName;
+            this.inputRole = this.provider.role;
+            this.inputCuit = this.provider.cuit;
   
             this.formTitle = 'EDITAR PROVEEDOR';
             this.buttonName = 'Editar';
@@ -158,24 +168,42 @@ export class ProviderFormComponent implements OnInit {
   }
 
   getParameter() {
-    return this.activatedRoute.snapshot.params['id'];
+    return Number(this.activatedRoute.snapshot.params['id']);
   }
 
   renderSectorSelect() {
-    this.sectorService.getSectors(true).subscribe((data) => {
-      this.sectorSelect = data;
+    this.sectorService.getSectors(true).subscribe({
+      next: (data) => {
+        this.sectorSelect = data;
+      },
+      error: () => {
+        //SweetAlert2 red error toast.
+        this.sectorSelect = [];
+      }
     });
   }
 
   renderCountrySelect() {
-    this.providerService.getCountries().subscribe((data) => {
-      this.countrySelect = data;
+    this.providerService.getCountries().subscribe({
+      next: (data) => {
+        this.countrySelect = data;
+      },
+      error: () => {
+        //SweetAlert2 red error toast.
+        this.countrySelect = [];
+      }
     });
   }
 
   renderProvinceSelect() {
-    this.providerService.getProvinces(this.country.id).subscribe((data) => {
-      this.provinceSelect = data;
+    this.providerService.getProvinces(this.inputCountry.id!).subscribe({
+      next: (data) => {
+        this.provinceSelect = data;
+      },
+      error: () => {
+        //SweetAlert2 red error toast.
+        this.provinceSelect = [];
+      }
     });
   }
 
@@ -186,41 +214,33 @@ export class ProviderFormComponent implements OnInit {
   }
 
   preRenderCountry() {
-    this.country = this.countrySelect.find(
-      (country) =>
-        country.id === this.provider.address.locality.province!.country.id
-    );
+    this.inputCountry = this.countrySelect.find((country) => country.id === this.provider.address.locality.province.country.id);
     this.preRenderProvince();
   }
 
   preRenderProvince() {
-    this.providerService.getProvinces(this.country.id).subscribe({
+    this.providerService.getProvinces(this.inputCountry.id!).subscribe({
       next: (data) => {
         this.provinceSelect = data;
       },
       complete: () => {
-        this.province = this.provinceSelect.find(
-          (province) =>
-            province.id === this.provider.address.locality.province!.id
-        );
+        this.inputProvince = this.provinceSelect.find((province) => province.id === this.provider.address.locality.province.id);
         this.preRenderLocality();
       },
     });
   }
 
   preRenderLocality() {
-    this.providerService.getLocalities(this.province.id).subscribe({
+    this.providerService.getLocalities(this.inputProvince.id!).subscribe({
       next: (data) => {
-        this.address.locality = data.find(
-          (locality: Locality) => locality.id === this.provider.address.locality.id
-        );
+        this.inputLocality = data.find((locality: Locality) => locality.id === this.provider.address.locality.id);
       }
     });
   }
 
   validateRepeatedEmail(){
-    if (this.contact.email !== '' && this.contact.email !== this.realProvider.contact.email){
-      this.contactService.validateEmail(this.contact.email).subscribe({
+    if (this.provider.contact !== undefined && this.inputEmail !== '' && this.inputEmail !== this.provider.contact.email){
+      this.contactService.validateEmail(this.inputEmail).subscribe({
         next: (isRepeated) => {
           if (isRepeated){ //If the email is repeated in the database, we set the new custom validation.
             this.emailNgModel.control.setErrors({ ...this.emailNgModel.errors, emailRepeated: true}); //with { ...this.emailNgModel.errors, customValidation: true }, we are creating a new object that contains all existing validation errors from this.emailNgModel.errors and we are adding our new custom validation error to that object.
@@ -239,8 +259,8 @@ export class ProviderFormComponent implements OnInit {
   }
 
   validateRepeatedTelephone(){
-    if (this.contact.telephone !== '' && this.contact.telephone !== this.realProvider.contact.telephone){
-      this.contactService.validateTelephone(this.contact.telephone).subscribe({
+    if (this.provider.contact !== undefined && this.inputTelephone !== '' && this.inputTelephone !== this.provider.contact.telephone){
+      this.contactService.validateTelephone(this.inputTelephone).subscribe({
         next: (isRepeated) => {
           if (isRepeated){
             this.telephoneNgModel.control.setErrors({ ...this.telephoneNgModel.errors, telephoneRepeated: true});
@@ -259,8 +279,8 @@ export class ProviderFormComponent implements OnInit {
   }
 
   validateRepeatedCode(){
-    if (this.provider.code !== '' && this.provider.code !== this.realProvider.code){
-      this.providerService.validateCode(this.provider.code).subscribe({
+    if (this.provider.code !== undefined && this.inputCode !== '' && this.inputCode !== this.provider.code){
+      this.providerService.validateCode(this.inputCode).subscribe({
         next: (isRepeated) => {
           if (isRepeated){
             this.codeNgModel.control.setErrors({ ...this.codeNgModel.errors, codeRepeated: true});
@@ -279,8 +299,8 @@ export class ProviderFormComponent implements OnInit {
   }
 
   validateRepeatedCuit(){
-    if (this.provider.cuit !== '' && this.provider.cuit !== this.realProvider.cuit){
-      this.providerService.validateCuit(this.provider.cuit).subscribe({
+    if (this.provider.cuit !== undefined && this.inputCuit !== '' && this.inputCuit !== this.provider.cuit){
+      this.providerService.validateCuit(this.inputCuit).subscribe({
         next: (isRepeated) => {
           if (isRepeated){
             this.cuitNgModel.control.setErrors({ ...this.cuitNgModel.errors, cuitRepeated: true});
@@ -299,8 +319,8 @@ export class ProviderFormComponent implements OnInit {
   }
 
   validateRepeatedCompanyName(){
-    if (this.provider.companyName !== '' && this.provider.companyName !== this.realProvider.companyName){
-      this.providerService.validateCompanyName(this.provider.companyName).subscribe({
+    if (this.provider.companyName !== undefined && this.inputCompanyName !== '' && this.inputCompanyName !== this.provider.companyName){
+      this.providerService.validateCompanyName(this.inputCompanyName).subscribe({
         next: (isRepeated) => {
           if (isRepeated) {
             this.companyNameNgModel.control.setErrors({ ...this.companyNameNgModel.errors, companyNameRepeated: true});
@@ -321,11 +341,28 @@ export class ProviderFormComponent implements OnInit {
   //Métodos de formulario para agregar proveedores:
   onSubmit(form: NgForm) {
     if (form.valid) {
-      this.address.locality.province = this.province;
-      this.provider.address = this.address;
-      this.provider.contact = this.contact;
-      this.provider.code = this.provider.code.toUpperCase();
-      this.realProvider = this.provider;
+
+      this.inputLocality.province = this.inputProvince;
+
+      this.provider.address.locality = this.inputLocality;
+      this.provider.address.street = this.inputStreet;
+      this.provider.address.num = this.inputNum;
+      this.provider.address.zipCode = this.inputZipCode;
+
+      this.provider.contact.email = this.inputEmail;
+      this.provider.contact.telephone = this.inputTelephone;
+
+      this.provider.sector = this.inputSector;
+      this.provider.vatCondition = this.inputVatCondition;
+      this.provider.code = this.inputCode.toUpperCase();
+      this.provider.companyName = this.inputCompanyName;
+      this.provider.logo = this.inputLogo;
+      this.provider.website = this.inputWebsite;
+      this.provider.firstName = this.inputFirstName;
+      this.provider.lastName = this.inputLastName;
+      this.provider.role = this.inputRole;
+      this.provider.cuit = this.inputCuit;
+
       if (this.buttonName === 'Agregar') {
         this.addProvider();
       } else if (this.buttonName === 'Editar') {
@@ -335,7 +372,7 @@ export class ProviderFormComponent implements OnInit {
   }
 
   addProvider() {
-    this.providerService.addProvider(this.realProvider).subscribe({
+    this.providerService.addProvider(this.provider).subscribe({
       //We pass one argument to subscribe: An Observer object. Which has the neccesary functions to handle the results that the Observable we are susbcribed to, like new data or an error.
       next: (data) => {
         //If the observable emmits new data, we use 'next'.
@@ -358,7 +395,7 @@ export class ProviderFormComponent implements OnInit {
   }
 
   updateProvider() {
-    this.providerService.updateProvider(this.realProvider).subscribe({
+    this.providerService.updateProvider(this.provider).subscribe({
       next: (data) => {
         this.alertHandler.getToast().fire({
           icon: "success",
@@ -387,6 +424,6 @@ export class ProviderFormComponent implements OnInit {
   //Métodos auxiliares:
   clearProvinceSelect() {
     this.provinceSelect = []; //Limpio el select de provincias.
-    this.province = null!;
+    this.inputProvince = null!;
   }
 }

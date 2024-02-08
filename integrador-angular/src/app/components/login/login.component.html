@@ -1,0 +1,32 @@
+<div class="container">
+    <div class="row">
+        <h1 class="display-5 fw-semibold font-blue text-center mt-5 mb-3">SISTEMA DE GESTIÓN DE COMPRAS</h1>
+        <div class="offset-3 col-6 offset-3">
+            <div class="card rounded-0 card-border-blue my-5">
+                <form #loginForm="ngForm" (ngSubmit)="onLogin()">
+                    <div class="m-4 mb-0">
+                        <label for="email" class="form-label">Email</label>
+                        <input type="text" #emailVar="ngModel" id="txtEmail"
+                            [(ngModel)]="user.email" name="email" class="form-control"
+                            placeholder="example@gmail.com" required email
+                            pattern=".*(\.com)$">
+                        <!-- Mensaje de error -->
+                        <div *ngIf="emailVar.touched && (emailVar.errors?.['email'] || emailVar.errors?.['pattern']) "
+                            class="text-danger ">
+                            <p><small>Este campo debe cumplir el formato nombre&commat;ejemplo.com</small></p>
+                        </div>
+                    </div>
+                    <div class="m-4">
+                        <label for="password" class="form-label">Contraseña</label>
+                        <input type="password" #passVar="ngModel" id="txtPassword"
+                            [(ngModel)]="user.password" name="password" class="form-control"
+                            placeholder="********" required>
+                    </div>
+                    <div class="text-end m-4 mt-0 ">
+                        <button class="btn btn-add rounded-0 " [disabled]="loginForm.invalid" type="submit">Ingresar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

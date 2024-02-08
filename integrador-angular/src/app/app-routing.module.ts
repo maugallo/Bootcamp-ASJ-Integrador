@@ -10,34 +10,40 @@ import { OrderFormComponent } from './components/main/orders/order-form/order-fo
 import { ProviderDetailComponent } from './components/main/providers/provider-detail/provider-detail.component';
 import { ProductDetailComponent } from './components/main/products/product-detail/product-detail.component';
 import { OrderDetailComponent } from './components/main/orders/order-detail/order-detail.component';
+import { LoginComponent } from './components/login/login.component';
+import { AuthenticationGuard } from './guards/authentication.guard';
+
+
 
 const routes: Routes = [
-  { path: '', component: HomeComponent },
+  { path: '', component: HomeComponent, canActivate: [AuthenticationGuard]},
+
+  { path: 'login', component: LoginComponent, canActivate: [AuthenticationGuard]},
   
   { path: 'providers',
     children: [
-      { path: '', component: ProviderCrudComponent},
-      { path: 'detail/:id', component: ProviderDetailComponent},
-      { path: 'form-provider', component: ProviderFormComponent},
-      { path: 'form-provider/:id', component: ProviderFormComponent}
+      { path: '', component: ProviderCrudComponent, canActivate: [AuthenticationGuard]},
+      { path: 'detail/:id', component: ProviderDetailComponent, canActivate: [AuthenticationGuard]},
+      { path: 'form-provider', component: ProviderFormComponent, canActivate: [AuthenticationGuard]},
+      { path: 'form-provider/:id', component: ProviderFormComponent, canActivate: [AuthenticationGuard]}
     ]
   },
 
   { path: 'products',
     children: [
-      { path: '', component: ProductCrudComponent},
-      { path: 'detail/:id', component: ProductDetailComponent},
-      { path: 'form-product', component: ProductFormComponent},
-      { path: 'form-product/:id', component: ProductFormComponent}
+      { path: '', component: ProductCrudComponent, canActivate: [AuthenticationGuard]},
+      { path: 'detail/:id', component: ProductDetailComponent, canActivate: [AuthenticationGuard]},
+      { path: 'form-product', component: ProductFormComponent, canActivate: [AuthenticationGuard]},
+      { path: 'form-product/:id', component: ProductFormComponent, canActivate: [AuthenticationGuard]}
     ]
   },
   
   { path: 'orders',
     children: [
-      { path: '', component: OrderCrudComponent},
-      { path: 'detail/:id', component: OrderDetailComponent},
-      { path: 'form-order', component: OrderFormComponent},
-      { path: 'form-order/:id', component: OrderFormComponent}
+      { path: '', component: OrderCrudComponent, canActivate: [AuthenticationGuard]},
+      { path: 'detail/:id', component: OrderDetailComponent, canActivate: [AuthenticationGuard]},
+      { path: 'form-order', component: OrderFormComponent, canActivate: [AuthenticationGuard]},
+      { path: 'form-order/:id', component: OrderFormComponent, canActivate: [AuthenticationGuard]}
     ]
   },
 

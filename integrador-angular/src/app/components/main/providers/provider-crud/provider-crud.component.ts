@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ErrorHandler, OnInit } from '@angular/core';
 import { ProviderService } from '../../../../services/provider.service';
 import { Provider } from '../../../../models/provider';
 import { AlertHandler } from '../../../../utils/alertHandler';

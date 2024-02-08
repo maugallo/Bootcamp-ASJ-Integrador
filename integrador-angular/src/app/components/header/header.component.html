@@ -51,6 +51,10 @@
                                         routerLink="orders/form-order">AGREGAR</a></li>
                             </ul>
                         </li>
+                        <!-- Botón de cerrar sesión -->
+                        <li *ngIf="isUserAuthenticated" class="nav-item dropdown">
+                            <a class="nav-link " role="button" (click)="logOut()">CERRAR SESIÓN</a>
+                        </li>
                     </ul>
                 </div>
             </div>
