@@ -33,7 +33,7 @@ export class OrderService {
   }
 
   getProvidersForSelect(){
-    return this.providerService.getProviders(true);
+    return this.providerService.getProvidersByIsEnabled(true);
   }
 
   getProductsForSelect(id: number){

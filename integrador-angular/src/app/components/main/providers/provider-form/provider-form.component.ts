@@ -5,11 +5,9 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgForm, NgModel } from '@angular/forms';
 import { Sector } from '../../../../models/sector';
 import { SectorService } from '../../../../services/sector.service';
-import { Address } from '../../../../models/address';
 import { VatCondition } from '../../../../models/vatCondition';
 import { Country } from '../../../../models/country';
 import { Province } from '../../../../models/province';
-import { Contact } from '../../../../models/contact';
 import { ContactService } from '../../../../services/contact.service';
 import { AlertHandler } from '../../../../utils/alertHandler';
 import Swal from 'sweetalert2';
@@ -50,6 +48,7 @@ export class ProviderFormComponent implements OnInit {
   inputRole!: string;
   inputCuit!: string;
 
+  //Provider object that will be send in the request:
   provider: Provider = {
     sector: undefined!,
     vatCondition: '',
@@ -95,14 +94,12 @@ export class ProviderFormComponent implements OnInit {
   countrySelect: any[] = [];
   provinceSelect: any[] = [];
 
-  //Variables to handle create or update message:
+  //Variables to handle create or update;:
+  param!: number;
   formTitle: string = 'AGREGAR PROVEEDOR';
   buttonName: string = 'Agregar';
 
-  //Variable to determine if we'll handle a creation or update:
-  param!: number;
-
-  //Validaciones del back:
+  //Back validations:
   @ViewChild('email') emailNgModel!: NgModel;
   @ViewChild('telephone') telephoneNgModel!: NgModel;
   @ViewChild('code') codeNgModel!: NgModel;
@@ -130,9 +127,11 @@ export class ProviderFormComponent implements OnInit {
           if (data) {
             this.provider = data;
             
-            //Precharge all the inputs:
-            this.preRenderCountry();
+            //Precharge all the selects and inputs:
             this.preRenderSector();
+            this.preRenderCountryAndProvince();
+            
+            this.inputLocality = this.provider.address.locality;
 
             this.inputStreet = this.provider.address.street;
             this.inputNum = this.provider.address.num;
@@ -172,37 +171,55 @@ export class ProviderFormComponent implements OnInit {
   }
 
   renderSectorSelect() {
-    this.sectorService.getSectors(true).subscribe({
+    this.providerService.getSectorsForSelect().subscribe({
       next: (data) => {
         this.sectorSelect = data;
       },
-      error: () => {
-        //SweetAlert2 red error toast.
+      error: (error) => {
         this.sectorSelect = [];
+        
+        this.alertHandler.getToast().fire({
+          icon: 'error',
+          position: 'top',
+          showCloseButton: false,
+          title: error.message,
+        });
       }
     });
   }
 
   renderCountrySelect() {
-    this.providerService.getCountries().subscribe({
+    this.providerService.getCountriesForSelect().subscribe({
       next: (data) => {
         this.countrySelect = data;
       },
-      error: () => {
-        //SweetAlert2 red error toast.
+      error: (error) => {
         this.countrySelect = [];
+
+        this.alertHandler.getToast().fire({
+          icon: 'error',
+          position: 'top',
+          showCloseButton: false,
+          title: error.message,
+        });
       }
     });
   }
 
   renderProvinceSelect() {
-    this.providerService.getProvinces(this.inputCountry.id!).subscribe({
+    this.providerService.getProvincesForSelect(this.inputCountry.id!).subscribe({
       next: (data) => {
         this.provinceSelect = data;
       },
-      error: () => {
-        //SweetAlert2 red error toast.
+      error: (error) => {
         this.provinceSelect = [];
+
+        this.alertHandler.getToast().fire({
+          icon: 'error',
+          position: 'top',
+          showCloseButton: false,
+          title: error.message,
+        });
       }
     });
   }
@@ -213,27 +230,29 @@ export class ProviderFormComponent implements OnInit {
     )!;
   }
 
-  preRenderCountry() {
-    this.inputCountry = this.countrySelect.find((country) => country.id === this.provider.address.locality.province.country.id);
-    this.preRenderProvince();
+  preRenderCountryAndProvince() {
+    if (this.countrySelect.length > 0){
+      this.inputCountry = this.countrySelect.find((country) => country.id === this.provider.address.locality.province.country.id);
+      this.preRenderProvince();
+    }
   }
 
   preRenderProvince() {
-    this.providerService.getProvinces(this.inputCountry.id!).subscribe({
+    this.providerService.getProvincesForSelect(this.inputCountry.id!).subscribe({
       next: (data) => {
         this.provinceSelect = data;
-      },
-      complete: () => {
-        this.inputProvince = this.provinceSelect.find((province) => province.id === this.provider.address.locality.province.id);
-        this.preRenderLocality();
-      },
-    });
-  }
 
-  preRenderLocality() {
-    this.providerService.getLocalities(this.inputProvince.id!).subscribe({
-      next: (data) => {
-        this.inputLocality = data.find((locality: Locality) => locality.id === this.provider.address.locality.id);
+        this.inputProvince = this.provinceSelect.find((province) => province.id === this.provider.address.locality.province.id);
+      },
+      error: (error) => {
+        this.inputProvince = {name: '', country: null!}
+
+        this.alertHandler.getToast().fire({
+          icon: 'error',
+          position: 'top',
+          showCloseButton: false,
+          title: error.message,
+        });
       }
     });
   }
@@ -338,7 +357,7 @@ export class ProviderFormComponent implements OnInit {
     }
   }
 
-  //Métodos de formulario para agregar proveedores:
+  //Send data:
   onSubmit(form: NgForm) {
     if (form.valid) {
 
@@ -373,9 +392,8 @@ export class ProviderFormComponent implements OnInit {
 
   addProvider() {
     this.providerService.addProvider(this.provider).subscribe({
-      //We pass one argument to subscribe: An Observer object. Which has the neccesary functions to handle the results that the Observable we are susbcribed to, like new data or an error.
-      next: (data) => {
-        //If the observable emmits new data, we use 'next'.
+      //We pass one argument to the subscribe method: An Observer object. Which has the neccesary functions to handle the results that the Observable we are susbcribed to, like new data or an error.
+      next: (data) => { //If the observable emmits new data, we use 'next'.
         this.alertHandler.getToast().fire({
           icon: "success",
           title: data,
@@ -383,13 +401,10 @@ export class ProviderFormComponent implements OnInit {
 
         this.router.navigate(['providers/']);
       },
-      error: (error) => {
-        //If the observable emmits an error, we use 'error'.
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: error.error
-        });
+      error: (error) => { //If the observable emmits an error, we use 'error'.
+        this.alertHandler.getErrorAlert().fire({
+          text: error.message
+        })
       },
     });
   }
@@ -405,25 +420,20 @@ export class ProviderFormComponent implements OnInit {
         this.router.navigate(['providers/']);
       },
       error: (error) => {
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: error.error
-        });
+        this.alertHandler.getErrorAlert().fire({
+          text: error.message
+        })
       },
     });
   }
 
-  chooseCountry() {
-    //Método del evento (change) del select de países.
-    this.clearProvinceSelect();
-
+  chooseCountry() { //Method connected with the (change) event in the countrySelect.
+    this.clearProvinceSelect(); //If the user changes the country option, we clean the provinces select and render it again according to the selected country.
     this.renderProvinceSelect();
   }
 
-  //Métodos auxiliares:
   clearProvinceSelect() {
-    this.provinceSelect = []; //Limpio el select de provincias.
+    this.provinceSelect = [];
     this.inputProvince = null!;
   }
 }

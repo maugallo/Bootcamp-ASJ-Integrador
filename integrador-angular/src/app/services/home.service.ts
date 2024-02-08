@@ -11,7 +11,7 @@ export class HomeService {
   constructor(private providerService: ProviderService, private productService: ProductService, private orderService: OrderService) { }
 
   getProvidersCount(){
-    return this.providerService.getProviders(true);
+    return this.providerService.getProvidersByIsEnabled(true);
   }
 
   getProductsCount(){

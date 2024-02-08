@@ -18,4 +18,11 @@ export class AlertHandler{
         });
     }
 
+    public getErrorAlert(){
+        return Swal.mixin({
+            icon: "error",
+            title: "Error",
+        });
+    }
+
 }

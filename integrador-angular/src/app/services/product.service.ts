@@ -47,7 +47,7 @@ export class ProductService {
   }
 
   getProvidersForSelect() {
-    return this.providerService.getProviders(true);
+    return this.providerService.getProvidersByIsEnabled(true);
   }
 
   //CREATE METHOD:

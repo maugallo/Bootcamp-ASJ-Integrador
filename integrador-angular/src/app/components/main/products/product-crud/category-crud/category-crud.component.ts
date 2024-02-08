@@ -92,6 +92,8 @@ export class CategoryCrudComponent implements OnInit {
       inputValidator: (value) => { //inputValidator accepts a Promise.resolve(string) if there was an error in the input, or Promise.resolve(null/undefined) if the input was ok.
         if (!value) {
           return Promise.resolve("Este campo no puede estar vacío");
+        } else if (!value.match('^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$')) {
+          return Promise.resolve("Este campo solo acepta letras");
         } else {
           return firstValueFrom(this.categoryService.validateName(value))
             .then((isRepeated) => {

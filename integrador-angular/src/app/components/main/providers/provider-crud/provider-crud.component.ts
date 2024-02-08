@@ -55,28 +55,42 @@ export class ProviderCrudComponent implements OnInit {
         Swal.fire({
           icon: "error",
           title: "Error",
-          text: error.error
+          text: error.message
         });
       }
     })
   }
 
   renderTables(){
-    this.providerService.getProviders(true).subscribe({
+    this.providerService.getProvidersByIsEnabled(true).subscribe({
       next: (data) => {
         this.arrayEnabled = data;
       },
-      error: () => {
+      error: (error) => {
         this.arrayEnabled = [];
+
+        this.alertHandler.getToast().fire({
+          icon: 'error',
+          position: 'top',
+          showCloseButton: false,
+          title: error.message,
+        });
       }
     });
 
-    this.providerService.getProviders(false).subscribe({
+    this.providerService.getProvidersByIsEnabled(false).subscribe({
       next: (data) => {
         this.arrayDisabled = data;
       },
-      error: () => {
+      error: (error) => {
         this.arrayDisabled = [];
+
+        this.alertHandler.getToast().fire({
+          icon: 'error',
+          position: 'top',
+          showCloseButton: false,
+          title: error.message,
+        });
       }
     });
   }
@@ -161,7 +175,14 @@ export class ProviderCrudComponent implements OnInit {
           next: (data) => {
             this.arrayDisabled = data;
           },
-          error: () => {
+          error: (error) => {
+            this.alertHandler.getToast().fire({
+              icon: 'error',
+              position: 'top',
+              showCloseButton: false,
+              title: error.message,
+            });
+
             this.renderTables();
           }
         })
@@ -170,7 +191,14 @@ export class ProviderCrudComponent implements OnInit {
           next: (data) => {
             this.arrayEnabled = data;
           },
-          error: () => {
+          error: (error) => {
+            this.alertHandler.getToast().fire({
+              icon: 'error',
+              position: 'top',
+              showCloseButton: false,
+              title: error.message,
+            });
+
             this.renderTables();
           }
         })
