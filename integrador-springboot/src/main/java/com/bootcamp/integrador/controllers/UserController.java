@@ -18,7 +18,7 @@ public class UserController {
 	@Autowired
 	UserService userService;
 	
-	@PostMapping("/validate")
+	@PostMapping("/login")
 	public ResponseEntity<Boolean> validateUser(@RequestBody User user){
 		return new ResponseEntity<>(userService.existsByEmailAndPassword(user.getEmail(), user.getPassword()), HttpStatus.OK);
 	}
