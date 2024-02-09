@@ -6,7 +6,7 @@ import { NgForm } from '@angular/forms';
 import { Provider } from '../../../../models/provider';
 import { Product } from '../../../../models/product';
 import { OrderDetail } from '../../../../models/orderDetail';
-import { format } from 'date-fns';
+import { addDays, format, parseISO } from 'date-fns';
 import { AlertService } from '../../../../services/utils/alert.service';
 
 @Component({
@@ -49,6 +49,8 @@ export class OrderFormComponent {
   param!: number;
   formTitle: string = "AGREGAR ORDEN DE COMPRA";
   buttonName: string = "Agregar";
+
+  minDate: string = format(addDays(parseISO(this.inputIssueDate), 1), 'yyyy-MM-dd');
 
   constructor(
     private orderService: OrderService,

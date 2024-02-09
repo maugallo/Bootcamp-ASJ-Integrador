@@ -5,3 +5,8 @@
 .subtitle{
     border-bottom: 2px solid #001652;
 }
+
+.scrollable{
+    max-height: 20rem;
+    overflow-y: auto;
+}

@@ -96,7 +96,7 @@
                             <div class="col">
                                 <label for="deliveryDate" class="form-label">Fecha de entrega</label>
                                 <input #deliveryDate="ngModel" [(ngModel)]="inputDeliveryDate" class="form-control"
-                                    name="deliveryDate" id="deliveryDate" type="date" required>
+                                    name="deliveryDate" id="deliveryDate" type="date" [min]="minDate" required>
                                 <!-- Mensaje de error -->
                                 <div *ngIf="deliveryDate.touched && deliveryDate.errors?.['required']" class="text-danger ">
                                     <p><small>Este campo no puede estar vacío</small></p>
