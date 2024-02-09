@@ -51,6 +51,7 @@ CREATE TABLE sectors
   (
      id         INT PRIMARY KEY IDENTITY (1, 1),
      sector     VARCHAR(100) UNIQUE NOT NULL,
+	 is_enabled   BIT NOT NULL,
      created_at DATETIME,
      updated_at DATETIME,
   );
@@ -65,8 +66,8 @@ CREATE TABLE providers
      company_name VARCHAR(100) NOT NULL,
 	 logo VARCHAR(500),
      website      VARCHAR(500),
-     NAME         VARCHAR(40) NOT NULL,
-     sirname      VARCHAR(40) NOT NULL,
+     first_name         VARCHAR(40) NOT NULL,
+     last_name      VARCHAR(40) NOT NULL,
      role         VARCHAR(100) NOT NULL,
      cuit         VARCHAR(13) UNIQUE NOT NULL,
      is_enabled   BIT NOT NULL,
@@ -92,6 +93,7 @@ CREATE TABLE categories
   (
      id         INT PRIMARY KEY IDENTITY (1, 1),
      category   VARCHAR(100) UNIQUE NOT NULL,
+	 is_enabled   BIT NOT NULL,
      created_at DATETIME,
      updated_at DATETIME,
   );
@@ -370,20 +372,20 @@ VALUES
 (10, 'Goya', '300', '4512', GETDATE(), GETDATE()),
 (25, 'Velázquez', '1718', '761', GETDATE(), GETDATE())
 
-INSERT INTO sectors (sector, created_at, updated_at)
+INSERT INTO sectors (sector, is_enabled, created_at, updated_at)
 VALUES
-('Tecnología', GETDATE(), GETDATE()),
-('Salud', GETDATE(), GETDATE()),
-('Eduación', GETDATE(), GETDATE()),
-('Finanzas', GETDATE(), GETDATE()),
-('Manufactura', GETDATE(), GETDATE()),
-('Construcción', GETDATE(), GETDATE()),
-('Servicios Profesionales', GETDATE(), GETDATE()),
-('Alimentos', GETDATE(), GETDATE()),
-('Telecomunicaciones', GETDATE(), GETDATE()),
-('Transporte y Depósito', GETDATE(), GETDATE())
+('Tecnología', 1, GETDATE(), GETDATE()),
+('Salud', 1, GETDATE(), GETDATE()),
+('Eduación', 1, GETDATE(), GETDATE()),
+('Finanzas', 1, GETDATE(), GETDATE()),
+('Manufactura', 1, GETDATE(), GETDATE()),
+('Construcción', 1, GETDATE(), GETDATE()),
+('Servicios Profesionales', 1, GETDATE(), GETDATE()),
+('Alimentos', 1, GETDATE(), GETDATE()),
+('Telecomunicaciones', 1, GETDATE(), GETDATE()),
+('Transporte y Depósito', 1, GETDATE(), GETDATE())
 
-INSERT INTO providers (sector_id, vat_id, address_id, code, company_name, website, logo, name, sirname, role, cuit, is_enabled, created_at, updated_at)
+INSERT INTO providers (sector_id, vat_id, address_id, code, company_name, website, logo, first_name, last_name, role, cuit, is_enabled, created_at, updated_at)
 VALUES
 (9, 7, 4, 'VQ9T9KGGQH', 'Construcciones Modernas SRL', 'http://www.ordonez.es/', 'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/5aa4ac12161485.562582d3c5ea2.jpg', 'Rogelio', 'Alberto', 'Terapeuta de arte', '6-58054292-35', 0, GETDATE(), GETDATE()),
 (8, 9, 8, 'NQ66IUOIVI', 'Manufacturas Duarte', 'http://www.sobrino.com/', 'https://mir-s3-cdn-cf.behance.net/project_modules/max_1200/b77f8512161485.5625832300392.jpg', 'Vito', 'Duarte', 'Gerente ambiental', '1-47550539-13', 1, GETDATE(), GETDATE()),
@@ -409,18 +411,18 @@ VALUES
 (9, '3516571276', 'ramonescontacto@gmail.com', GETDATE(), GETDATE()),
 (10, '3516789146', 'jcortina@lastwidget.com', GETDATE(), GETDATE())
 
-INSERT INTO categories (category, created_at, updated_at)
+INSERT INTO categories (category, is_enabled, created_at, updated_at)
 VALUES
-('Comestibles', GETDATE(), GETDATE()),
-('Tecnología', GETDATE(), GETDATE()),
-('Moda', GETDATE(), GETDATE()),
-('Hogar', GETDATE(), GETDATE()),
-('Deportes', GETDATE(), GETDATE()),
-('Juguetes', GETDATE(), GETDATE()),
-('Salud y Belleza', GETDATE(), GETDATE()),
-('Electrodomésticos', GETDATE(), GETDATE()),
-('Libros', GETDATE(), GETDATE()),
-('Materiales de Construcción', GETDATE(), GETDATE())
+('Comestibles', 1, GETDATE(), GETDATE()),
+('Tecnología', 1, GETDATE(), GETDATE()),
+('Moda', 1, GETDATE(), GETDATE()),
+('Hogar', 1, GETDATE(), GETDATE()),
+('Deportes', 1, GETDATE(), GETDATE()),
+('Juguetes', 1, GETDATE(), GETDATE()),
+('Salud y Belleza', 1, GETDATE(), GETDATE()),
+('Electrodomésticos', 1, GETDATE(), GETDATE()),
+('Libros', 1, GETDATE(), GETDATE()),
+('Materiales de Construcción', 1, GETDATE(), GETDATE())
 
 INSERT INTO products (category_id, provider_id, sku, image, title, price, description, is_enabled, created_at, updated_at)
 VALUES

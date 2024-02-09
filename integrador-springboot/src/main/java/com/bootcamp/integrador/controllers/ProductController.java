@@ -36,7 +36,7 @@ public class ProductController {
 			@RequestParam(required = false) String titleOrDescription,
 			@RequestParam(required = false) String category,
 			@RequestParam(required = false) Integer idProvider,
-			@RequestParam(required = true) Boolean isEnabled){
+			@RequestParam(required = false) Boolean isEnabled){
 		
 		ProductSpecification productSpecification = new ProductSpecification(titleOrDescription, category, idProvider, isEnabled);
 		
