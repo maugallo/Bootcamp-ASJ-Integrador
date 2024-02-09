@@ -9,6 +9,11 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 @ControllerAdvice
 public class GlobalExceptionHandler {
 	
+	@ExceptionHandler(IllegalArgumentException.class)
+	public ResponseEntity<String> handleIllegalArgumentException(IllegalArgumentException ex){
+		return new ResponseEntity<>("Parámetro erróneo", HttpStatus.BAD_REQUEST);
+	}
+	
 	@ExceptionHandler(ObjectNotFoundException.class)
 	public ResponseEntity<String> handleObjectNotFoundException(ObjectNotFoundException ex){
 		return new ResponseEntity<>(ex.getMessage(), HttpStatus.NOT_FOUND);

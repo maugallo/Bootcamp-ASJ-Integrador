@@ -37,7 +37,7 @@ public class ProviderController {
 	@GetMapping()
 	public ResponseEntity<List<Provider>> getProviders(
 			@RequestParam(required = false) String companyNameOrCode,
-			@RequestParam(required = true) Boolean isEnabled) {
+			@RequestParam(required = false) Boolean isEnabled) {
 		
 		ProviderSpecification providerSpecification = new ProviderSpecification(companyNameOrCode, isEnabled);
 		
