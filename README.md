@@ -88,8 +88,8 @@ Pasos necesarios para correr el proyecto localmente:
 
 ## Credenciales para ingreso
 
-###email: admin@gmail.com
-###contraseña: asjadmin123
+### email: admin@gmail.com
+### contraseña: asjadmin123
 
 ## Desarrollado por
 
