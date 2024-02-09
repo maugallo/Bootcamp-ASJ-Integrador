@@ -1,7 +1,6 @@
 package com.bootcamp.integrador.services;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -21,12 +20,8 @@ public class LocalityService {
 	}
 	
 	public Locality getLocalityById(Integer id){
-		Optional<Locality> locality = localityRepository.findById(id);
-		if (locality.isPresent()) {
-			return locality.get();
-		} else {
-			throw new ObjectNotFoundException("No se pudo encontrar la localidad solicitada con id " + id);
-		}
+		return localityRepository.findById(id)
+				.orElseThrow(() -> new ObjectNotFoundException("No se pudo encontrar la localidad solicitada con id: " + id));
 	}
 	
 	public Locality createLocality(Locality locality) {

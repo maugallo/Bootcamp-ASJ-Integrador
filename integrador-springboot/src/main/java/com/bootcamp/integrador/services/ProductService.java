@@ -1,7 +1,6 @@
 package com.bootcamp.integrador.services;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,12 +22,8 @@ public class ProductService {
 	}
 	
 	public Product getProductById(Integer id){
-		Optional<Product> product = productRepository.findById(id);
-		if (product.isPresent()) {
-			return product.get();
-		} else {
-			throw new ObjectNotFoundException("No se pudo encontrar el producto solicitado con id " + id);
-		}
+		return productRepository.findById(id)
+				.orElseThrow(() -> new ObjectNotFoundException("No se pudo encontrar el producto solicitado con id " + id));
 	}
 	
 	//CREATE METHOD:
@@ -45,15 +40,11 @@ public class ProductService {
 	
 	//DELETE & RECOVER METHOD:
 	public String toggleIsEnabled(Integer id) {
-		Optional<Product> optProduct = productRepository.findById(id);
-		if (optProduct.isPresent()) {
-			Product product = optProduct.get();
-			product.setIsEnabled(!product.getIsEnabled());
-			productRepository.save(product);
-			return product.getIsEnabled() ? "Producto agregado correctamente" : "Producto eliminado correctamente";
-		} else {
-			throw new ObjectNotFoundException("No se pudo encontrar el producto solicitado con id: " + id);
-		}
+		Product product = this.getProductById(id);
+		
+		product.setIsEnabled(!product.getIsEnabled());
+		productRepository.save(product);
+		return product.getIsEnabled() ? "Producto agregado correctamente" : "Producto eliminado correctamente";
 	}
 	
 	//VALIDATION METHODS:

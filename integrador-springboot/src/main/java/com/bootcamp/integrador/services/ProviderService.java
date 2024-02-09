@@ -1,7 +1,6 @@
 package com.bootcamp.integrador.services;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -37,12 +36,8 @@ public class ProviderService {
 	}
 
 	public Provider getProviderById(Integer id) {
-		Optional<Provider> provider = providerRepository.findById(id);
-		if (provider.isPresent()) {
-			return provider.get();
-		} else {
-			throw new ObjectNotFoundException("No se pudo encontrar el proveedor solicitado con id: " + id);
-		}
+		return providerRepository.findById(id)
+				.orElseThrow(() -> new ObjectNotFoundException("No se pudo encontrar el proveedor solicitado con id: " + id));
 	}
 	
 	//CREATE METHOD:
@@ -90,15 +85,11 @@ public class ProviderService {
 	
 	//DELETE & RECOVER METHOD:
 	public String toggleIsEnabled(Integer id) {
-		Optional<Provider> optProvider = providerRepository.findById(id);
-		if (optProvider.isPresent()) {
-			Provider provider = optProvider.get();
-			provider.setIsEnabled(!provider.getIsEnabled());
-			providerRepository.save(provider);
-			return provider.getIsEnabled() ? "Proveedor agregado correctamente" : "Proveedor eliminado correctamente";
-		} else {
-			throw new ObjectNotFoundException("No se pudo encontrar el proveedor solicitado con id: " + id);
-		}
+		Provider provider = this.getProviderById(id);
+		
+		provider.setIsEnabled(!provider.getIsEnabled());
+		providerRepository.save(provider);
+		return provider.getIsEnabled() ? "Proveedor agregado correctamente" : "Proveedor eliminado correctamente";
 	}
 	
 	//VALIDATION METHODS:

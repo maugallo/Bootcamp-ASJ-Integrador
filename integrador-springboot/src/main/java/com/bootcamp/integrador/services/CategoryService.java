@@ -1,7 +1,6 @@
 package com.bootcamp.integrador.services;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,12 +21,8 @@ public class CategoryService {
 	}
 	
 	public Category getCategoryById(Integer id){
-		Optional<Category> category = categoryRepository.findById(id);
-		if (category.isPresent()) {
-			return category.get();
-		} else {
-			throw new ObjectNotFoundException("No se pudo encontrar la categoría solicitada con id " + id);
-		}
+		return categoryRepository.findById(id)
+				.orElseThrow(() -> new ObjectNotFoundException("No se pudo encontrar la categoría solicitada con id " + id));
 	}
 	
 	//CREATE METHOD:
@@ -44,16 +39,11 @@ public class CategoryService {
 	
 	//DELETE & RECOVER METHOD:
 	public String toggleIsEnabled(Integer id) {
-		Optional<Category> optCategory = categoryRepository.findById(id);
+		Category category = this.getCategoryById(id);
 		
-		if (optCategory.isPresent()) {
-			Category category = optCategory.get();
-			category.setIsEnabled(!category.getIsEnabled());
-			categoryRepository.save(category);
-			return category.getIsEnabled() ? "Categoría agregada correctamente" : "Categoría eliminada correctamente";
-		} else {
-			throw new ObjectNotFoundException("No se pudo encontrar la categoría solicitada con id: " + id);
-		}
+		category.setIsEnabled(!category.getIsEnabled());
+		categoryRepository.save(category);
+		return category.getIsEnabled() ? "Categoría agregada correctamente" : "Categoría eliminada correctamente";
 	}
 	
 	//VALIDATE METHOD:

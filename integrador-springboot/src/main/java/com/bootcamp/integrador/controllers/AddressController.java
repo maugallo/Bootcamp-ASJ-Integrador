@@ -1,7 +1,6 @@
 package com.bootcamp.integrador.controllers;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,8 +28,8 @@ public class AddressController {
 	AddressService addressService;
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Optional<Address>> getAddressById(@PathVariable Integer id){
-		return new ResponseEntity<Optional<Address>>(addressService.getAddressById(id), HttpStatus.OK);
+	public ResponseEntity<Address> getAddressById(@PathVariable Integer id){
+		return new ResponseEntity<Address>(addressService.getAddressById(id), HttpStatus.OK);
 	}
 	
 	@PostMapping()

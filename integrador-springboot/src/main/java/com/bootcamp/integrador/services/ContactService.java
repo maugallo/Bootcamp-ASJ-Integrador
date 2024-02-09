@@ -1,10 +1,9 @@
 package com.bootcamp.integrador.services;
 
-import java.util.Optional;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.bootcamp.integrador.exceptions.ObjectNotFoundException;
 import com.bootcamp.integrador.models.Contact;
 import com.bootcamp.integrador.repositories.ContactRepository;
 
@@ -14,8 +13,9 @@ public class ContactService {
 	@Autowired
 	ContactRepository contactRepository;
 	
-	public Optional<Contact> getContactById(Integer id){
-		return contactRepository.findById(id);
+	public Contact getContactById(Integer id){
+		return contactRepository.findById(id)
+				.orElseThrow(() -> new ObjectNotFoundException("No se pudo encontrar el contacto solicitado con id: " + id));
 	}
 	
 	public Boolean existsByEmail(String email) {

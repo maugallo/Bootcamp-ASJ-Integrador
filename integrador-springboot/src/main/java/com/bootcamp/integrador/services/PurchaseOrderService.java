@@ -1,7 +1,6 @@
 package com.bootcamp.integrador.services;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -35,18 +34,13 @@ public class PurchaseOrderService {
 	}
 	
 	public PurchaseOrder getPurchaseOrderById(Integer id){
-		Optional<PurchaseOrder> purchaseOrder = purchaseOrderRepository.findById(id);
-		if (purchaseOrder.isPresent()) {
-			return purchaseOrder.get();
-		} else {
-			throw new ObjectNotFoundException("No se pudo encontrar la órden de compra solicitada con id: " + id);
-		}
+		return purchaseOrderRepository.findById(id)
+				.orElseThrow(() -> new ObjectNotFoundException("No se pudo encontrar la orden de compra solicitada con id: " + id));
 	}
 	
 	//CREATE METHOD:
 	@Transactional
 	public String createPurchaseOrder(PurchaseOrder purchaseOrder) {
-		
 		PurchaseOrder savedOrder = purchaseOrderRepository.save(purchaseOrder);
 		
 		purchaseOrder.getDetails().forEach((detail) -> {
@@ -60,8 +54,6 @@ public class PurchaseOrderService {
 	//UPDATE METHOD:
 	@Transactional
 	public String updatePurchaseOrder(Integer id, PurchaseOrder updatedPurchaseOrder) {
-		
-		//Declare variables:
 		PurchaseOrder oldPurchaseOrder = this.getPurchaseOrderById(id);
 		
 		Set<Integer> updatedDetailIds = updatedPurchaseOrder.getDetails().stream()

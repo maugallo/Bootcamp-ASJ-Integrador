@@ -1,7 +1,6 @@
 package com.bootcamp.integrador.controllers;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -35,8 +34,8 @@ public class OrderDetailController {
 	}
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Optional<OrderDetail>> getOrderDetailById(@PathVariable Integer id){
-		return new ResponseEntity<Optional<OrderDetail>>(orderDetailService.getOrderDetailById(id), HttpStatus.OK);
+	public ResponseEntity<OrderDetail> getOrderDetailById(@PathVariable Integer id){
+		return new ResponseEntity<OrderDetail>(orderDetailService.getOrderDetailById(id), HttpStatus.OK);
 	}
 	
 	@PostMapping()

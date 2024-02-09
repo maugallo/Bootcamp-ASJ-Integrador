@@ -1,7 +1,6 @@
 package com.bootcamp.integrador.controllers;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -29,8 +28,8 @@ public class ContactController {
 	ContactService contactService;
 	
 	@GetMapping("/{id}")
-	public ResponseEntity<Optional<Contact>> getContactById(@PathVariable Integer id){
-		return new ResponseEntity<Optional<Contact>>(contactService.getContactById(id), HttpStatus.OK);
+	public ResponseEntity<Contact> getContactById(@PathVariable Integer id){
+		return new ResponseEntity<Contact>(contactService.getContactById(id), HttpStatus.OK);
 	}
 	
 	@GetMapping("/validate-email/{email}")

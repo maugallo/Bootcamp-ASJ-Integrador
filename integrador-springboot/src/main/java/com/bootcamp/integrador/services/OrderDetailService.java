@@ -1,7 +1,6 @@
 package com.bootcamp.integrador.services;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,8 +19,9 @@ public class OrderDetailService {
 		return orderDetailRepository.findAll();
 	}
 	
-	public Optional<OrderDetail> getOrderDetailById(Integer id){
-		return orderDetailRepository.findById(id);
+	public OrderDetail getOrderDetailById(Integer id){
+		return orderDetailRepository.findById(id)
+				.orElseThrow(() -> new ObjectNotFoundException("No se pudo encontrar el detalle de orden solicitado con id: " + id));
 	}
 	
 	public String createOrderDetail(OrderDetail orderDetail) {
@@ -35,14 +35,10 @@ public class OrderDetailService {
 	}
 	
 	public String deleteOrderDetail(Integer id) {
-		Optional<OrderDetail> optionalOrderDetail = orderDetailRepository.findById(id);
-		if (optionalOrderDetail.isPresent()) {
-			OrderDetail orderDetail = optionalOrderDetail.get();
-			orderDetailRepository.delete(orderDetail);
-			return "Detalle de orden eliminado correctamente";
-		} else {
-			throw new ObjectNotFoundException("No se pudo encontrar el detalle de orden solicitado con id: " + id);
-		}
+		OrderDetail orderDetail = this.getOrderDetailById(id);
+		
+		orderDetailRepository.delete(orderDetail);
+		return "Detalle de orden eliminado correctamente";
 	}
 	
 }

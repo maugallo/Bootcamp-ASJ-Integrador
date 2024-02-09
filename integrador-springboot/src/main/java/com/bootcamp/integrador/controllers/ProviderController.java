@@ -83,7 +83,9 @@ public class ProviderController {
 	
 	//VALIDATION METHODS:
 	@GetMapping("/validate")
-	public ResponseEntity<Boolean> existsByParameter(@RequestParam String type, @RequestParam String value){
+	public ResponseEntity<Boolean> existsByParameter(
+			@RequestParam(required = true) String type,
+			@RequestParam(required = true) String value) {
 		switch (type.toLowerCase()) {
 		case "code": {
 			return new ResponseEntity<>(providerService.existsByCode(value), HttpStatus.OK);
