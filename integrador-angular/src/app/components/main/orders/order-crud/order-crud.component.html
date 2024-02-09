@@ -65,9 +65,9 @@
                                     {{order.status | titlecase}}
                                 </td>
                                 <td>
-                                    <a *ngIf="order.status === 'PENDIENTE' " class="fs-5 me-2 text-decoration-none option" (click)="openCancelOrderModal(order.id!)">🚫</a>
-                                    <a *ngIf="order.status === 'PENDIENTE' " class="fs-5 me-2 text-decoration-none option" (click)="openCompleteOrderModal(order.id!)">✔️</a>
-                                    <a *ngIf="order.status === 'PENDIENTE' " class="fs-5 me-2 text-decoration-none option" (click)="openExpireOrderModal(order.id!)">📆</a>
+                                    <a *ngIf="order.status === 'PENDIENTE' " class="fs-5 me-2 text-decoration-none option" (click)="openUpdateOrderModal(order.id!, 'CANCELADA')">🚫</a>
+                                    <a *ngIf="order.status === 'PENDIENTE' " class="fs-5 me-2 text-decoration-none option" (click)="openUpdateOrderModal(order.id!, 'COMPLETADA')">✔️</a>
+                                    <a *ngIf="order.status === 'PENDIENTE' " class="fs-5 me-2 text-decoration-none option" (click)="openUpdateOrderModal(order.id!, 'EXPIRADA')">📆</a>
                                     <a *ngIf="order.status === 'PENDIENTE' " class="fs-5 me-2 text-decoration-none option" [routerLink]="['form-order', order.id]">✏️</a>
                                     <a class="fs-5 text-decoration-none option" [routerLink]="['/orders/detail', order.id]">👁️</a>
                                 </td>

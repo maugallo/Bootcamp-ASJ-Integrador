@@ -6,10 +6,9 @@
                 <form #loginForm="ngForm" (ngSubmit)="onLogin()">
                     <div class="m-4 mb-0">
                         <label for="email" class="form-label">Email</label>
-                        <input type="text" #emailVar="ngModel" id="txtEmail"
-                            [(ngModel)]="user.email" name="email" class="form-control"
-                            placeholder="example@gmail.com" required email
-                            pattern=".*(\.com)$">
+                        <input type="text" #emailVar="ngModel" name="email" id="email"
+                            [(ngModel)]="user.email" class="form-control" placeholder="example@gmail.com"
+                            required email pattern=".*(\.com)$">
                         <!-- Mensaje de error -->
                         <div *ngIf="emailVar.touched && (emailVar.errors?.['email'] || emailVar.errors?.['pattern']) "
                             class="text-danger ">
@@ -18,9 +17,8 @@
                     </div>
                     <div class="m-4">
                         <label for="password" class="form-label">Contraseña</label>
-                        <input type="password" #passVar="ngModel" id="txtPassword"
-                            [(ngModel)]="user.password" name="password" class="form-control"
-                            placeholder="********" required>
+                        <input type="password" #passVar="ngModel" [(ngModel)]="user.password"
+                        name="password" id="password" class="form-control" placeholder="********" required>
                     </div>
                     <div class="text-end m-4 mt-0 ">
                         <button class="btn btn-add rounded-0 " [disabled]="loginForm.invalid" type="submit">Ingresar</button>

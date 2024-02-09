@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Category } from '../../../../../models/category';
-import { AlertHandler } from '../../../../../utils/alertHandler';
-import Swal from 'sweetalert2';
 import { CategoryService } from '../../../../../services/category.service';
 import { firstValueFrom } from 'rxjs';
 import { SharedProductCategoryService } from '../../../../../services/shared-product-category.service';
+import { AlertService } from '../../../../../services/utils/alert.service';
 
 @Component({
   selector: 'app-category-crud',
@@ -23,22 +22,24 @@ export class CategoryCrudComponent implements OnInit {
 
   seeDisabled: boolean = false;
 
-  private alertHandler = new AlertHandler();
-
-  constructor(private categoryService: CategoryService, private sharedProductCategoryService: SharedProductCategoryService) {}
+  constructor(
+    private categoryService: CategoryService,
+    private alertService: AlertService,
+    private sharedProductCategoryService: SharedProductCategoryService
+  ) {}
 
   ngOnInit(): void {
     this.renderCategoriesTable();
   }
 
   renderCategoriesTable() {
-    this.categoryService.getCategories(true).subscribe({
+    this.categoryService.getCategoriesByIsEnabled(true).subscribe({
       next: (data) => {
         this.arrayEnabled = data;
       }
     })
 
-    this.categoryService.getCategories(false).subscribe({
+    this.categoryService.getCategoriesByIsEnabled(false).subscribe({
       next: (data) => {
         this.arrayDisabled = data;
       }
@@ -46,13 +47,12 @@ export class CategoryCrudComponent implements OnInit {
   }
 
   openDeleteOrRecoverCategoryModal(id: number) {
-    Swal.fire({
+    this.alertService.getConfirmModal()
+    .fire({
       title: this.seeDisabled ? "¿Estás seguro que deseas volver a agregar la categoría?" : "¿Estás seguro que deseas eliminar la categoría?",
-      icon: "warning",
-      showCancelButton: true,
       confirmButtonText: this.seeDisabled ? "Agregar" : "Eliminar",
-      cancelButtonText: "Cerrar"
-    }).then((result) => {
+    })
+    .then((result) => {
       if (result.isConfirmed) {
         this.deleteOrRecoverCategory(id);
       }
@@ -65,30 +65,17 @@ export class CategoryCrudComponent implements OnInit {
         this.renderCategoriesTable();
 
         this.sharedProductCategoryService.triggerProductCrud();
-
-        this.alertHandler.getToast().fire({
-          icon: "success",
-          title: data,
-        });
+        this.alertService.getSuccessToast(data).fire();
       },
       error: (error) => {
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: error.error
-        });
+        this.alertService.getErrorAlert(error.message).fire();
       }
     })
   }
 
   openAddCategoryModal() {
-    Swal.fire({
-      title: `Agregar Categoría <i class="bi bi-tag-fill"></i>`,
-      input: "text",
-      inputPlaceholder: "Ingrese el nombre",
-      showCancelButton: true,
-      confirmButtonText: "Agregar",
-      cancelButtonText: "Cerrar",
+    this.alertService.getInputModal(`Agregar Categoría <i class="bi bi-tag-fill"></i>`, "Ingrese el nombre", "Agregar")
+    .fire({
       inputValidator: (value) => { //inputValidator accepts a Promise.resolve(string) if there was an error in the input, or Promise.resolve(null/undefined) if the input was ok.
         if (!value) {
           return Promise.resolve("Este campo no puede estar vacío");
@@ -106,14 +93,14 @@ export class CategoryCrudComponent implements OnInit {
         }
       }
     })
-      .then((result) => {
-        if (result.isConfirmed) {
-          this.category.name = result.value;
-          this.category.isEnabled = true;
+    .then((result) => {
+      if (result.isConfirmed) {
+        this.category.name = result.value;
+        this.category.isEnabled = true;
 
-          this.addCategory(this.category);
-        }
-      });
+        this.addCategory(this.category);
+      }
+    });
   }
 
   addCategory(category: Category) {
@@ -122,34 +109,22 @@ export class CategoryCrudComponent implements OnInit {
         this.renderCategoriesTable();
 
         this.sharedProductCategoryService.triggerProductCrud();
-
-        this.alertHandler.getToast().fire({
-          icon: "success",
-          title: data,
-        });
+        this.alertService.getSuccessToast(data).fire();
       },
       error: (error) => {
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: error.error
-        });
+        this.alertService.getErrorAlert(error.message).fire();
       }
     })
   }
 
   openEditCategoryModal(category: Category) {
-    Swal.fire({
-      title: `Editar Categoría <i class="bi bi-tag-fill"></i>`,
-      input: "text",
-      inputPlaceholder: "Ingrese el nombre",
-      inputValue: category.name,
-      showCancelButton: true,
-      confirmButtonText: "Editar",
-      cancelButtonText: "Cerrar",
+    this.alertService.getInputModal(`Editar Categoría <i class="bi bi-tag-fill"></i>`, "Ingrese el nombre", "Editar", category.name)
+    .fire({
       inputValidator: (value) => { //inputValidator accepts a Promise.resolve(string) if there was an error in the input, or Promise.resolve(null/undefined) if the input was ok.
         if (!value) {
           return Promise.resolve("Este campo no puede estar vacío");
+        } else if (!value.match('^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$')) {
+          return Promise.resolve("Este campo solo acepta letras");
         } else {
           if (value !== category.name){
             return firstValueFrom(this.categoryService.validateName(value))
@@ -166,13 +141,13 @@ export class CategoryCrudComponent implements OnInit {
         }
       }
     })
-      .then((result) => {
-        if (result.isConfirmed) {
-          category.name = result.value;
+    .then((result) => {
+      if (result.isConfirmed) {
+        category.name = result.value;
 
-          this.updateCategory(category);
-        }
-      });
+        this.updateCategory(category);
+      }
+    });
   }
 
   updateCategory(category: Category) {
@@ -181,18 +156,10 @@ export class CategoryCrudComponent implements OnInit {
         this.renderCategoriesTable();
 
         this.sharedProductCategoryService.triggerProductCrud();
-
-        this.alertHandler.getToast().fire({
-          icon: "success",
-          title: data,
-        });
+        this.alertService.getSuccessToast(data).fire();
       },
       error: (error) => {
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: error.error
-        });
+        this.alertService.getErrorAlert(error.message);
       }
     })
   }

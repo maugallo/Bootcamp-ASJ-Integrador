@@ -10,7 +10,7 @@ import { OrderFormComponent } from './components/main/orders/order-form/order-fo
 import { ProviderDetailComponent } from './components/main/providers/provider-detail/provider-detail.component';
 import { ProductDetailComponent } from './components/main/products/product-detail/product-detail.component';
 import { OrderDetailComponent } from './components/main/orders/order-detail/order-detail.component';
-import { LoginComponent } from './components/login/login.component';
+import { LoginComponent } from './components/main/login/login.component';
 import { AuthenticationGuard } from './guards/authentication.guard';
 
 

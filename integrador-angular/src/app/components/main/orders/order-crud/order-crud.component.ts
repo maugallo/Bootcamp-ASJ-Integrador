@@ -1,9 +1,8 @@
 import { Component } from '@angular/core';
 import { PurchaseOrder } from '../../../../models/purchaseOrder';
 import { OrderService } from '../../../../services/order.service';
-import { AlertHandler } from '../../../../utils/alertHandler';
-import Swal from 'sweetalert2';
 import { OrderStatus } from '../../../../models/orderStatus';
+import { AlertService } from '../../../../services/utils/alert.service';
 
 @Component({
   selector: 'app-order-crud',
@@ -23,55 +22,36 @@ export class OrderCrudComponent {
 
   filterSelectedStatus: string = '';
 
-  constructor(private orderService: OrderService) { }
-
-  private alertHandler = new AlertHandler();
+  constructor(private orderService: OrderService, private alertService: AlertService) { }
 
   ngOnInit(): void {
     this.renderTable();
   }
 
-  openCancelOrderModal(id: number) {
-    Swal.fire({
-      title: "¿Deseas cancelar esta orden?",
-      text: "Esta operación no se puede deshacer",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "Confirmar",
-      cancelButtonText: "Cerrar"
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.updateOrderStatus(id, "CANCELADA");
-      }
-    });
-  }
+  openUpdateOrderModal(id: number, status: string){
+    let titleMessage: string;
+    switch (status) {
+      case "CANCELADA":
+        titleMessage = "¿Deseas cancelar esta orden?";
+        break;
 
-  openCompleteOrderModal(id: number) {
-    Swal.fire({
-      title: "¿Deseas completar esta orden?",
-      text: "Esta operación no se puede deshacer",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "Confirmar",
-      cancelButtonText: "Cerrar"
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.updateOrderStatus(id, "COMPLETADA");
-      }
-    });
-  }
+      case "COMPLETADA":
+        titleMessage = "¿Deseas completar esta orden?";
+        break;
 
-  openExpireOrderModal(id: number){
-    Swal.fire({
-      title: "¿Deseas marcar esta orden como expirada?",
-      text: "Esta operación no se puede deshacer",
-      icon: "warning",
-      showCancelButton: true,
-      confirmButtonText: "Confirmar",
-      cancelButtonText: "Cerrar"
-    }).then((result) => {
+      case "EXPIRADA":
+        titleMessage = "¿Deseas marcar esta orden como expirada?";
+        break;
+    
+      default:
+        titleMessage = "";
+        break;
+    }
+    this.alertService.getConfirmModal()
+    .fire({ title: titleMessage, text: "Esta operación no se puede deshacer" })
+    .then((result) => {
       if (result.isConfirmed) {
-        this.updateOrderStatus(id, "EXPIRADA");
+        this.updateOrderStatus(id, status);
       }
     });
   }
@@ -80,18 +60,10 @@ export class OrderCrudComponent {
     this.orderService.updateOrderStatus(id, orderStatus).subscribe({
       next: (data) => {
         this.renderTable();
-
-        this.alertHandler.getToast().fire({
-          icon: "success",
-          title: data,
-        });
+        this.alertService.getSuccessToast(data).fire();
       },
       error: (error) => {
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: error.error
-        });
+        this.alertService.getErrorAlert(error.message).fire();
       }
     })
   }
@@ -116,8 +88,9 @@ export class OrderCrudComponent {
       next: (data) => {
         this.arrayEnabled = data;
       },
-      error: () => {
+      error: (error) => {
         this.arrayEnabled = [];
+        this.alertService.getErrorToast(error.message).fire();
       }
     })
   }

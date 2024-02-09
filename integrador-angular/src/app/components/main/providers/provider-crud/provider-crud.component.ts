@@ -1,8 +1,7 @@
-import { Component, ErrorHandler, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ProviderService } from '../../../../services/provider.service';
 import { Provider } from '../../../../models/provider';
-import { AlertHandler } from '../../../../utils/alertHandler';
-import Swal from 'sweetalert2';
+import { AlertService } from '../../../../services/utils/alert.service';
 
 @Component({
   selector: 'app-provider-crud',
@@ -18,23 +17,20 @@ export class ProviderCrudComponent implements OnInit {
 
   companyNameOrCode: string = "";
 
-  private alertHandler = new AlertHandler();
-
-  constructor(private providerService: ProviderService) {}
+  constructor(private providerService: ProviderService, private alertService: AlertService) {}
 
   ngOnInit(): void {
     this.renderTables();
   }
 
   openDeleteOrRecoverProviderModal(id: number) {
-    Swal.fire({
+    this.alertService.getConfirmModal()
+    .fire({
       title: this.seeDisabled ? "¿Estás seguro que deseas volver a agregar el proveedor?" : "¿Estás seguro que deseas eliminar el proveedor?",
-      icon: "warning",
-      showCancelButton: true,
       confirmButtonText: this.seeDisabled ? "Agregar" : "Eliminar",
-      cancelButtonText: "Cerrar",
       text: this.seeDisabled ? "" : "Los productos relacionados podrán seguir usándose"
-    }).then((result) => {
+    })
+    .then((result) => {
       if (result.isConfirmed) {
         this.deleteOrRecoverProvider(id);
       }
@@ -45,18 +41,10 @@ export class ProviderCrudComponent implements OnInit {
     this.providerService.deleteOrRecoverProvider(id).subscribe({
       next: (data) => {
         this.renderTables();
-
-        this.alertHandler.getToast().fire({
-          icon: "success",
-          title: data,
-        });
+        this.alertService.getSuccessToast(data).fire();
       },
       error: (error) => {
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: error.message
-        });
+        this.alertService.getErrorAlert(error.message).fire();
       }
     })
   }
@@ -68,13 +56,7 @@ export class ProviderCrudComponent implements OnInit {
       },
       error: (error) => {
         this.arrayEnabled = [];
-
-        this.alertHandler.getToast().fire({
-          icon: 'error',
-          position: 'top',
-          showCloseButton: false,
-          title: error.message,
-        });
+        this.alertService.getErrorToast(error.message).fire();
       }
     });
 
@@ -84,13 +66,7 @@ export class ProviderCrudComponent implements OnInit {
       },
       error: (error) => {
         this.arrayDisabled = [];
-
-        this.alertHandler.getToast().fire({
-          icon: 'error',
-          position: 'top',
-          showCloseButton: false,
-          title: error.message,
-        });
+        this.alertService.getErrorToast(error.message).fire();
       }
     });
   }
@@ -176,13 +152,7 @@ export class ProviderCrudComponent implements OnInit {
             this.arrayDisabled = data;
           },
           error: (error) => {
-            this.alertHandler.getToast().fire({
-              icon: 'error',
-              position: 'top',
-              showCloseButton: false,
-              title: error.message,
-            });
-
+            this.alertService.getErrorToast(error.message).fire();
             this.renderTables();
           }
         })
@@ -192,13 +162,7 @@ export class ProviderCrudComponent implements OnInit {
             this.arrayEnabled = data;
           },
           error: (error) => {
-            this.alertHandler.getToast().fire({
-              icon: 'error',
-              position: 'top',
-              showCloseButton: false,
-              title: error.message,
-            });
-
+            this.alertService.getErrorToast(error.message).fire();
             this.renderTables();
           }
         })

@@ -15,7 +15,7 @@ export class HomeService {
   }
 
   getProductsCount(){
-    return this.productService.getProducts(true);
+    return this.productService.getProductsByIsEnabled(true);
   }
 
   getOrdersCount(){

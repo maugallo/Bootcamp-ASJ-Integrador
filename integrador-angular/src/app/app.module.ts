@@ -22,7 +22,7 @@ import { OrderDetailComponent } from './components/main/orders/order-detail/orde
 import { VatConditionPipe } from './pipes/vat-condition.pipe';
 import { CategoryCrudComponent } from './components/main/products/product-crud/category-crud/category-crud.component';
 import { SectorCrudComponent } from './components/main/providers/provider-crud/sector-crud/sector-crud.component';
-import { LoginComponent } from './components/login/login.component';
+import { LoginComponent } from './components/main/login/login.component';
 
 @NgModule({
   declarations: [

@@ -17,19 +17,19 @@ export class ProviderDetailComponent implements OnInit {
   constructor(private providerService: ProviderService, private router: Router, private activatedRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
-      this.param = this.getParameter();
-      if (this.param){
-        this.providerService.getProviderById(this.param).subscribe({
-          next: (data) => {
-            this.provider = data;
-          },
-          error: () => {
-            this.router.navigate(['providers/form-provider']);
-          }
-        });
-      } else {
-        this.router.navigate(['providers/form-provider']);
-      }
+    this.param = this.getParameter();
+    if (this.param){
+      this.providerService.getProviderById(this.param).subscribe({
+        next: (data) => {
+          this.provider = data;
+        },
+        error: () => {
+          this.router.navigate(['providers/form-provider']);
+        }
+      });
+    } else {
+      this.router.navigate(['providers/form-provider']);
+    }
   }
 
   getParameter(){

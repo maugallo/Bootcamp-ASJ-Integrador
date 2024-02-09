@@ -4,14 +4,12 @@ import { Provider } from '../../../../models/provider';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgForm, NgModel } from '@angular/forms';
 import { Sector } from '../../../../models/sector';
-import { SectorService } from '../../../../services/sector.service';
 import { VatCondition } from '../../../../models/vatCondition';
 import { Country } from '../../../../models/country';
 import { Province } from '../../../../models/province';
 import { ContactService } from '../../../../services/contact.service';
-import { AlertHandler } from '../../../../utils/alertHandler';
-import Swal from 'sweetalert2';
 import { Locality } from '../../../../models/locality';
+import { AlertService } from '../../../../services/utils/alert.service';
 
 @Component({
   selector: 'app-provider-form',
@@ -94,24 +92,22 @@ export class ProviderFormComponent implements OnInit {
   countrySelect: any[] = [];
   provinceSelect: any[] = [];
 
-  //Variables to handle create or update;:
+  //Variables to handle create or update:
   param!: number;
   formTitle: string = 'AGREGAR PROVEEDOR';
   buttonName: string = 'Agregar';
 
-  //Back validations:
+  //Objects for validations:
   @ViewChild('email') emailNgModel!: NgModel;
   @ViewChild('telephone') telephoneNgModel!: NgModel;
   @ViewChild('code') codeNgModel!: NgModel;
   @ViewChild('cuit') cuitNgModel!: NgModel;
   @ViewChild('companyName') companyNameNgModel!: NgModel;
 
-  private alertHandler = new AlertHandler();
-
   constructor(
-    public providerService: ProviderService,
-    public contactService: ContactService,
-    public sectorService: SectorService,
+    private providerService: ProviderService,
+    private contactService: ContactService,
+    private alertService: AlertService,
     private router: Router,
     private activatedRoute: ActivatedRoute
   ) {}
@@ -177,13 +173,7 @@ export class ProviderFormComponent implements OnInit {
       },
       error: (error) => {
         this.sectorSelect = [];
-        
-        this.alertHandler.getToast().fire({
-          icon: 'error',
-          position: 'top',
-          showCloseButton: false,
-          title: error.message,
-        });
+        this.alertService.getErrorToast(error.message).fire();
       }
     });
   }
@@ -195,13 +185,7 @@ export class ProviderFormComponent implements OnInit {
       },
       error: (error) => {
         this.countrySelect = [];
-
-        this.alertHandler.getToast().fire({
-          icon: 'error',
-          position: 'top',
-          showCloseButton: false,
-          title: error.message,
-        });
+        this.alertService.getErrorToast(error.message).fire();
       }
     });
   }
@@ -213,13 +197,7 @@ export class ProviderFormComponent implements OnInit {
       },
       error: (error) => {
         this.provinceSelect = [];
-
-        this.alertHandler.getToast().fire({
-          icon: 'error',
-          position: 'top',
-          showCloseButton: false,
-          title: error.message,
-        });
+        this.alertService.getErrorToast(error.message).fire();
       }
     });
   }
@@ -231,10 +209,10 @@ export class ProviderFormComponent implements OnInit {
   }
 
   preRenderCountryAndProvince() {
-    if (this.countrySelect.length > 0){
-      this.inputCountry = this.countrySelect.find((country) => country.id === this.provider.address.locality.province.country.id);
-      this.preRenderProvince();
-    }
+    this.inputCountry = this.countrySelect.find(
+      (country) => country.id === this.provider.address.locality.province.country.id
+    );
+    this.preRenderProvince();
   }
 
   preRenderProvince() {
@@ -246,13 +224,7 @@ export class ProviderFormComponent implements OnInit {
       },
       error: (error) => {
         this.inputProvince = {name: '', country: null!}
-
-        this.alertHandler.getToast().fire({
-          icon: 'error',
-          position: 'top',
-          showCloseButton: false,
-          title: error.message,
-        });
+        this.alertService.getErrorToast(error.message).fire();
       }
     });
   }
@@ -265,12 +237,12 @@ export class ProviderFormComponent implements OnInit {
             this.emailNgModel.control.setErrors({ ...this.emailNgModel.errors, emailRepeated: true}); //with { ...this.emailNgModel.errors, customValidation: true }, we are creating a new object that contains all existing validation errors from this.emailNgModel.errors and we are adding our new custom validation error to that object.
           } else { //If the email is not repeated in the database, we delete the custom validation.
             if (this.emailNgModel.errors?.['emailRepeated']) {
-              delete this.emailNgModel.errors['emailRepeated']; //Deleting the validation using the operator 'delete' (deletes the property of an object)
+              delete this.emailNgModel.errors['emailRepeated']; //Deleting the validation using the operator 'delete' (deletes the property of an object).
               this.emailNgModel.control.setErrors(this.emailNgModel.errors);
             }
           }
         },
-        error: () => {
+        error: () => { //If there is a server error, we set a new custom validation.
           this.emailNgModel.control.setErrors({ ...this.emailNgModel.errors, httpError: true});
         }
       })
@@ -391,20 +363,13 @@ export class ProviderFormComponent implements OnInit {
   }
 
   addProvider() {
-    this.providerService.addProvider(this.provider).subscribe({
-      //We pass one argument to the subscribe method: An Observer object. Which has the neccesary functions to handle the results that the Observable we are susbcribed to, like new data or an error.
+    this.providerService.addProvider(this.provider).subscribe({ //We pass one argument to the subscribe method: An Observer object. Which has the neccesary functions to handle the results that the Observable we are susbcribed to, like new data or an error.
       next: (data) => { //If the observable emmits new data, we use 'next'.
-        this.alertHandler.getToast().fire({
-          icon: "success",
-          title: data,
-        });
-
+        this.alertService.getSuccessToast(data).fire();
         this.router.navigate(['providers/']);
       },
       error: (error) => { //If the observable emmits an error, we use 'error'.
-        this.alertHandler.getErrorAlert().fire({
-          text: error.message
-        })
+        this.alertService.getErrorAlert(error.message).fire();
       },
     });
   }
@@ -412,17 +377,11 @@ export class ProviderFormComponent implements OnInit {
   updateProvider() {
     this.providerService.updateProvider(this.provider).subscribe({
       next: (data) => {
-        this.alertHandler.getToast().fire({
-          icon: "success",
-          title: data,
-        });
-
+        this.alertService.getSuccessToast(data).fire();
         this.router.navigate(['providers/']);
       },
       error: (error) => {
-        this.alertHandler.getErrorAlert().fire({
-          text: error.message
-        })
+        this.alertService.getErrorAlert(error.message).fire();
       },
     });
   }

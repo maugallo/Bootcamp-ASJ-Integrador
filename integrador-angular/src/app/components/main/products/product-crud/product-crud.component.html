@@ -21,13 +21,13 @@
             <div class="d-flex justify-content-between mt-5">
                 <ng-container *ngIf="arrayEnabled && arrayDisabled">
                     <div class="d-flex justify-content-start w-50">
-                        <div class="w-50 me-2">
+                        <div class="w-75 me-2">
                             <input [(ngModel)]="filterValue" type="text" class="form-control"
                                 placeholder="Filtrar por nombre o descripción">
                         </div>
                         <div class="w-50 me-2">
-                            <select class="form-select" name="" id="" [(ngModel)]="filterCategoryValue">
-                                <option value="" disabled selected hidden>Filtrar por categoría</option>
+                            <select class="form-select" name="" id="" [(ngModel)]="filterCategory">
+                                <option value="" disabled selected hidden>Categoría</option>
                                 <option *ngFor="let category of categorySelect" [ngValue]="category.name">
                                     {{category.name}}</option>
                             </select>

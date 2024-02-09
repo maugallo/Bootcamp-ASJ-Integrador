@@ -17,15 +17,22 @@ export class OrderDetailComponent implements OnInit {
   constructor(private orderService: OrderService, private router: Router, private activatedRoute: ActivatedRoute) { }
 
   ngOnInit(): void {
-    this.param = this.activatedRoute.snapshot.params['id'];
-    
-    this.orderService.getOrderById(this.param).subscribe({
-      next: (data) => {
-        this.order = data;
-      },
-      error: () => {
-        this.router.navigate(['orders/form-order']);
-      }
-    });
+    this.param = this.getParameter();
+    if(this.param){
+      this.orderService.getOrderById(this.param).subscribe({
+        next: (data) => {
+          this.order = data;
+        },
+        error: () => {
+          this.router.navigate(['orders/form-order']);
+        }
+      });
+    } else {
+      this.router.navigate(['orders/form-order']);
+    }
+  }
+
+  getParameter(){
+    return Number(this.activatedRoute.snapshot.params['id']);
   }
 }

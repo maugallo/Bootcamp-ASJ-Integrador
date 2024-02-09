@@ -5,9 +5,7 @@ import { Provider } from '../../../../models/provider';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgForm, NgModel } from '@angular/forms';
 import { Category } from '../../../../models/category';
-import { CategoryService } from '../../../../services/category.service';
-import Swal from 'sweetalert2';
-import { AlertHandler } from '../../../../utils/alertHandler';
+import { AlertService } from '../../../../services/utils/alert.service';
 
 @Component({
   selector: 'app-product-form',
@@ -15,53 +13,42 @@ import { AlertHandler } from '../../../../utils/alertHandler';
   styleUrl: './product-form.component.css',
 })
 export class ProductFormComponent implements OnInit {
-  //Objetos que se enlazarán mediante ngModel en el form:
-  category!: Category;
-  providerInput!: Provider;
+  //Product object attributes:
+  inputCategory!: Category;
+  inputProvider!: Provider;
+  inputSku!: string;
+  inputImage!: string;
+  inputTitle!: string;
+  inputPrice!: number;
+  inputDescription!: string;
 
+  //Product object that will be send in the request:
   product: Product = {
-    category: null!,
-    provider: null!,
+    category: undefined!,
+    provider: undefined!,
     sku: '',
     image: '',
     title: '',
     price: 0,
     description: '',
-    isEnabled: true,
+    isEnabled: true
   };
 
-  realProduct: Product = {
-    category: null!,
-    provider: null!,
-    sku: '',
-    image: '',
-    title: '',
-    price: 0,
-    description: '',
-    isEnabled: true,
-  };
-
-  //Select de proveedores que se renderizará en el form.
+  //Selects to render in the form:
   providerSelect: Provider[] = [];
-
-  //Select de categorías que se renderizará en el form.
   categorySelect: Category[] = [];
 
-  //Variables para manejar el título y nombre del botón:
+  //Variables to handle create or update;:
+  param!: number;
   formTitle: string = 'AGREGAR PRODUCTO';
   buttonName: string = 'Agregar';
 
-  //Variable para determinar si se editará o creará un producto:
-  param!: number;
-
-  //Validaciones del back:
+  //Object for back validations:
   @ViewChild('sku') skuNgModel!: NgModel;
-
-  private alertHandler = new AlertHandler();
 
   constructor(
     private productService: ProductService,
-    private categoryService: CategoryService,
+    private alertService: AlertService,
     private router: Router,
     private activatedRoute: ActivatedRoute
   ) {}
@@ -75,12 +62,17 @@ export class ProductFormComponent implements OnInit {
       this.productService.getProductById(this.param).subscribe({
         next: (data) => {
           if (data) {
-            this.realProduct = data;
+            this.product = data;
 
-            this.product = JSON.parse(JSON.stringify(this.realProduct));
-
+            //Precharge all the selects and inputs:
             this.preRenderProvider();
             this.preRenderCategory();
+
+            this.inputSku = this.product.sku;
+            this.inputImage = this.product.image;
+            this.inputTitle = this.product.title;
+            this.inputPrice = this.product.price;
+            this.inputDescription = this.product.description;
 
             this.formTitle = 'EDITAR PRODUCTO';
             this.buttonName = 'Editar';
@@ -105,45 +97,50 @@ export class ProductFormComponent implements OnInit {
     this.productService.getProvidersForSelect().subscribe({
       next: (data) => {
         this.providerSelect = data;
+      },
+      error: (error) => {
+        this.providerSelect = [];
+        this.alertService.getErrorToast(error.message).fire();
       }
-    })
+    });
   }
 
   renderCategorySelect(){
-    this.categoryService.getCategories(true).subscribe({
+    this.productService.getCategoriesForSelect().subscribe({
       next: (data) => {
         this.categorySelect = data;
+      },
+      error: (error) => {
+        this.categorySelect = [];
+        this.alertService.getErrorToast(error.message).fire();
       }
-    })
+    });
   }
 
   preRenderProvider(){
     this.productService.getProvidersForSelect().subscribe({
       next: (data) => {
         this.providerSelect = data;
-        this.providerInput = this.providerSelect.find(
-          (provider) =>
-            provider.id === this.realProduct.provider.id
+        this.inputProvider = this.providerSelect.find(
+          (provider) => provider.id === this.product.provider.id
         )!;
+      },
+      error: (error) => {
+        this.providerSelect = [];
+        this.alertService.getErrorToast(error.message).fire();
       }
-    })
+    });
   }
 
   preRenderCategory(){
-    this.categoryService.getCategories(true).subscribe({
-      next: (data) => {
-        this.categorySelect = data;
-        this.category = this.categorySelect.find(
-          (category) =>
-            category.id === this.realProduct.category.id
-        )!;
-      }
-    })
+    this.inputCategory = this.categorySelect.find(
+      (category) => category.id === this.product.category.id
+    )!;
   }
 
   validateSku(){
-    if (this.product.sku !== '' && this.product.sku !== this.realProduct.sku){
-      this.productService.validateSku(this.product.sku).subscribe({
+    if (this.product !== undefined && this.inputSku !== '' && this.inputSku !== this.product.sku){
+      this.productService.validateSku(this.inputSku).subscribe({
         next: (isRepeated) => {
           if (isRepeated){
             this.skuNgModel.control.setErrors({ ...this.skuNgModel.errors, skuRepeated: true});
@@ -161,12 +158,17 @@ export class ProductFormComponent implements OnInit {
     }
   }
 
-  //Métodos de formulario para agregar productos:
+  //Send data:
   onSubmit(form: NgForm) {
     if (form.valid) {
-      this.realProduct = this.product;
-      this.realProduct.provider = this.providerInput;
-      this.realProduct.category = this.category;
+
+      this.product.category = this.inputCategory;
+      this.product.provider = this.inputProvider;
+      this.product.sku = this.inputSku;
+      this.product.image = this.inputImage;
+      this.product.title = this.inputTitle;
+      this.product.price = this.inputPrice;
+      this.product.description = this.inputDescription;
 
       if (this.buttonName === 'Agregar'){
         this.addProduct();
@@ -177,42 +179,26 @@ export class ProductFormComponent implements OnInit {
   }
 
   addProduct(){
-    this.productService.addProduct(this.realProduct).subscribe({
+    this.productService.addProduct(this.product).subscribe({
       next: (data) => {
-        this.alertHandler.getToast().fire({
-          icon: "success",
-          title: data,
-        });
-
+        this.alertService.getSuccessToast(data).fire();
         this.router.navigate(['products/']);
       },
-      error: (error) => {
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: error.error
-        });
-      }
+      error: (error) => { //If the observable emmits an error, we use 'error'.
+        this.alertService.getErrorAlert(error.message).fire();
+      },
     })
   }
 
   updateProduct(){
-    this.productService.updateProduct(this.realProduct).subscribe({
+    this.productService.updateProduct(this.product).subscribe({
       next: (data) => {
-        this.alertHandler.getToast().fire({
-          icon: "success",
-          title: data,
-        });
-
+        this.alertService.getSuccessToast(data).fire();
         this.router.navigate(['products/']);
       },
       error: (error) => {
-         Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: error.error
-        });
-      }
+        this.alertService.getErrorAlert(error.message).fire();
+      },
     })
   }
 }

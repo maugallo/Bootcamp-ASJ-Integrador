@@ -1,10 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { Sector } from '../../../../../models/sector';
-import { AlertHandler } from '../../../../../utils/alertHandler';
 import { SharedProductCategoryService } from '../../../../../services/shared-product-category.service';
-import Swal from 'sweetalert2';
 import { SectorService } from '../../../../../services/sector.service';
 import { firstValueFrom } from 'rxjs';
+import { AlertService } from '../../../../../services/utils/alert.service';
 
 @Component({
   selector: 'app-sector-crud',
@@ -23,22 +22,25 @@ export class SectorCrudComponent implements OnInit {
 
   seeDisabled: boolean = false;
 
-  private alertHandler = new AlertHandler();
+  constructor(
+    private sectorService: SectorService,
+    private alertService: AlertService,
+    private sharedProductCategoryService: SharedProductCategoryService
+  ) {}
 
-  constructor(private sectorService: SectorService, private sharedProductCategoryService: SharedProductCategoryService) {}
 
   ngOnInit(): void {
     this.renderSectorsTable();
   }
 
   renderSectorsTable() {
-    this.sectorService.getSectors(true).subscribe({
+    this.sectorService.getSectorsByIsEnabled(true).subscribe({
       next: (data) => {
         this.arrayEnabled = data;
       }
     })
 
-    this.sectorService.getSectors(false).subscribe({
+    this.sectorService.getSectorsByIsEnabled(false).subscribe({
       next: (data) => {
         this.arrayDisabled = data;
       }
@@ -46,13 +48,12 @@ export class SectorCrudComponent implements OnInit {
   }
 
   openDeleteOrRecoverSectorModal(id: number) {
-    Swal.fire({
+    this.alertService.getConfirmModal()
+    .fire({
       title: this.seeDisabled ? "¿Estás seguro que deseas volver a agregar el rubro?" : "¿Estás seguro que deseas eliminar el rubro?",
-      icon: "warning",
-      showCancelButton: true,
       confirmButtonText: this.seeDisabled ? "Agregar" : "Eliminar",
-      cancelButtonText: "Cerrar"
-    }).then((result) => {
+    })
+    .then((result) => {
       if (result.isConfirmed) {
         this.deleteOrRecoverSector(id);
       }
@@ -63,32 +64,18 @@ export class SectorCrudComponent implements OnInit {
     this.sectorService.deleteOrRecoverSector(id).subscribe({
       next: (data) => {
         this.renderSectorsTable();
-
         this.sharedProductCategoryService.triggerProductCrud();
-
-        this.alertHandler.getToast().fire({
-          icon: "success",
-          title: data,
-        });
+        this.alertService.getSuccessToast(data).fire();
       },
       error: (error) => {
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: error.error
-        });
+        this.alertService.getErrorAlert(error.message).fire();
       }
     })
   }
 
   openAddSectorModal() {
-    Swal.fire({
-      title: `Agregar Rubro <i class="bi bi-grid-fill"></i>`,
-      input: "text",
-      inputPlaceholder: "Ingrese el nombre",
-      showCancelButton: true,
-      confirmButtonText: "Agregar",
-      cancelButtonText: "Cerrar",
+    this.alertService.getInputModal(`Agregar Rubro <i class="bi bi-grid-fill"></i>`, "Ingrese el nombre", "Agregar")
+    .fire({
       inputValidator: (value) => { //inputValidator accepts a Promise.resolve(string) if there was an error in the input, or Promise.resolve(null/undefined) if the input was ok.
         if (!value) {
           return Promise.resolve("Este campo no puede estar vacío");
@@ -106,50 +93,37 @@ export class SectorCrudComponent implements OnInit {
         }
       }
     })
-      .then((result) => {
-        if (result.isConfirmed) {
-          this.sector.name = result.value;
-          this.sector.isEnabled = true;
+    .then((result) => {
+      if (result.isConfirmed) {
+        this.sector.name = result.value;
+        this.sector.isEnabled = true;
 
-          this.addSector(this.sector);
-        }
-      });
+        this.addSector(this.sector);
+      }
+    });
   }
 
   addSector(sector: Sector) {
     this.sectorService.addSector(sector).subscribe({
       next: (data) => {
         this.renderSectorsTable();
-
         this.sharedProductCategoryService.triggerProductCrud();
-
-        this.alertHandler.getToast().fire({
-          icon: "success",
-          title: data,
-        });
+        this.alertService.getSuccessToast(data).fire();
       },
       error: (error) => {
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: error.error
-        });
+        this.alertService.getErrorAlert(error.message).fire();
       }
     })
   }
 
   openEditSectorModal(sector: Sector) {
-    Swal.fire({
-      title: `Editar Sector `,
-      input: "text",
-      inputPlaceholder: "Ingrese el nombre",
-      inputValue: sector.name,
-      showCancelButton: true,
-      confirmButtonText: "Editar",
-      cancelButtonText: "Cerrar",
+    this.alertService.getInputModal(`Editar Rubro <i class="bi bi-grid-fill"></i>`, "Ingrese el nombre", "Editar", sector.name)
+    .fire({
       inputValidator: (value) => { //inputValidator accepts a Promise.resolve(string) if there was an error in the input, or Promise.resolve(null/undefined) if the input was ok.
         if (!value) {
           return Promise.resolve("Este campo no puede estar vacío");
+        } else if (!value.match('^[a-zA-ZñÑáéíóúÁÉÍÓÚ ]+$')) {
+          return Promise.resolve("Este campo solo acepta letras");
         } else {
           if (value !== sector.name){
             return firstValueFrom(this.sectorService.validateName(value))
@@ -166,33 +140,24 @@ export class SectorCrudComponent implements OnInit {
         }
       }
     })
-      .then((result) => {
-        if (result.isConfirmed) {
-          sector.name = result.value;
+    .then((result) => {
+      if (result.isConfirmed) {
+        sector.name = result.value;
 
-          this.updateSector(sector);
-        }
-      });
+        this.updateSector(sector);
+      }
+    });
   }
 
   updateSector(sector: Sector) {
     this.sectorService.updateSector(sector).subscribe({
       next: (data) => {
         this.renderSectorsTable();
-
         this.sharedProductCategoryService.triggerProductCrud();
-
-        this.alertHandler.getToast().fire({
-          icon: "success",
-          title: data,
-        });
+        this.alertService.getSuccessToast(data).fire();
       },
       error: (error) => {
-        Swal.fire({
-          icon: "error",
-          title: "Error",
-          text: error.error
-        });
+        this.alertService.getErrorAlert(error.message).fire();
       }
     })
   }
