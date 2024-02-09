@@ -86,6 +86,11 @@ Pasos necesarios para correr el proyecto localmente:
 | :-------- | :------- | :-------------------------------- |
 | `id`      | `Integer` | **Obligatorio**. ID de la orden a buscar |
 
+## Credenciales para ingreso
+
+###email: admin@gmail.com
+###contraseña: asjadmin123
+
 ## Desarrollado por
 
 Este proyecto fue desarrollado por: **Mauro Gallo**
